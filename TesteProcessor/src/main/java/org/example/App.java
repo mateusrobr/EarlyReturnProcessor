@@ -28,21 +28,12 @@ public class App
                 targetClassSpoon = model.getElements(new TypeFilter<>(CtClass.class)).get(i);
             }
         }
+        System.out.println(targetClassSpoon.getElements(new TypeFilter<>(CtMethod.class)).get(0).prettyprint());
         for (CtMethod method : targetClassSpoon.getElements(new TypeFilter<>(CtMethod.class))){
-            System.out.println(method);
 
             earlyReturnProcessor.process(method);
-            System.out.println(method);
         }
+        System.out.println(targetClassSpoon.getElements(new TypeFilter<>(CtMethod.class)).get(0).prettyprint());
 
-
-        /*CtMethod testeMetodo = model.getElements(new TypeFilter<>(CtClass.class)).get(3).getElements(new TypeFilter<>(CtMethod.class)).get(0);
-        System.out.println(testeMetodo.prettyprint());
-        earlyReturnProcessor.earlyReturnRefactor();
-        //CtMethod testeMetodo = model.getElements(new TypeFilter<>(CtClass.class)).get(3).getElements(new TypeFilter<>(CtMethod.class)).get(0);
-
-        //earlyReturnProcessor.process(testeMetodo);
-        System.out.println(testeMetodo.prettyprint());
-        //earlyReturnProcessor.process(testeMetodo);*/
     }
 }

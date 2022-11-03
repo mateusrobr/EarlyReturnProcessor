@@ -2,17 +2,20 @@ package org.example;
 
 import spoon.Launcher;
 import spoon.reflect.CtModel;
-import spoon.reflect.code.CtBlock;
-import spoon.reflect.code.CtIf;
+import spoon.reflect.code.*;
 import spoon.processing.AbstractProcessor;
-import spoon.reflect.code.CtStatement;
 import spoon.reflect.declaration.CtClass;
+import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.visitor.filter.TypeFilter;
+
+import java.util.List;
 
 public class EarlyReturnProcessor extends AbstractProcessor<CtMethod>{
     private String path;
     private String targetClassName;
+
+    private final int FIRST_IF = 0;
 
     public EarlyReturnProcessor(String path, String targetClassName){
         this.path = path;
@@ -56,11 +59,11 @@ public class EarlyReturnProcessor extends AbstractProcessor<CtMethod>{
             return;
         }
 
-        if(ctMethod.getElements(new TypeFilter<>(CtIf.class)).get(0).getElseStatement() == null){
+        if(ctMethod.getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).getElseStatement() == null){
             return;
         }
 
-        if(ctMethod.getElements(new TypeFilter<>(CtIf.class)).get(0).getElseStatement().getElements(new TypeFilter<>(CtIf.class)).size() > 0 ){
+        if(ctMethod.getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).getElseStatement().getElements(new TypeFilter<>(CtIf.class)).size() > 0 ){
             return;
         }
 
@@ -69,11 +72,12 @@ public class EarlyReturnProcessor extends AbstractProcessor<CtMethod>{
 
         CtBlock elseStatement;
 
-        ctMethod.getBody().getElements(new TypeFilter<>(CtIf.class)).get(0).getThenStatement().insertAfter(returnStatement);
+        ctMethod.getBody().getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).getThenStatement().insertAfter(returnStatement);
 
-        elseStatement = ctMethod.getBody().getElements(new TypeFilter<>(CtIf.class)).get(0).getElseStatement();
-        ctMethod.getBody().getElements(new TypeFilter<>(CtIf.class)).get(0).getElseStatement().delete();
+        elseStatement = ctMethod.getBody().getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).getElseStatement();
+        //CtCodeSnippetStatement elseSnippet = launcher.getFactory().createCodeSnippetStatement(elseStatement.prettyprint().replace("{","").replace("}","//"));
 
-        ctMethod.getBody().getElements(new TypeFilter<>(CtIf.class)).get(0).insertAfter( (CtStatement) elseStatement);
+        ctMethod.getBody().getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).getElseStatement().delete();
+        ctMethod.getBody().getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).insertAfter((CtStatementList) elseStatement);
     }
 }
