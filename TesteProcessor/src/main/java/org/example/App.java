@@ -14,12 +14,12 @@ public class App
 {
     public static void main( String[] args )
     {
-        String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
-        String targetClassName = "TesteIfs";
+        String path = "F:\\Bolsa\\TesteIFS\\src";
+        String targetClassName = "Main";
         Launcher launcher = new Launcher();
         launcher.addInputResource(path);
         CtModel model = launcher.buildModel();
-        EarlyReturnProcessor earlyReturnProcessor = new EarlyReturnProcessor(path, targetClassName);
+        EarlyReturnProcessor earlyReturnProcessor = new EarlyReturnProcessor();
         CtClass targetClassSpoon = null;
 
 
@@ -28,12 +28,18 @@ public class App
                 targetClassSpoon = model.getElements(new TypeFilter<>(CtClass.class)).get(i);
             }
         }
-        System.out.println(targetClassSpoon.getElements(new TypeFilter<>(CtMethod.class)).get(0).prettyprint());
+        System.out.println(targetClassSpoon.prettyprint());
         for (CtMethod method : targetClassSpoon.getElements(new TypeFilter<>(CtMethod.class))){
 
-            earlyReturnProcessor.process(method);
+            if(earlyReturnProcessor.isToBeProcessed(method)){
+                earlyReturnProcessor.process(method);
+            }
+
         }
-        System.out.println(targetClassSpoon.getElements(new TypeFilter<>(CtMethod.class)).get(0).prettyprint());
+        System.out.println(targetClassSpoon.prettyprint());
+
+
+
 
     }
 }

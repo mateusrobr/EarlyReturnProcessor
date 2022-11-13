@@ -17,67 +17,56 @@ public class EarlyReturnProcessor extends AbstractProcessor<CtMethod>{
 
     private final int FIRST_IF = 0;
 
-    public EarlyReturnProcessor(String path, String targetClassName){
-        this.path = path;
-        this.targetClassName = targetClassName;
-    }
+    @Override
+    public boolean isToBeProcessed(CtMethod candidate) {
 
-    public void earlyReturnRefactor() {
-        Launcher launcher = new Launcher();
-        launcher.addInputResource(path);
-        CtModel model = launcher.buildModel();
-        CtClass targetClassSpoon = null;
-        for (int i = 0; i < model.getElements(new TypeFilter<>(CtClass.class)).size(); i++) {
-            if (model.getElements(new TypeFilter<>(CtClass.class)).get(i).getSimpleName().equals(targetClassName)) {
-                targetClassSpoon = model.getElements(new TypeFilter<>(CtClass.class)).get(i);
+        if (candidate.getType().prettyprint().equals("void")) {
+            //Verifica se o metodo é void
+
+            if (candidate.getElements(new TypeFilter<>(CtIf.class)).size() == 1 /*|| candidate.getElements(new TypeFilter<>(CtIf.class)).size() > 1*/) {
+                //Verifica se tem exatamente um If
+
+                if (candidate.getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).getElseStatement() != null) {
+                    //Verifica se o else é existente
+
+                    if (candidate.getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).getElseStatement().getElements(new TypeFilter<>(CtIf.class)).size() == 0) {
+                        //Verifica se tem algum If dentro do bloco do Else --implementar a verificação no bloco Then
+
+                        return true;
+                    }
+                }
             }
         }
-        System.out.println("A");
-
-        if(targetClassSpoon.getSimpleName() == null){
-            return;
-        }
-        System.out.println("B");
-
-        for(int i = 0 ; i < targetClassSpoon.getElements(new TypeFilter<>(CtMethod.class)).size() ; i++){
-            System.out.println(targetClassSpoon.getElements(new TypeFilter<>(CtMethod.class)).get(i));
-            process(targetClassSpoon.getElements(new TypeFilter<>(CtMethod.class)).get(i));
-        }
-        System.out.println("C");
-
-
+        return false;
     }
 
 
     @Override
     public void process(CtMethod ctMethod) {
-        if(!ctMethod.getType().prettyprint().equals("void")){
-            return;
-        }
+        CtBlock elseStatement; //Pode ser facilmente retirado porem os argumentos ficariam extremamente grandes
 
-        if(ctMethod.getElements(new TypeFilter<>(CtIf.class)).size() == 0 || ctMethod.getElements(new TypeFilter<>(CtIf.class)).size() > 1){
-            return;
-        }
+        //ctMethod.getBody().getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).insertAfter((CtStatementList) ctMethod.getBody().getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).getElseStatement());
 
-        if(ctMethod.getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).getElseStatement() == null){
-            return;
-        }
+        CtStatement returnStatement = getReturnStatement(); // Tambem pode ser facilmente retirado porem o argumento ficaria extramente grande e precisaria do launcher nesse método
 
-        if(ctMethod.getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).getElseStatement().getElements(new TypeFilter<>(CtIf.class)).size() > 0 ){
-            return;
-        }
 
-        Launcher launcher = new Launcher();
-        CtStatement returnStatement = launcher.getFactory().createCodeSnippetStatement("return");
 
-        CtBlock elseStatement;
-
+        //Insere o "return;" no final do block then
         ctMethod.getBody().getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).getThenStatement().insertAfter(returnStatement);
 
+        //Pega o bloco Else
         elseStatement = ctMethod.getBody().getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).getElseStatement();
-        //CtCodeSnippetStatement elseSnippet = launcher.getFactory().createCodeSnippetStatement(elseStatement.prettyprint().replace("{","").replace("}","//"));
 
+        //Deleta o bloco Else
         ctMethod.getBody().getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).getElseStatement().delete();
+
+        //Coloca o bloco Else após o If
         ctMethod.getBody().getElements(new TypeFilter<>(CtIf.class)).get(FIRST_IF).insertAfter((CtStatementList) elseStatement);
     }
+
+    public CtStatement getReturnStatement(){
+        Launcher launcher = new Launcher();
+        return launcher.getFactory().createCodeSnippetStatement("return");
+    }
+
 }
