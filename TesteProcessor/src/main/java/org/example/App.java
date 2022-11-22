@@ -1,15 +1,12 @@
 package org.example;
 
 import spoon.Launcher;
-import spoon.reflect.CtModel;
-import spoon.reflect.code.CtAssignment;
-import spoon.reflect.code.CtBinaryOperator;
-import spoon.reflect.code.CtCodeElement;
-import spoon.reflect.declaration.CtClass;
+import spoon.reflect.code.*;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.visitor.filter.NamedElementFilter;
 import spoon.reflect.visitor.filter.TypeFilter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,8 +17,12 @@ public class App
 {
     public static void main( String[] args )
     {
-        String path = "F:\\Bolsa\\TesteIFS\\src";
-        String targetClassName = "Main";
+        //String path = "F:\\Bolsa\\TesteIFS\\src";
+        //String targetClassName = "Main";
+        String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
+        String targetClassName = "TesteIfs";
+
+
         /*Launcher launcher = new Launcher();
         launcher.addInputResource(path);
         CtModel model = launcher.buildModel();
@@ -41,25 +42,61 @@ public class App
         }
         System.out.println(targetClassSpoon.prettyprint());*/
 
-        BlockHierarchy blockHierarchy= new BlockHierarchy(path, targetClassName);
-        VariableDependencyCreator variableDependencyCreator = new VariableDependencyCreator(path, targetClassName);
-        variableDependencyCreator.testingClassSpoon();
+        //Teste getPackages
+
+        Launcher launcher = new Launcher();
+        launcher.addInputResource(path);
+        launcher.buildModel();
+        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "teste6")).get(0);
+
+        List<CtStatement> list = new ArrayList<>();
+        for(CtStatement statement : method.getElements(new TypeFilter<>(CtStatement.class))){
+            if(statement.getParent() == method.getBody()){
+                list.add(statement);
+            }
+        }
+        //System.out.println(list);
+
+        List<GraphNode> nodeList = new ArrayList<>();
+        List<GraphEdge> edgeList = new ArrayList<>();
+        /*GraphNode node = new GraphNode(list.get(0));
+        GraphEdge edge = new GraphEdge();
+        edge.setDst(new GraphNode(list.get(1)));
+        edge.setSrc(node);
+        node.setOutgoingEdges(edge);
+
+        System.out.println(node.getIncomingEdges());*/
 
 
-        List<CtCodeElement> codeElementList = variableDependencyCreator.getElementsInCorrectPosition();
-        //System.out.println(codeElementList.get(2).getElements(new TypeFilter<>(CtAssignment.class)));
-        //System.out.println(codeElementList);
-        /*System.out.println(codeElementList.get(2));
-        System.out.println(codeElementList.get(2).getClass());
-        System.out.println(codeElementList.get(2).getDirectChildren());
-        for(Object element : codeElementList.get(2).getDirectChildren()){
-            System.out.println(element);
-            System.out.println(element.getClass());
-        }*/
+        for(CtStatement statement : list){
+            nodeList.add(new GraphNode(statement));
+        }
+        int i = 0;
+        while(nodeList.size() > i){
+            if(nodeList.size() - 1 == i ){
+                nodeList.get(i).setOutgoingEdges(new GraphEdge(nodeList.get(i), null));
+                break;
+            }
+            nodeList.get(i).setOutgoingEdges(new GraphEdge(nodeList.get(i), nodeList.get(i + 1)));
+            i++;
+        }
+        i = 1;
+        while(nodeList.size() > i){
+            /*if(i == 0){
+                nodeList.get(i).setIncomingEdge(new GraphEdge(null, null));
+                i++;
+                continue;
+            }
+            else if (nodeList.size() - 1 == i){
+                nodeList.get(i).setIncomingEdge(new GraphEdge(nodeList.get(i), nodeList.get(i - 1)));
+                break;
+            }*/
+            nodeList.get(i).setIncomingEdge(new GraphEdge(nodeList.get(i), nodeList.get(i - 1)));
+            i++;
+        }
 
-
-        /*variableDependencyCreator.addingAllVariablesToVariableField();
-        variableDependencyCreator.printVariableField();*/
+        System.out.println(nodeList.get(4).getOutgoingEdges());
+        System.out.println(nodeList.get(4).getIncomingEdges());
 
 
 
