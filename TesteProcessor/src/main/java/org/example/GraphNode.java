@@ -12,6 +12,8 @@ public class GraphNode {
     private Set<GraphEdge> incomingEdges;
     private Set<GraphEdge> outgoingEdges;
 
+    private BasicBlock basicBlock;
+
     private int id;
 
     public GraphNode(CtStatement statement){

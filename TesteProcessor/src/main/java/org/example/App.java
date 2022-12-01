@@ -5,9 +5,15 @@ import spoon.reflect.code.*;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.visitor.filter.NamedElementFilter;
 import spoon.reflect.visitor.filter.TypeFilter;
+import spoon.support.reflect.code.CtBlockImpl;
+import spoon.support.reflect.code.CtIfImpl;
+import spoon.support.reflect.code.CtSwitchImpl;
+import spoon.support.reflect.code.CtWhileImpl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Hello world!
@@ -28,40 +34,38 @@ public class App
         launcher.buildModel();
         CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "teste6")).get(0);
 
-        /*List<CtStatement> list = new ArrayList<>();
-        for(CtStatement statement : method.getElements(new TypeFilter<>(CtStatement.class))){
+        List<BasicBlock> basicBlockList = new ArrayList<>();
+        Set<CtStatement> statementsFromMethod = new HashSet<>();
+        for(CtStatement statement : method.getBody().getElements(new TypeFilter<>(CtStatement.class))){
             if(statement.getParent() == method.getBody()){
-                list.add(statement);
+                statementsFromMethod.add(statement);
             }
         }
-
-
-        List<GraphNode> nodeList = new ArrayList<>();
-        for(CtStatement statement : list){
-            nodeList.add(new GraphNode(statement));
-        }
-        int i = 0;
-        while(nodeList.size() > i){
-            if(nodeList.size() - 1 == i ){
-                nodeList.get(i).setOutgoingEdges(new GraphEdge(nodeList.get(i), null));
-                break;
+        int blockNumber = 1;
+        basicBlockList.add(new BasicBlock());
+        List<CtStatement> statementsToAddToBlock = new ArrayList<>();
+        for(CtStatement statement : statementsFromMethod){
+            if(statement instanceof CtIfImpl){
+                basicBlockList.get(blockNumber).addNode(statementsToAddToBlock);
+                statementsToAddToBlock.clear();
+                basicBlockList.add(new BasicBlock());
+                basicBlockList.get(blockNumber).setOutgoingEdges(new GraphEdge());
+                continue;
             }
-            nodeList.get(i).setOutgoingEdges(new GraphEdge(nodeList.get(i), nodeList.get(i + 1)));
-            i++;
+            if(statement instanceof CtSwitchImpl){
+                continue;
+            }
+            if(statement instanceof CtWhileImpl){
+                continue;
+            }
+            if(statement instanceof CtFor){
+                continue;
+            }
+            statementsToAddToBlock.add(statement);
         }
-        i = 1;
-        while(nodeList.size() > i){
-            nodeList.get(i).setIncomingEdge(new GraphEdge(nodeList.get(i), nodeList.get(i - 1)));
-            i++;
-        }
 
-        System.out.println(nodeList.get(4).getOutgoingEdges());
-        System.out.println(nodeList.get(4).getIncomingEdges());*/
+        System.out.println(statementsToAddToBlock);
 
-        BasicBlock blockTeste = new BasicBlock();
-
-        blockTeste.addNodesFromCtBlock(method.getBody());
-        blockTeste.printNodes();
 
 
 

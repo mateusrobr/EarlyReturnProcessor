@@ -13,6 +13,7 @@ import java.util.Set;
 
 public class BasicBlock {
     private int id;
+    GraphNode leader;
     List<GraphNode> nodes;
     Set<GraphEdge> incomingEdges;
     Set<GraphEdge> outgoingEdges;
@@ -23,7 +24,7 @@ public class BasicBlock {
         nodes = new ArrayList<>();
     }
 
-    public void addNodesFromCtBlock(CtBlock block){
+    /*public void addNodesFromCtBlock(CtBlock block){
 
         for(CtStatement statement : block.getElements(new TypeFilter<>(CtStatement.class))){
             if(statement.getParent() == block){
@@ -31,10 +32,25 @@ public class BasicBlock {
             }
         }
 
+    }*/
+
+    public void addNode(List<CtStatement> statements){
+        for(CtStatement statement : statements){
+            nodes.add(new GraphNode(statement));
+        }
     }
 
     public void printNodes(){
         System.out.println(nodes);
+    }
+
+    public void setIncomingEdges(){
+
+    }
+    public void setOutgoingEdges(List<GraphEdge> graphEdges){
+        for(GraphEdge edge : graphEdges){
+            outgoingEdges.add(edge);
+        }
     }
 
 }
