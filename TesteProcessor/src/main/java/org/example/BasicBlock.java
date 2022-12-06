@@ -13,31 +13,21 @@ import java.util.Set;
 
 public class BasicBlock {
     private int id;
-    GraphNode leader;
-    List<GraphNode> nodes;
-    Set<GraphEdge> incomingEdges;
-    Set<GraphEdge> outgoingEdges;
+    private GraphNode leader;
+    private List<GraphNode> nodes;
+    private Set<GraphEdge> incomingEdges;
+    private Set<GraphEdge> outgoingEdges;
 
-    public BasicBlock(){
+    public BasicBlock(int id){
         incomingEdges = new HashSet<>();
         outgoingEdges = new HashSet<>();
         nodes = new ArrayList<>();
+        this.id = id;
     }
 
-    /*public void addNodesFromCtBlock(CtBlock block){
 
-        for(CtStatement statement : block.getElements(new TypeFilter<>(CtStatement.class))){
-            if(statement.getParent() == block){
-                nodes.add(new GraphNode(statement));
-            }
-        }
-
-    }*/
-
-    public void addNode(List<CtStatement> statements){
-        for(CtStatement statement : statements){
-            nodes.add(new GraphNode(statement));
-        }
+    public void addNode(GraphNode newNode){
+        nodes.add(newNode);
     }
 
     public void printNodes(){
@@ -51,6 +41,12 @@ public class BasicBlock {
         for(GraphEdge edge : graphEdges){
             outgoingEdges.add(edge);
         }
+    }
+    public void setId(int id){
+        this.id = id;
+    }
+    public int getId(){
+        return this.id;
     }
 
 }

@@ -14,6 +14,8 @@ public class GraphNode {
 
     private BasicBlock basicBlock;
 
+    private boolean isLeader;
+
     private int id;
 
     public GraphNode(CtStatement statement){
@@ -40,6 +42,15 @@ public class GraphNode {
 
     public String toString(){
         return statement.prettyprint();
+    }
+
+    public boolean isLeader(){
+        return isLeader;
+    }
+
+    public void setBasicBlock(BasicBlock basicBlock){
+        this.basicBlock = basicBlock;
+        basicBlock.addNode(this);
     }
 
 }
