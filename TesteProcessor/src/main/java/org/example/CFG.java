@@ -21,7 +21,7 @@ public class CFG {
     public CFG(CtMethod method){
         int currentId = 1;
         basicBlocks = new ArrayList<>();
-        basicBlocks.add(new BasicBlock(currentId));
+        //basicBlocks.add(new BasicBlock(currentId));
         allNodes = new ArrayList<>();
 
         getBasicBlocksFromCtBlock(basicBlocks, method.getBody(), currentId, allNodes);
@@ -36,10 +36,13 @@ public class CFG {
         List<CtStatement> statementList = getStatementsInOrderFromBlock(block);
         BasicBlock newBasicBlock = new BasicBlock(id++);
         basicBlockList.add(newBasicBlock);
+        List<BasicBlock> basicBlockListForThisBlock = new ArrayList<>();
+        basicBlockListForThisBlock.add(newBasicBlock);
+        int numberOfBasicBlocksForThisBlock = 1;
 
         for (CtStatement statement : statementList){
             GraphNode newNode = new GraphNode(statement);
-            newNode.setBasicBlock(newBasicBlock);
+            newNode.setBasicBlock(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
             allNodes.add(newNode);
 
             if(statement instanceof CtIfImpl){
@@ -47,6 +50,11 @@ public class CFG {
                 getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getThenStatement(), id, allNodes);
                 id++;
                 getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getElseStatement(), ++id, allNodes);
+                id++;
+
+                basicBlockListForThisBlock.add(new BasicBlock(id));
+                numberOfBasicBlocksForThisBlock++;
+                basicBlockList.add(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
             }
 
         }
