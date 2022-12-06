@@ -39,8 +39,10 @@ public class CFG {
         List<BasicBlock> basicBlockListForThisBlock = new ArrayList<>();
         basicBlockListForThisBlock.add(newBasicBlock);
         int numberOfBasicBlocksForThisBlock = 1;
+        int numberOfStatements = 0;
 
         for (CtStatement statement : statementList){
+            numberOfStatements++;
             GraphNode newNode = new GraphNode(statement);
             newNode.setBasicBlock(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
             allNodes.add(newNode);
@@ -52,9 +54,15 @@ public class CFG {
                 getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getElseStatement(), ++id, allNodes);
                 id++;
 
+                if(numberOfStatements < statementList.size()){
+                    numberOfBasicBlocksForThisBlock++;
+                    basicBlockListForThisBlock.add(new BasicBlock(id));
+                    basicBlockList.add(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
+                }
+                /*numberOfBasicBlocksForThisBlock++;
                 basicBlockListForThisBlock.add(new BasicBlock(id));
-                numberOfBasicBlocksForThisBlock++;
-                basicBlockList.add(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
+                basicBlockList.add(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));*/
+
             }
 
         }
