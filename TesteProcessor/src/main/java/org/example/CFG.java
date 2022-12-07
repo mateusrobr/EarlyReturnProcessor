@@ -24,12 +24,12 @@ public class CFG {
         //basicBlocks.add(new BasicBlock(currentId));
         allNodes = new ArrayList<>();
 
-        getBasicBlocksFromCtBlock(basicBlocks, method.getBody(), currentId, allNodes);
+        getBasicBlocksFromCtBlock(basicBlocks, method.getBody(), currentId, allNodes, false);
 
 
     }
 
-    public void getBasicBlocksFromCtBlock(List<BasicBlock> basicBlockList, CtBlock block, int id, List<GraphNode> allNodes){
+    public void getBasicBlocksFromCtBlock(List<BasicBlock> basicBlockList, CtBlock block, int id, List<GraphNode> allNodes, boolean isRecursive){
         if(block == null){
             return;
         }
@@ -38,6 +38,7 @@ public class CFG {
         basicBlockList.add(newBasicBlock);
         List<BasicBlock> basicBlockListForThisBlock = new ArrayList<>();
         basicBlockListForThisBlock.add(newBasicBlock);
+
         int numberOfBasicBlocksForThisBlock = 1;
         int numberOfStatements = 0;
 
@@ -46,23 +47,32 @@ public class CFG {
             GraphNode newNode = new GraphNode(statement);
             newNode.setBasicBlock(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
             allNodes.add(newNode);
+            GraphEdge outgoingEdge = new GraphEdge();
 
             if(statement instanceof CtIfImpl){
 
-                getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getThenStatement(), id, allNodes);
+                getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getThenStatement(), id, allNodes, true);
                 id++;
-                getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getElseStatement(), ++id, allNodes);
+                getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getElseStatement(), ++id, allNodes, true);
                 id++;
 
                 if(numberOfStatements < statementList.size()){
                     numberOfBasicBlocksForThisBlock++;
-                    basicBlockListForThisBlock.add(new BasicBlock(id));
+                    basicBlockListForThisBlock.add(new BasicBlock(id++));
                     basicBlockList.add(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
                 }
-                /*numberOfBasicBlocksForThisBlock++;
-                basicBlockListForThisBlock.add(new BasicBlock(id));
-                basicBlockList.add(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));*/
 
+
+            }
+            else{
+                outgoingEdge.setDst(newNode);
+                if(numberOfStatements > 1 || isRecursive == true){
+                    outgoingEdge.setSrc(allNodes.get(allNodes.size() - 2));
+                }
+                else{
+                    outgoingEdge.setSrc(null);
+                }
+                newNode.setOutgoingEdges(outgoingEdge);
             }
 
         }
@@ -89,5 +99,9 @@ public class CFG {
             basicBlock.printNodes();
             System.out.println("------");
         }
+    }
+
+    public List<GraphNode> getAllNodes(){
+        return this.allNodes;
     }
 }

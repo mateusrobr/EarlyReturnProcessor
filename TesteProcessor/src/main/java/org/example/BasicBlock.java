@@ -49,4 +49,8 @@ public class BasicBlock {
         return this.id;
     }
 
+    public List<GraphNode> getNodes(){
+        return this.nodes;
+    }
+
 }

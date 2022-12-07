@@ -8,9 +8,7 @@ public class GraphEdge {
     private GraphNode dst;
 
 
-    public GraphEdge(GraphNode src, GraphNode dst){
-        this.src = src;
-        this.dst = dst;
+    public GraphEdge(){
     }
     public GraphNode getDst(){
         return dst;

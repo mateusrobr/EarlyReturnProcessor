@@ -41,6 +41,11 @@ public class App
         CFG cfg = new CFG(method);
         cfg.printNodesFromBasicBlocks();
 
+        for(GraphNode node : cfg.getAllNodes()){
+            System.out.println(node.getOutgoingEdges());
+            System.out.println("----------------");
+        }
+
 
     }
 }
