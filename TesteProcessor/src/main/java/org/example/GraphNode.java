@@ -26,6 +26,10 @@ public class GraphNode {
 
     public void setIncomingEdge(GraphEdge incomingEdge){
         incomingEdges.add(incomingEdge);
+        GraphEdge outgoingEdge = new GraphEdge();
+        outgoingEdge.setSrc(incomingEdge.getDst());
+        outgoingEdge.setDst(incomingEdge.getSrc());
+        setOutgoingEdges(outgoingEdge);
     }
 
     public void setOutgoingEdges(GraphEdge outgoingEdge){
@@ -40,8 +44,16 @@ public class GraphNode {
         return outgoingEdges;
     }
 
+    public void setId(int id){
+        this.id = id;
+    }
+
+    public int getId(){
+        return id;
+    }
+
     public String toString(){
-        return statement.prettyprint();
+        return "Statement: " + id + " " + statement.prettyprint();
     }
 
     public boolean isLeader(){
@@ -51,6 +63,12 @@ public class GraphNode {
     public void setBasicBlock(BasicBlock basicBlock){
         this.basicBlock = basicBlock;
         basicBlock.addNode(this);
+    }
+
+    public void deleteOutgoingEdge(){
+        if(!outgoingEdges.isEmpty()){
+            outgoingEdges.clear();
+        }
     }
 
 }

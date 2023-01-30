@@ -29,50 +29,77 @@ public class CFG {
 
     }
 
-    public void getBasicBlocksFromCtBlock(List<BasicBlock> basicBlockList, CtBlock block, int id, List<GraphNode> allNodes, boolean isRecursive){
+    public void getBasicBlocksFromCtBlock(List<BasicBlock> basicBlockList, CtBlock block, int blockId, List<GraphNode> allNodes, boolean isRecursive){
         if(block == null){
             return;
         }
         List<CtStatement> statementList = getStatementsInOrderFromBlock(block);
-        BasicBlock newBasicBlock = new BasicBlock(id++);
+        BasicBlock newBasicBlock = new BasicBlock(blockId++);
         basicBlockList.add(newBasicBlock);
+
         List<BasicBlock> basicBlockListForThisBlock = new ArrayList<>();
         basicBlockListForThisBlock.add(newBasicBlock);
 
         int numberOfBasicBlocksForThisBlock = 1;
-        int numberOfStatements = 0;
+        int numberOfStatementsForThisBlock = 0;
 
         for (CtStatement statement : statementList){
-            numberOfStatements++;
+            numberOfStatementsForThisBlock++;
             GraphNode newNode = new GraphNode(statement);
             newNode.setBasicBlock(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
             allNodes.add(newNode);
+            newNode.setId(allNodes.size());
+
             GraphEdge outgoingEdge = new GraphEdge();
 
             if(statement instanceof CtIfImpl){
 
-                getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getThenStatement(), id, allNodes, true);
-                id++;
-                getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getElseStatement(), ++id, allNodes, true);
-                id++;
+                int idFromPreviousStatement = allNodes.size() - 2;
+                //int idFromThisStatement = allNodes.size() - 1;
+                outgoingEdge.setDst(newNode);
+                outgoingEdge.setSrc(allNodes.get( idFromPreviousStatement ) );
+                allNodes.get(idFromPreviousStatement).setOutgoingEdges(outgoingEdge);
 
-                if(numberOfStatements < statementList.size()){
+                getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getThenStatement(), blockId, allNodes, true);
+                blockId++;
+
+                //GraphEdge trueBranhOutgoingEdge = new GraphEdge();
+                //trueBranhOutgoingEdge.setSrc(newNode);
+                //;newNode.setOutgoingEdges(trueBranhOutgoingEdge);
+
+
+                if( ( ( CtIfImpl ) statement).getElseStatement() != null){
+                    int idFromTheFirstStatementOfElseStatement = allNodes.size();
+                    getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getElseStatement(), ++blockId, allNodes, true);
+                    blockId++;
+
+
+                    GraphEdge falseBranchOutgoingEdge = new GraphEdge();
+                    falseBranchOutgoingEdge.setDst(allNodes.get( idFromTheFirstStatementOfElseStatement ));
+                    falseBranchOutgoingEdge.setSrc(newNode);
+                    newNode.setOutgoingEdges(falseBranchOutgoingEdge);
+
+                }
+
+                if(numberOfStatementsForThisBlock < statementList.size()){
                     numberOfBasicBlocksForThisBlock++;
-                    basicBlockListForThisBlock.add(new BasicBlock(id++));
+                    basicBlockListForThisBlock.add(new BasicBlock(blockId++));
                     basicBlockList.add(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
                 }
+
 
 
             }
             else{
                 outgoingEdge.setDst(newNode);
-                if(numberOfStatements > 1 || isRecursive == true){
-                    outgoingEdge.setSrc(allNodes.get(allNodes.size() - 2));
+                /*if(numberOfStatementsForThisBlock == statementList.size() && isRecursive == true){
+                     //do nothing
+                }*/
+                if (numberOfStatementsForThisBlock > 1 || isRecursive == true) {
+                    int SrcId = allNodes.size() - 2;
+                    outgoingEdge.setSrc(allNodes.get(SrcId));
+                    allNodes.get(SrcId).setOutgoingEdges(outgoingEdge);
                 }
-                else{
-                    outgoingEdge.setSrc(null);
-                }
-                newNode.setOutgoingEdges(outgoingEdge);
             }
 
         }
@@ -90,7 +117,6 @@ public class CFG {
     }
 
     public void ProcessIfStatement(List<BasicBlock>basicBlockList, CtIf ctIf, List<CtStatement> statementsInOrder){
-
     }
 
     public void printNodesFromBasicBlocks(){

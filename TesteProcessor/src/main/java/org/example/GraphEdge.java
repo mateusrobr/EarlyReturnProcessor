@@ -27,6 +27,6 @@ public class GraphEdge {
     }
 
     public String toString(){
-        return "src: " + src + " dst: " + dst;
+        return "src: " + src + "\n" +" dst: " + dst;
     }
 }
