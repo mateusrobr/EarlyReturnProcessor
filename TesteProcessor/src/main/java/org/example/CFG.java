@@ -45,9 +45,11 @@ public class CFG {
 
         int numberOfBasicBlocksForThisBlock = 1;
         int numberOfStatementsForThisBlock = 0;
+        boolean flag = false;
 
         for (CtStatement statement : statementList){
             numberOfStatementsForThisBlock++;
+            //boolean flag = false;
             GraphNode newNode = new GraphNode(statement);
             newNode.setBasicBlock(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
             allNodes.add(newNode);
@@ -58,6 +60,7 @@ public class CFG {
             if(statement instanceof CtIfImpl){
 
                 int idFromPreviousStatement = allNodes.size() - 2;
+
 
                 outgoingEdge.setDst(newNode);
                 outgoingEdge.setSrc(allNodes.get( idFromPreviousStatement ) );
@@ -85,7 +88,10 @@ public class CFG {
                     newNode.setOutgoingEdges(falseBranchOutgoingEdge);
 
                 }
-                //allNodes.get( idFromLastStatementTrueBranch ).deleteOutgoingEdge();
+                flag = true;
+                for(GraphNode node : lastNodesFromConditionalBranches ){
+                    node.deleteOutgoingEdge();
+                }
 
                 if(numberOfStatementsForThisBlock < statementList.size()){
                     numberOfBasicBlocksForThisBlock++;
@@ -101,6 +107,19 @@ public class CFG {
                     int SrcId = allNodes.size() - 2;
                     outgoingEdge.setSrc( allNodes.get( SrcId ) );
                     allNodes.get( SrcId ).setOutgoingEdges( outgoingEdge );
+                    if( flag ) {
+                        for (GraphNode node : lastNodesFromConditionalBranches) {
+                            GraphEdge outgoingEdgeConditionalStatement = new GraphEdge();
+                            outgoingEdgeConditionalStatement.setDst(newNode);
+                            outgoingEdgeConditionalStatement.setSrc(node);
+
+                            node.setOutgoingEdges(outgoingEdgeConditionalStatement);
+                            //lastNodesFromConditionalBranches.remove( node );
+                        }
+                        lastNodesFromConditionalBranches.clear();
+                        flag = false;
+                    }
+                    //lastNodesFromConditionalBranches.clear();
                 }
 
             }

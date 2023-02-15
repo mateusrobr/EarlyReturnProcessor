@@ -30,7 +30,7 @@ public class App
         CFG cfg = new CFG(method);
         //cfg.printNodesFromBasicBlocks();
 
-        /*System.out.println("Edges: ");
+        System.out.println("Edges: ");
 
         for(GraphNode node : cfg.getAllNodes()){
 
@@ -38,11 +38,11 @@ public class App
             System.out.println("Edge: ");
             System.out.println(node.getOutgoingEdges());
             System.out.println("----------------");
-        }*/
+        }
 
         //System.out.println(cfg.getAllNodes());
 
-        System.out.println(cfg.getLastNodesFromConditionalBranches());
+        //System.out.println(cfg.getLastNodesFromConditionalBranches());
 
 
     }
