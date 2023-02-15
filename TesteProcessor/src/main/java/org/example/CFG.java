@@ -16,6 +16,8 @@ public class CFG {
 
     private List<GraphNode> allNodes;
 
+    private List<GraphNode> lastNodesFromConditionalBranches;
+
     private String MethodName;
 
     public CFG(CtMethod method){
@@ -23,6 +25,7 @@ public class CFG {
         basicBlocks = new ArrayList<>();
         //basicBlocks.add(new BasicBlock(currentId));
         allNodes = new ArrayList<>();
+        lastNodesFromConditionalBranches = new ArrayList<>();
 
         getBasicBlocksFromCtBlock(basicBlocks, method.getBody(), currentId, allNodes, false);
 
@@ -55,31 +58,34 @@ public class CFG {
             if(statement instanceof CtIfImpl){
 
                 int idFromPreviousStatement = allNodes.size() - 2;
-                //int idFromThisStatement = allNodes.size() - 1;
+
                 outgoingEdge.setDst(newNode);
                 outgoingEdge.setSrc(allNodes.get( idFromPreviousStatement ) );
                 allNodes.get(idFromPreviousStatement).setOutgoingEdges(outgoingEdge);
 
                 getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getThenStatement(), blockId, allNodes, true);
                 blockId++;
-
-                //GraphEdge trueBranhOutgoingEdge = new GraphEdge();
-                //trueBranhOutgoingEdge.setSrc(newNode);
-                //;newNode.setOutgoingEdges(trueBranhOutgoingEdge);
-
+                int idFromLastStatementTrueBranch = allNodes.size() - 1;
+                lastNodesFromConditionalBranches.add( allNodes.get( idFromLastStatementTrueBranch ) );
 
                 if( ( ( CtIfImpl ) statement).getElseStatement() != null){
-                    int idFromTheFirstStatementOfElseStatement = allNodes.size();
+                    int idFromFirstStatementFalseBranch = allNodes.size();
                     getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getElseStatement(), ++blockId, allNodes, true);
                     blockId++;
 
 
+                    int idFromLastStatementFalseBranch = allNodes.size() - 1;
+                    if(!lastNodesFromConditionalBranches.contains( allNodes.get( idFromLastStatementFalseBranch ) )){
+                        lastNodesFromConditionalBranches.add( allNodes.get( idFromLastStatementFalseBranch ) );
+                    }
+
                     GraphEdge falseBranchOutgoingEdge = new GraphEdge();
-                    falseBranchOutgoingEdge.setDst(allNodes.get( idFromTheFirstStatementOfElseStatement ));
+                    falseBranchOutgoingEdge.setDst(allNodes.get( idFromFirstStatementFalseBranch ));
                     falseBranchOutgoingEdge.setSrc(newNode);
                     newNode.setOutgoingEdges(falseBranchOutgoingEdge);
 
                 }
+                //allNodes.get( idFromLastStatementTrueBranch ).deleteOutgoingEdge();
 
                 if(numberOfStatementsForThisBlock < statementList.size()){
                     numberOfBasicBlocksForThisBlock++;
@@ -87,21 +93,17 @@ public class CFG {
                     basicBlockList.add(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
                 }
 
-
-
             }
             else{
                 outgoingEdge.setDst(newNode);
-                /*if(numberOfStatementsForThisBlock == statementList.size() && isRecursive == true){
-                     //do nothing
-                }*/
+
                 if (numberOfStatementsForThisBlock > 1 || isRecursive == true) {
                     int SrcId = allNodes.size() - 2;
-                    outgoingEdge.setSrc(allNodes.get(SrcId));
-                    allNodes.get(SrcId).setOutgoingEdges(outgoingEdge);
+                    outgoingEdge.setSrc( allNodes.get( SrcId ) );
+                    allNodes.get( SrcId ).setOutgoingEdges( outgoingEdge );
                 }
-            }
 
+            }
         }
     }
 
@@ -129,5 +131,9 @@ public class CFG {
 
     public List<GraphNode> getAllNodes(){
         return this.allNodes;
+    }
+
+    public List<GraphNode> getLastNodesFromConditionalBranches() {
+        return lastNodesFromConditionalBranches;
     }
 }
