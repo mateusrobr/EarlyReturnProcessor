@@ -45,11 +45,11 @@ public class CFG {
 
         int numberOfBasicBlocksForThisBlock = 1;
         int numberOfStatementsForThisBlock = 0;
-        boolean flag = false;
+        boolean isAnyStatementNeedingEdge = false;
 
         for (CtStatement statement : statementList){
             numberOfStatementsForThisBlock++;
-            //boolean flag = false;
+
             GraphNode newNode = new GraphNode(statement);
             newNode.setBasicBlock(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
             allNodes.add(newNode);
@@ -88,7 +88,7 @@ public class CFG {
                     newNode.setOutgoingEdges(falseBranchOutgoingEdge);
 
                 }
-                flag = true;
+                isAnyStatementNeedingEdge = true;
                 for(GraphNode node : lastNodesFromConditionalBranches ){
                     node.deleteOutgoingEdge();
                 }
@@ -107,7 +107,7 @@ public class CFG {
                     int SrcId = allNodes.size() - 2;
                     outgoingEdge.setSrc( allNodes.get( SrcId ) );
                     allNodes.get( SrcId ).setOutgoingEdges( outgoingEdge );
-                    if( flag ) {
+                    if( isAnyStatementNeedingEdge ) {
                         for (GraphNode node : lastNodesFromConditionalBranches) {
                             GraphEdge outgoingEdgeConditionalStatement = new GraphEdge();
                             outgoingEdgeConditionalStatement.setDst(newNode);
@@ -117,7 +117,7 @@ public class CFG {
                             //lastNodesFromConditionalBranches.remove( node );
                         }
                         lastNodesFromConditionalBranches.clear();
-                        flag = false;
+                        isAnyStatementNeedingEdge = false;
                     }
                     //lastNodesFromConditionalBranches.clear();
                 }
