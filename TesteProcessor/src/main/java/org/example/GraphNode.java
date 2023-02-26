@@ -1,6 +1,7 @@
 package org.example;
 
 import spoon.reflect.code.CtStatement;
+import spoon.support.reflect.code.CtIfImpl;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -53,6 +54,9 @@ public class GraphNode {
     }
 
     public String toString(){
+        if(statement instanceof CtIfImpl){
+            return "Statement: " + "if( " +((CtIfImpl) statement).getCondition() + " )";
+        }
         return "Statement: " + id + " " + statement.prettyprint();
     }
 
