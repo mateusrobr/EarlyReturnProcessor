@@ -136,4 +136,8 @@ public class CFG {
     public List<GraphNode> getLastNodesFromConditionalBranches() {
         return lastNodesFromConditionalBranches;
     }
+
+    public List<BasicBlock> getBasicBlocks(){
+        return this.basicBlocks;
+    }
 }

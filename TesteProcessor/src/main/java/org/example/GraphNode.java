@@ -27,9 +27,6 @@ GraphNode {
 
     public void setIncomingEdge(GraphEdgeNode incomingEdge){
         incomingEdges.add(incomingEdge);
-        if(incomingEdge.getDst().getBasicBlock() != incomingEdge.getSrc().getBasicBlock()){
-
-        }
 
         GraphEdgeNode outgoingEdge = new GraphEdgeNode();
         outgoingEdge.setSrc(incomingEdge.getDst());
@@ -39,6 +36,12 @@ GraphNode {
 
     public void setOutgoingEdges(GraphEdgeNode outgoingEdge){
         outgoingEdges.add(outgoingEdge);
+        if(outgoingEdge.getDst().getBasicBlock() != outgoingEdge.getSrc().getBasicBlock()){
+            GraphEdgeBasicBlock newEdge = new GraphEdgeBasicBlock();
+            newEdge.setSrc(outgoingEdge.getSrc().getBasicBlock());
+            newEdge.setDst(outgoingEdge.getDst().getBasicBlock());
+            outgoingEdge.getSrc().getBasicBlock().setOutgoingEdges(newEdge);
+        }
     }
 
     public Set<GraphEdgeNode> getIncomingEdges(){

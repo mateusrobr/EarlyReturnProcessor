@@ -1,5 +1,6 @@
 package org.example;
 
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -9,8 +10,8 @@ public class BasicBlock {
     private int id;
     private GraphNode leader;
     private List<GraphNode> nodes;
-    private Set<GraphEdgeNode> incomingEdges;
-    private Set<GraphEdgeNode> outgoingEdges;
+    private Set<GraphEdgeBasicBlock> incomingEdges;
+    private Set<GraphEdgeBasicBlock> outgoingEdges;
 
     public BasicBlock(int id){
         incomingEdges = new HashSet<>();
@@ -31,10 +32,12 @@ public class BasicBlock {
     public void setIncomingEdges(){
 
     }
-    public void setOutgoingEdges(List<GraphEdgeNode> graphEdgeNodes){
-        for(GraphEdgeNode edge : graphEdgeNodes){
-            outgoingEdges.add(edge);
-        }
+    public void setOutgoingEdges(GraphEdgeBasicBlock outgoingEdge){
+        this.outgoingEdges.add(outgoingEdge);
+    }
+
+    public Set<GraphEdgeBasicBlock> getOutgoingEdges(){
+        return this.outgoingEdges;
     }
     public void setId(int id){
         this.id = id;
@@ -45,6 +48,10 @@ public class BasicBlock {
 
     public List<GraphNode> getNodes(){
         return this.nodes;
+    }
+
+    public String toString(){
+        return "id: " + id;
     }
 
 }

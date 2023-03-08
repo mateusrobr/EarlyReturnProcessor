@@ -22,4 +22,8 @@ public class GraphEdgeBasicBlock {
     public BasicBlock getSrc() {
         return src;
     }
+
+    public String toString(){
+        return "src: " + src + " dst: " + dst;
+    }
 }
