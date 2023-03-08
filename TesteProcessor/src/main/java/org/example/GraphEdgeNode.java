@@ -1,14 +1,12 @@
 package org.example;
 
-import spoon.reflect.code.CtStatement;
-
-public class GraphEdge {
+public class GraphEdgeNode {
 
     private GraphNode src;
     private GraphNode dst;
 
 
-    public GraphEdge(){
+    public GraphEdgeNode(){
     }
     public GraphNode getDst(){
         return dst;

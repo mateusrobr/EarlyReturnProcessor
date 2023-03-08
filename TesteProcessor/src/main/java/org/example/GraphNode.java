@@ -4,14 +4,14 @@ import spoon.reflect.code.CtStatement;
 import spoon.support.reflect.code.CtIfImpl;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
-public class GraphNode {
+public class
+GraphNode {
 
     private CtStatement statement;
-    private Set<GraphEdge> incomingEdges;
-    private Set<GraphEdge> outgoingEdges;
+    private Set<GraphEdgeNode> incomingEdges;
+    private Set<GraphEdgeNode> outgoingEdges;
 
     private BasicBlock basicBlock;
 
@@ -21,27 +21,31 @@ public class GraphNode {
 
     public GraphNode(CtStatement statement){
         this.statement = statement;
-        incomingEdges = new LinkedHashSet<GraphEdge>();
-        outgoingEdges = new LinkedHashSet<GraphEdge>();
+        incomingEdges = new LinkedHashSet<GraphEdgeNode>();
+        outgoingEdges = new LinkedHashSet<GraphEdgeNode>();
     }
 
-    public void setIncomingEdge(GraphEdge incomingEdge){
+    public void setIncomingEdge(GraphEdgeNode incomingEdge){
         incomingEdges.add(incomingEdge);
-        GraphEdge outgoingEdge = new GraphEdge();
+        if(incomingEdge.getDst().getBasicBlock() != incomingEdge.getSrc().getBasicBlock()){
+
+        }
+
+        GraphEdgeNode outgoingEdge = new GraphEdgeNode();
         outgoingEdge.setSrc(incomingEdge.getDst());
         outgoingEdge.setDst(incomingEdge.getSrc());
         setOutgoingEdges(outgoingEdge);
     }
 
-    public void setOutgoingEdges(GraphEdge outgoingEdge){
+    public void setOutgoingEdges(GraphEdgeNode outgoingEdge){
         outgoingEdges.add(outgoingEdge);
     }
 
-    public Set<GraphEdge> getIncomingEdges(){
+    public Set<GraphEdgeNode> getIncomingEdges(){
         return incomingEdges;
     }
 
-    public Set<GraphEdge> getOutgoingEdges(){
+    public Set<GraphEdgeNode> getOutgoingEdges(){
         return outgoingEdges;
     }
 
@@ -68,7 +72,7 @@ public class GraphNode {
         this.basicBlock = basicBlock;
         basicBlock.addNode(this);
     }
-
+    public BasicBlock getBasicBlock(){return this.basicBlock;}
     public void deleteOutgoingEdge(){
         if(!outgoingEdges.isEmpty()){
             outgoingEdges.clear();

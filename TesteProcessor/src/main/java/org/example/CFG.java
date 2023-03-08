@@ -50,7 +50,7 @@ public class CFG {
             newNode.setBasicBlock(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
             allNodes.add(newNode);
             newNode.setId(allNodes.size());
-            GraphEdge outgoingEdge = new GraphEdge();
+            GraphEdgeNode outgoingEdge = new GraphEdgeNode();
             if(statement instanceof CtIfImpl){
                 int idFromPreviousStatement = allNodes.size() - 2;
                 outgoingEdge.setDst(newNode);
@@ -69,7 +69,7 @@ public class CFG {
                     if(!lastNodesFromConditionalBranches.contains( allNodes.get( idFromLastStatementFalseBranch ) )){
                         lastNodesFromConditionalBranches.add( allNodes.get( idFromLastStatementFalseBranch ) );
                     }
-                    GraphEdge falseBranchOutgoingEdge = new GraphEdge();
+                    GraphEdgeNode falseBranchOutgoingEdge = new GraphEdgeNode();
                     falseBranchOutgoingEdge.setDst(allNodes.get( idFromFirstStatementFalseBranch ));
                     falseBranchOutgoingEdge.setSrc(newNode);
                     newNode.setOutgoingEdges(falseBranchOutgoingEdge);
@@ -92,7 +92,7 @@ public class CFG {
                     allNodes.get( SrcId ).setOutgoingEdges( outgoingEdge );
                     if( isAnyStatementNeedingEdge ) {
                         for (GraphNode node : lastNodesFromConditionalBranches) {
-                            GraphEdge outgoingEdgeConditionalStatement = new GraphEdge();
+                            GraphEdgeNode outgoingEdgeConditionalStatement = new GraphEdgeNode();
                             outgoingEdgeConditionalStatement.setDst(newNode);
                             outgoingEdgeConditionalStatement.setSrc(node);
 

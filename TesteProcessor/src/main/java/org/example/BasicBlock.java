@@ -1,11 +1,5 @@
 package org.example;
 
-import spoon.reflect.code.CtBlock;
-import spoon.reflect.code.CtIf;
-import spoon.reflect.code.CtStatement;
-import spoon.reflect.visitor.filter.TypeFilter;
-import spoon.support.reflect.code.CtIfImpl;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,8 +9,8 @@ public class BasicBlock {
     private int id;
     private GraphNode leader;
     private List<GraphNode> nodes;
-    private Set<GraphEdge> incomingEdges;
-    private Set<GraphEdge> outgoingEdges;
+    private Set<GraphEdgeNode> incomingEdges;
+    private Set<GraphEdgeNode> outgoingEdges;
 
     public BasicBlock(int id){
         incomingEdges = new HashSet<>();
@@ -37,8 +31,8 @@ public class BasicBlock {
     public void setIncomingEdges(){
 
     }
-    public void setOutgoingEdges(List<GraphEdge> graphEdges){
-        for(GraphEdge edge : graphEdges){
+    public void setOutgoingEdges(List<GraphEdgeNode> graphEdgeNodes){
+        for(GraphEdgeNode edge : graphEdgeNodes){
             outgoingEdges.add(edge);
         }
     }
