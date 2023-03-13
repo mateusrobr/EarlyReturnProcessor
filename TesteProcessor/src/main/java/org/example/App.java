@@ -32,18 +32,18 @@ public class App
 
         System.out.println("Edges: ");
 
-        /*for(GraphNode node : cfg.getAllNodes()){
+        for(GraphNode node : cfg.getAllNodes()){
 
             System.out.println(node);
             System.out.println("Edge: ");
             System.out.println(node.getOutgoingEdges());
-            System.out.println("----------------");
-        }*/
+            System.out.println(" ----------------");
+        }
 
-        cfg.printNodesFromBasicBlocks();
+        /*cfg.printNodesFromBasicBlocks();
         for(BasicBlock basicBlock : cfg.getBasicBlocks()){
             System.out.println(basicBlock.getOutgoingEdges());
-        }
+        }*/
 
 
 
