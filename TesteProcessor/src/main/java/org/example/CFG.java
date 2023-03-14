@@ -62,8 +62,9 @@ public class CFG {
 
                 getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getThenStatement(), allNodes, true);
 
-                int idFromLastStatementTrueBranch = allNodes.size() - 1;
-                lastNodesFromConditionalBranches.add( allNodes.get( idFromLastStatementTrueBranch ) );
+                //int idFromLastStatementTrueBranch = allNodes.size() - 1;
+                //lastNodesFromConditionalBranches.add( allNodes.get( idFromLastStatementTrueBranch ) );
+                addLastNodesFromCodiditionalBranch();
                 if( ( ( CtIfImpl ) statement).getElseStatement() != null){
                     int idFromFirstStatementFalseBranch = allNodes.size();
                     getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getElseStatement(), allNodes, true);
@@ -153,6 +154,13 @@ public class CFG {
             outgoingEdgeConditionalStatement.setSrc(node);
 
             node.setOutgoingEdges(outgoingEdgeConditionalStatement);
+        }
+    }
+
+    private void addLastNodesFromCodiditionalBranch(){
+        int idFromLastStatementTrueBranch = allNodes.size() - 1;
+        if( !lastNodesFromConditionalBranches.contains(allNodes.get(idFromLastStatementTrueBranch))) {
+            lastNodesFromConditionalBranches.add(allNodes.get(idFromLastStatementTrueBranch));
         }
     }
 }
