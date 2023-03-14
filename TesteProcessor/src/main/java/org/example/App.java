@@ -13,7 +13,8 @@ public class App
 {
     public static void main( String[] args )
     {
-        String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
+        //String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
+        String path = "C:\\Users\\Kurumi\\Desktop\\ERP\\EarlyReturnProcessor\\TesteProcessor\\src\\main\\java\\BaseMethodsForTesting";
         //String targetClassName = "Main";
         //String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
        // String targetClassName = "TesteIfs";
@@ -23,7 +24,7 @@ public class App
         launcher.addInputResource(path);
         launcher.buildModel();
 
-        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "teste6")).get(0);
+        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "teste01")).get(0);
 
 
 
@@ -36,8 +37,8 @@ public class App
 
             System.out.println(node);
             System.out.println("Edge: ");
-            System.out.println(node.getOutgoingEdges());
-            System.out.println(" ----------------");
+            //System.out.println(node);
+            //System.out.println(" ----------------");
         }
 
         /*cfg.printNodesFromBasicBlocks();

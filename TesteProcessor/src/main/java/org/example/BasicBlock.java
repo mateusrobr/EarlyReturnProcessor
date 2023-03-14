@@ -8,16 +8,19 @@ import java.util.Set;
 
 public class BasicBlock {
     private int id;
+
+    private static int BasicBlockNum = 0;
     private GraphNode leader;
     private List<GraphNode> nodes;
     private Set<GraphEdgeBasicBlock> incomingEdges;
     private Set<GraphEdgeBasicBlock> outgoingEdges;
 
-    public BasicBlock(int id){
+    public BasicBlock(){
         incomingEdges = new HashSet<>();
         outgoingEdges = new HashSet<>();
         nodes = new ArrayList<>();
-        this.id = id;
+        ++BasicBlockNum;
+        this.id = BasicBlockNum;
     }
 
 

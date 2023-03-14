@@ -62,7 +62,7 @@ GraphNode {
 
     public String toString(){
         if(statement instanceof CtIfImpl){
-            return "Statement: " + "if( " +((CtIfImpl) statement).getCondition() + " )";
+            return "Statement: " + id + " if( " +((CtIfImpl) statement).getCondition() + " )";
         }
         return "Statement: " + id + " " + statement.prettyprint();
     }

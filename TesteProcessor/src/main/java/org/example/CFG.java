@@ -21,24 +21,25 @@ public class CFG {
     private String MethodName;
 
     public CFG(CtMethod method){
-        int currentId = 1;
+
         basicBlocks = new ArrayList<>();
         //basicBlocks.add(new BasicBlock(currentId));
         allNodes = new ArrayList<>();
         lastNodesFromConditionalBranches = new ArrayList<>();
 
-        getBasicBlocksFromCtBlock(basicBlocks, method.getBody(), currentId, allNodes, false);
+        getBasicBlocksFromCtBlock(basicBlocks, method.getBody(), allNodes, false);
 
 
     }
 
-    public void getBasicBlocksFromCtBlock(List<BasicBlock> basicBlockList, CtBlock block, int blockId, List<GraphNode> allNodes, boolean isRecursive){
+    public void getBasicBlocksFromCtBlock(List<BasicBlock> basicBlockList, CtBlock block,  List<GraphNode> allNodes, boolean isRecursive){
         if(block == null){
             return;
         }
         List<CtStatement> statementList = getStatementsInOrderFromBlock(block);
-        BasicBlock newBasicBlock = new BasicBlock(blockId++);
+        BasicBlock newBasicBlock = new BasicBlock();
         basicBlockList.add(newBasicBlock);
+
         List<BasicBlock> basicBlockListForThisBlock = new ArrayList<>();
         basicBlockListForThisBlock.add(newBasicBlock);
         int numberOfBasicBlocksForThisBlock = 1;
@@ -51,6 +52,7 @@ public class CFG {
             newNode.setBasicBlock(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
             allNodes.add(newNode);
             newNode.setId(allNodes.size());
+
             GraphEdgeNode outgoingEdge = new GraphEdgeNode();
             if(statement instanceof CtIfImpl){
                 int idFromPreviousStatement = allNodes.size() - 2;
@@ -58,29 +60,32 @@ public class CFG {
                 outgoingEdge.setSrc(allNodes.get( idFromPreviousStatement ) );
                 allNodes.get(idFromPreviousStatement).setOutgoingEdges(outgoingEdge);
 
-                getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getThenStatement(), blockId, allNodes, true);
-                blockId++;
+                getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getThenStatement(), allNodes, true);
+
                 int idFromLastStatementTrueBranch = allNodes.size() - 1;
                 lastNodesFromConditionalBranches.add( allNodes.get( idFromLastStatementTrueBranch ) );
                 if( ( ( CtIfImpl ) statement).getElseStatement() != null){
                     int idFromFirstStatementFalseBranch = allNodes.size();
-                    getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getElseStatement(), ++blockId, allNodes, true);
-                    blockId++;
+                    getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getElseStatement(), allNodes, true);
+
                     int idFromLastStatementFalseBranch = allNodes.size() - 1;
                     if(!lastNodesFromConditionalBranches.contains( allNodes.get( idFromLastStatementFalseBranch ) )){
-                        lastNodesFromConditionalBranches.add( allNodes.get( idFromLastStatementFalseBranch ) );
+                        //lastNodesFromConditionalBranches.add( allNodes.get( idFromLastStatementFalseBranch ) );
                     }
                     GraphEdgeNode falseBranchOutgoingEdge = new GraphEdgeNode();
                     falseBranchOutgoingEdge.setDst(allNodes.get( idFromFirstStatementFalseBranch ));
                     falseBranchOutgoingEdge.setSrc(newNode);
                     newNode.setOutgoingEdges(falseBranchOutgoingEdge);
                 }
+
                 isAnyStatementNeedingEdge = true;
+
 
                 deleteOutgoingEdgesFromConditionalBranches();
                 if(numberOfStatementsForThisBlock < statementList.size()){
                     numberOfBasicBlocksForThisBlock++;
-                    basicBlockListForThisBlock.add(new BasicBlock(blockId++));
+                    //basicBlockListForThisBlock.add(new BasicBlock(blockId++));
+                    basicBlockListForThisBlock.add(new BasicBlock());
                     basicBlockList.add(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
                 }
             }
