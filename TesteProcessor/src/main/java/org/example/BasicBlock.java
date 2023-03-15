@@ -57,4 +57,8 @@ public class BasicBlock {
         return "id: " + id;
     }
 
+    public void deleteOutGoingEdges(){
+        outgoingEdges.clear();
+    }
+
 }

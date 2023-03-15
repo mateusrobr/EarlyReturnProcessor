@@ -62,17 +62,16 @@ public class CFG {
 
                 getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getThenStatement(), allNodes, true);
 
-                //int idFromLastStatementTrueBranch = allNodes.size() - 1;
-                //lastNodesFromConditionalBranches.add( allNodes.get( idFromLastStatementTrueBranch ) );
                 addLastNodesFromCodiditionalBranch();
+
                 if( ( ( CtIfImpl ) statement).getElseStatement() != null){
                     int idFromFirstStatementFalseBranch = allNodes.size();
                     getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getElseStatement(), allNodes, true);
 
                     int idFromLastStatementFalseBranch = allNodes.size() - 1;
-                    if(!lastNodesFromConditionalBranches.contains( allNodes.get( idFromLastStatementFalseBranch ) )){
+                    /*if(!lastNodesFromConditionalBranches.contains( allNodes.get( idFromLastStatementFalseBranch ) )){
                         //lastNodesFromConditionalBranches.add( allNodes.get( idFromLastStatementFalseBranch ) );
-                    }
+                    }*/
                     GraphEdgeNode falseBranchOutgoingEdge = new GraphEdgeNode();
                     falseBranchOutgoingEdge.setDst(allNodes.get( idFromFirstStatementFalseBranch ));
                     falseBranchOutgoingEdge.setSrc(newNode);
@@ -85,7 +84,6 @@ public class CFG {
                 deleteOutgoingEdgesFromConditionalBranches();
                 if(numberOfStatementsForThisBlock < statementList.size()){
                     numberOfBasicBlocksForThisBlock++;
-                    //basicBlockListForThisBlock.add(new BasicBlock(blockId++));
                     basicBlockListForThisBlock.add(new BasicBlock());
                     basicBlockList.add(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
                 }
@@ -98,7 +96,9 @@ public class CFG {
                     allNodes.get( SrcId ).setOutgoingEdges( outgoingEdge );
                     if( isAnyStatementNeedingEdge ) {
                         connectLastNodesFromConditionalBranch(newNode);
+
                         lastNodesFromConditionalBranches.clear();
+
                         isAnyStatementNeedingEdge = false;
                     }
                 }
@@ -144,6 +144,7 @@ public class CFG {
     private void deleteOutgoingEdgesFromConditionalBranches(){
         for(GraphNode node : lastNodesFromConditionalBranches ){
             node.deleteOutgoingEdge();
+            node.getBasicBlock().deleteOutGoingEdges();
         }
     }
 

@@ -41,6 +41,7 @@ GraphNode {
             newEdge.setSrc(outgoingEdge.getSrc().getBasicBlock());
             newEdge.setDst(outgoingEdge.getDst().getBasicBlock());
             outgoingEdge.getSrc().getBasicBlock().setOutgoingEdges(newEdge);
+
         }
     }
 
