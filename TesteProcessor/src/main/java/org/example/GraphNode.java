@@ -77,6 +77,10 @@ GraphNode {
         basicBlock.addNode(this);
     }
     public BasicBlock getBasicBlock(){return this.basicBlock;}
+
+    public CtStatement getStatement(){
+        return this.statement;
+    }
     public void deleteOutgoingEdge(){
         if(!outgoingEdges.isEmpty()){
             outgoingEdges.clear();
