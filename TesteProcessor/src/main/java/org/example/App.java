@@ -41,12 +41,15 @@ public class App
             System.out.println(" ----------------");
         }*/
 
-        cfg.printNodesFromBasicBlocks();
+
+
+        //cfg.printNodesFromBasicBlocks();
         for(BasicBlock basicBlock : cfg.getBasicBlocks()){
-            System.out.println(basicBlock.getOutgoingEdges());
+            System.out.println(basicBlock);
+            System.out.println("foward reachableblocks");
+            //System.out.println(basicBlock.getOutgoingEdges());
+            System.out.println(basicBlock.getReachableBlocks());
         }
-
-
 
     }
 }

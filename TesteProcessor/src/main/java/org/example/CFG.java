@@ -29,7 +29,9 @@ public class CFG {
 
         getBasicBlocksFromCtBlock(basicBlocks, method.getBody(), allNodes, false);
 
-
+        for (BasicBlock basicBlock : basicBlocks){
+            basicBlock.getReachableBlocksFromEdges();
+        }
     }
 
     public void getBasicBlocksFromCtBlock(List<BasicBlock> basicBlockList, CtBlock block,  List<GraphNode> allNodes, boolean isRecursive){
