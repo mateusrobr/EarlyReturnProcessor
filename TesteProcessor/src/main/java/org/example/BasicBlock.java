@@ -1,13 +1,10 @@
 package org.example;
 
 
-import spoon.reflect.code.CtStatement;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
 
 public class BasicBlock {
     private int id;
@@ -28,6 +25,9 @@ public class BasicBlock {
         ++BasicBlockNum;
         this.id = BasicBlockNum;
         reachableBlocks = new ArrayList<>();
+        reachableBlocks.add(this);
+        dominatedBlocks = new ArrayList<>();
+        dominatedBlocks.add(this);
     }
 
 
@@ -70,11 +70,11 @@ public class BasicBlock {
     }
 
     public void getReachableBlocksFromEdges(){
-
+        //reachableBlocks.add(this);
         for(int i = 0 ; i < outgoingEdges.size() ; i++){
-            if(!isDuplicatedInReachableBlocks(outgoingEdges.get(i))){
-                reachableBlocks.add(outgoingEdges.get(i).getDst());
-                System.out.println("A");
+            if(!isBasicBlockInListAndAdd(outgoingEdges.get(i),reachableBlocks)){
+                //reachableBlocks.add(outgoingEdges.get(i).getDst());
+               // System.out.println("A");
                 outgoingEdges.get(i).getDst().getReachableBlocksFromEdges();
             }
         }
@@ -82,26 +82,42 @@ public class BasicBlock {
         getReachableBlocksFromDirectReachableBlock();
 
     }
+    public void getDominatedBlocksFromEdges(){
+        //dominatedBlocks.add(this);
+        if(outgoingEdges.size() > 1){
+            for(int i = 0 ; i < outgoingEdges.size() ; i++){
+                if(!isBasicBlockInListAndAdd(outgoingEdges.get(i), dominatedBlocks)){
+                    outgoingEdges.get(i).getDst().getDominatedBlocksFromEdges();
+                }
+            }
+        }
+        getDominatedBlocksFromDirectDominatedBlocks();
+    }
 
     private void getReachableBlocksFromDirectReachableBlock(){
         for(int i = 0 ; i < reachableBlocks.size() ; i++){
             addReachableBlocks(reachableBlocks.get(i).getReachableBlocks());
         }
     }
-    private boolean isDuplicatedInReachableBlocks(GraphEdgeBasicBlock outgoingEdge){
+    private void getDominatedBlocksFromDirectDominatedBlocks(){
+        for (int i = 0 ; i < dominatedBlocks.size() ; i++){
+            addDominatedBlocks(dominatedBlocks.get(i).getDominatedBlocks());
+        }
+    }
+    private boolean isBasicBlockInListAndAdd(GraphEdgeBasicBlock outgoingEdge, List<BasicBlock> basicBlockList){
         boolean isDuplicatedEdge = false;
-        for (BasicBlock reachBlocks : reachableBlocks){
+        for (BasicBlock reachBlocks : basicBlockList){
             if(outgoingEdge.getDst().getId() == reachBlocks.getId()){
                 isDuplicatedEdge = true;
                 return isDuplicatedEdge;
             }
         }
-
+        basicBlockList.add(outgoingEdge.getDst());
         return isDuplicatedEdge;
     }
-    private boolean isDuplicatedInReachableBlocks(BasicBlock basicBlock){
+    private boolean isBasicBlockAlreadyInList(BasicBlock basicBlock,List<BasicBlock> basicBlockList){
         boolean isDuplicatedBasicBlock = false;
-        for(BasicBlock reachBlocks : reachableBlocks){
+        for(BasicBlock reachBlocks : basicBlockList){
             if (reachBlocks.getId() == basicBlock.getId()){
                 isDuplicatedBasicBlock = true;
                 return isDuplicatedBasicBlock;
@@ -113,15 +129,26 @@ public class BasicBlock {
     private void addReachableBlocks(List<BasicBlock> childrenOfDirectReachableBlocks){
 
         for(BasicBlock basicBlock : childrenOfDirectReachableBlocks){
-            if(!isDuplicatedInReachableBlocks(basicBlock)){
+            if(!isBasicBlockAlreadyInList(basicBlock,reachableBlocks)){
                 this.reachableBlocks.add(basicBlock);
             }
         }
         //this.reachableBlocks.addAll(childrenOfDirectReachableBlocks);
     }
+    private void addDominatedBlocks(List<BasicBlock> childrenOfDirectEdges){
+        for(BasicBlock basicBlock : childrenOfDirectEdges){
+            if(!isBasicBlockAlreadyInList(basicBlock, dominatedBlocks)){
+                this.dominatedBlocks.add(basicBlock);
+            }
+        }
+    }
 
     public List<BasicBlock> getReachableBlocks() {
         return reachableBlocks;
+    }
+
+    public List<BasicBlock> getDominatedBlocks() {
+        return dominatedBlocks;
     }
 
     public String toString(){

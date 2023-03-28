@@ -15,16 +15,17 @@ public class App
     {
         //String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
         String path = "C:\\Users\\Kurumi\\Desktop\\ERP\\EarlyReturnProcessor\\TesteProcessor\\src\\main\\java\\BaseMethodsForTesting";
+        String pathExample = "C:\\Users\\Kurumi\\Desktop\\SpoonTests\\spoonTests\\src\\main\\java\\org\\example";
         //String targetClassName = "Main";
         //String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
        // String targetClassName = "TesteIfs";
 
 
         Launcher launcher = new Launcher();
-        launcher.addInputResource(path);
+        launcher.addInputResource(pathExample);
         launcher.buildModel();
 
-        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "teste01")).get(0);
+        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
 
 
 
@@ -45,10 +46,13 @@ public class App
 
         //cfg.printNodesFromBasicBlocks();
         for(BasicBlock basicBlock : cfg.getBasicBlocks()){
-            System.out.println(basicBlock);
-            System.out.println("foward reachableblocks");
+            //System.out.println(basicBlock);
+            //System.out.println(basicBlock.getNodes());
+            System.out.println("Dominated Blocks");
+            System.out.println(basicBlock.getId());
             //System.out.println(basicBlock.getOutgoingEdges());
-            System.out.println(basicBlock.getReachableBlocks());
+            //System.out.println(basicBlock.getReachableBlocks());
+            System.out.println(basicBlock.getDominatedBlocks());
         }
 
     }

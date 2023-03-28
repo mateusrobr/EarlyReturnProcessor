@@ -23,15 +23,12 @@ public class CFG {
     public CFG(CtMethod method){
 
         basicBlocks = new ArrayList<>();
-        //basicBlocks.add(new BasicBlock(currentId));
         allNodes = new ArrayList<>();
         lastNodesFromConditionalBranches = new ArrayList<>();
 
         getBasicBlocksFromCtBlock(basicBlocks, method.getBody(), allNodes, false);
-
-        for (BasicBlock basicBlock : basicBlocks){
-            basicBlock.getReachableBlocksFromEdges();
-        }
+        //basicBlocks.get(0).getReachableBlocks();
+        addReachableAndDominatedBlocksForAllBasicBlocks();
     }
 
     public void getBasicBlocksFromCtBlock(List<BasicBlock> basicBlockList, CtBlock block,  List<GraphNode> allNodes, boolean isRecursive){
@@ -146,7 +143,6 @@ public class CFG {
                 continue;
             }
             node.deleteOutgoingEdge();
-
             node.getBasicBlock().deleteOutGoingEdges();
         }
     }
@@ -165,6 +161,14 @@ public class CFG {
         int idFromLastStatementTrueBranch = allNodes.size() - 1;
         if( !lastNodesFromConditionalBranches.contains(allNodes.get(idFromLastStatementTrueBranch))) {
             lastNodesFromConditionalBranches.add(allNodes.get(idFromLastStatementTrueBranch));
+        }
+    }
+
+    private void addReachableAndDominatedBlocksForAllBasicBlocks(){
+        for (BasicBlock basicBlock : basicBlocks){
+
+            basicBlock.getReachableBlocksFromEdges();
+            basicBlock.getDominatedBlocksFromEdges();
         }
     }
 }

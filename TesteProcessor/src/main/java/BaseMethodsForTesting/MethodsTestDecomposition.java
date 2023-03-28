@@ -17,4 +17,5 @@ public class MethodsTestDecomposition {
         a = a + 25;
 
     }
+
 }
