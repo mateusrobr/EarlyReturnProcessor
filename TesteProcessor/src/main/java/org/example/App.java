@@ -16,20 +16,23 @@ public class App
         //String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
         String path = "C:\\Users\\Kurumi\\Desktop\\ERP\\EarlyReturnProcessor\\TesteProcessor\\src\\main\\java\\BaseMethodsForTesting";
         String pathExample = "C:\\Users\\Kurumi\\Desktop\\SpoonTests\\spoonTests\\src\\main\\java\\org\\example";
+        String pathHome = "C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src";
         //String targetClassName = "Main";
         //String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
        // String targetClassName = "TesteIfs";
 
 
         Launcher launcher = new Launcher();
-        launcher.addInputResource(pathExample);
+        launcher.addInputResource(pathHome);
         launcher.buildModel();
 
         CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
 
 
 
-        CFG cfg = new CFG(method);
+        PDG pdg = new PDG(method);
+        System.out.println(pdg.getAllLocalVariablesForThisMethod());
+        //CFG cfg = new CFG(method);
         //cfg.printNodesFromBasicBlocks();
 
         System.out.println("Edges: ");
@@ -45,15 +48,18 @@ public class App
 
 
         //cfg.printNodesFromBasicBlocks();
-        for(BasicBlock basicBlock : cfg.getBasicBlocks()){
+
+        //for(BasicBlock basicBlock : cfg.getBasicBlocks()){
             //System.out.println(basicBlock);
             //System.out.println(basicBlock.getNodes());
-            System.out.println("Dominated Blocks");
-            System.out.println(basicBlock.getId());
+            //System.out.println("id do block: " +basicBlock.getId());
             //System.out.println(basicBlock.getOutgoingEdges());
             //System.out.println(basicBlock.getReachableBlocks());
-            System.out.println(basicBlock.getDominatedBlocks());
-        }
+           // System.out.println("Dominated:");
+           // System.out.println(basicBlock.getDominatedBlocks());
+           // System.out.println("Reachad");
+           // System.out.println(basicBlock.getReachableBlocks());
+       // }
 
     }
 }
