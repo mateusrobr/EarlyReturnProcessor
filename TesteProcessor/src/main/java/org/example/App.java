@@ -16,14 +16,14 @@ public class App
         //String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
         String path = "C:\\Users\\Kurumi\\Desktop\\ERP\\EarlyReturnProcessor\\TesteProcessor\\src\\main\\java\\BaseMethodsForTesting";
         String pathExample = "C:\\Users\\Kurumi\\Desktop\\SpoonTests\\spoonTests\\src\\main\\java\\org\\example";
-        String pathHome = "C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src";
+        //String pathHome = "C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src";
         //String targetClassName = "Main";
         //String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
        // String targetClassName = "TesteIfs";
 
 
         Launcher launcher = new Launcher();
-        launcher.addInputResource(pathHome);
+        launcher.addInputResource(pathExample);
         launcher.buildModel();
 
         CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
