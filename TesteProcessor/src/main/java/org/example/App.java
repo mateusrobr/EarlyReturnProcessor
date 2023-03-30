@@ -3,7 +3,6 @@ package org.example;
 import spoon.Launcher;
 import spoon.reflect.code.CtStatement;
 import spoon.reflect.declaration.CtMethod;
-import spoon.reflect.reference.CtReference;
 import spoon.reflect.visitor.filter.NamedElementFilter;
 
 import java.util.List;
@@ -40,7 +39,7 @@ public class App
         //System.out.println(pdg.getAllLocalVariablesForThisMethod());
         //pdg.fromCFGGraphNodesGetAllOcurrencesOfALocalVariable();
         //CFG cfg = new CFG(method);
-        for(Map.Entry<GraphNode, List<CtReference>> entry : pdg.getCtReferenceForAllOcurrencesOfAVariable().entrySet()){
+        for(Map.Entry<GraphNode, List<CtStatement>> entry : pdg.getCtStatementForAllOcurrencesOfAVariable().entrySet()){
             System.out.println("Key: " +entry.getKey());
             System.out.println("Values: " + entry.getValue());
         }
