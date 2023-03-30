@@ -6,9 +6,12 @@ import spoon.reflect.code.CtStatement;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.visitor.filter.TypeFilter;
 import spoon.support.reflect.code.CtIfImpl;
+import spoon.support.reflect.code.CtLocalVariableImpl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CFG {
 
@@ -170,5 +173,14 @@ public class CFG {
             basicBlock.getReachableBlocksFromEdges();
             basicBlock.getDominatedBlocksFromEdges();
         }
+    }
+    public Map<GraphNode, CtStatement> getMapGraphNodeCtStatement(){
+        Map<GraphNode, CtStatement> graphNodeMap = new HashMap<>();
+        for(GraphNode node : allNodes){
+            if(node.getStatement().getClass() == CtLocalVariableImpl.class){
+                graphNodeMap.put(node, node.getStatement());
+            }
+        }
+        return graphNodeMap;
     }
 }

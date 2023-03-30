@@ -1,8 +1,13 @@
 package org.example;
 
 import spoon.Launcher;
+import spoon.reflect.code.CtStatement;
 import spoon.reflect.declaration.CtMethod;
+import spoon.reflect.reference.CtReference;
 import spoon.reflect.visitor.filter.NamedElementFilter;
+
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -31,9 +36,15 @@ public class App
 
 
         PDG pdg = new PDG(method);
-        System.out.println(pdg.getAllLocalVariablesForThisMethod());
+
+        //System.out.println(pdg.getAllLocalVariablesForThisMethod());
+        //pdg.fromCFGGraphNodesGetAllOcurrencesOfALocalVariable();
         //CFG cfg = new CFG(method);
-        //cfg.printNodesFromBasicBlocks();
+        for(Map.Entry<GraphNode, List<CtReference>> entry : pdg.getCtReferenceForAllOcurrencesOfAVariable().entrySet()){
+            System.out.println("Key: " +entry.getKey());
+            System.out.println("Values: " + entry.getValue());
+        }
+
 
         System.out.println("Edges: ");
 
