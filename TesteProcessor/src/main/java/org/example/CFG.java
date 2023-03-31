@@ -183,4 +183,11 @@ public class CFG {
         }
         return graphNodeMap;
     }
+    public List<CtStatement> getAllCtStatements(){
+        List<CtStatement> statementList = new ArrayList<>();
+        for(GraphNode node : allNodes){
+            statementList.add(node.getStatement());
+        }
+        return statementList;
+    }
 }
