@@ -1,9 +1,17 @@
 package org.example;
 
 import spoon.Launcher;
+import spoon.reflect.code.CtAssignment;
+import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.code.CtStatement;
+import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtMethod;
+import spoon.reflect.declaration.CtNamedElement;
+import spoon.reflect.declaration.CtVariable;
+import spoon.reflect.reference.CtReference;
 import spoon.reflect.visitor.filter.NamedElementFilter;
+import spoon.support.reflect.code.CtAssignmentImpl;
+import spoon.support.reflect.reference.CtVariableReferenceImpl;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +35,7 @@ public class App
 
 
         Launcher launcher = new Launcher();
-        launcher.addInputResource(pathHome);
+        launcher.addInputResource(pathExample);
         launcher.buildModel();
 
         CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
@@ -35,6 +43,11 @@ public class App
 
 
         PDG pdg = new PDG(method);
-        System.out.println(pdg.getLocalVariablesOcurrences());
+
+        for(Map.Entry<GraphNode,List<GraphNode>> entry : pdg.getAssignedVariablrStatements().entrySet()){
+            System.out.println("Key: " + entry.getKey());
+            System.out.println("Values: + " + entry.getValue());
+        }
+
     }
 }

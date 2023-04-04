@@ -19,6 +19,8 @@ GraphNode {
 
     private int id;
 
+    private String name;
+
     public GraphNode(CtStatement statement){
         this.statement = statement;
         incomingEdges = new LinkedHashSet<GraphEdgeNode>();
@@ -55,6 +57,10 @@ GraphNode {
 
     public void setId(int id){
         this.id = id;
+    }
+
+    public void setName(String newName){
+        this.name = newName;
     }
 
     public int getId(){

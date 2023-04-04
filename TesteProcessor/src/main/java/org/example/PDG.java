@@ -1,5 +1,6 @@
 package org.example;
 
+import spoon.reflect.code.CtAssignment;
 import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.code.CtStatement;
 import spoon.reflect.declaration.CtElement;
@@ -8,6 +9,7 @@ import spoon.reflect.reference.CtReference;
 import spoon.reflect.visitor.chain.CtConsumer;
 import spoon.reflect.visitor.filter.TypeFilter;
 import spoon.reflect.visitor.filter.VariableReferenceFunction;
+import spoon.support.reflect.code.CtAssignmentImpl;
 import spoon.support.reflect.code.CtBlockImpl;
 import spoon.support.reflect.code.CtLocalVariableImpl;
 
@@ -45,17 +47,17 @@ public class PDG {
     }
     public Map<GraphNode, List<GraphNode>> getMapOfLocalVariableAndAllOcurrencesOfLocalVariable(){
         Map<GraphNode, List<GraphNode>> statementMap = new HashMap<>();
-        List<List<GraphNode>> listOfListOfGraphNodes = new ArrayList<>();
+        List<List<GraphNode>> auxList = new ArrayList<>();
         List<CtStatement> allCFGCtStatements = cfg.getAllCtStatements();
         for(Map.Entry<GraphNode, CtStatement> entry : cfg.getMapGraphNodeCtStatement().entrySet()){
-            listOfListOfGraphNodes.add(new ArrayList<>());
+            auxList.add(new ArrayList<>());
             entry.getKey().getStatement().map(new VariableReferenceFunction()).forEach(new CtConsumer<CtReference>() {
                 public void accept(CtReference t){
-                    listOfListOfGraphNodes.get(listOfListOfGraphNodes.size() - 1).add(getGraphNodeFromCtReference(t, allCFGCtStatements));
+                    auxList.get(auxList.size() - 1).add(getGraphNodeFromCtReference(t, allCFGCtStatements));
                 }
             });
 
-            statementMap.put(entry.getKey(), listOfListOfGraphNodes.get(listOfListOfGraphNodes.size() - 1));
+            statementMap.put(entry.getKey(), auxList.get(auxList.size() - 1));
         }
 
         return statementMap;
@@ -68,6 +70,24 @@ public class PDG {
         }
         statementList.indexOf((CtStatement) completeStatement);
         return cfg.getAllNodes().get(statementList.indexOf((CtStatement) completeStatement));
+    }
+    public Map<GraphNode, List<GraphNode>> getAssignedVariablrStatements(){
+        Map<GraphNode, List<GraphNode>> sliceCriteria = new HashMap<>();
+        for (Map.Entry<GraphNode, List<GraphNode>> entry : localVariablesOcurrences.entrySet()){
+            List<GraphNode> auxList = new ArrayList<>();
+            CtLocalVariable localVariable = (CtLocalVariable) entry.getKey().getStatement();
+            for (GraphNode node : entry.getValue()){
+                if(node.getStatement() instanceof CtAssignmentImpl){
+                    CtAssignment assignment = (CtAssignment) node.getStatement();
+                    CtReference reference = (CtReference) assignment.getAssigned().getDirectChildren().get(0);
+                    if(localVariable.getSimpleName().equals(reference.getSimpleName())){
+                        auxList.add(node);
+                    }
+                }
+            }
+            sliceCriteria.put(entry.getKey(), auxList);
+        }
+        return sliceCriteria;
     }
     public List<GraphNode> getAllLocalVariablesForThisMethod(){
         return allLocalVariablesForMethod;
