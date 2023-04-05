@@ -71,7 +71,7 @@ public class PDG {
         statementList.indexOf((CtStatement) completeStatement);
         return cfg.getAllNodes().get(statementList.indexOf((CtStatement) completeStatement));
     }
-    public Map<GraphNode, List<GraphNode>> getAssignedVariablrStatements(){
+    public Map<GraphNode, List<GraphNode>> getStatementsLocalVariableIsAssigned(){
         Map<GraphNode, List<GraphNode>> sliceCriteria = new HashMap<>();
         for (Map.Entry<GraphNode, List<GraphNode>> entry : localVariablesOcurrences.entrySet()){
             List<GraphNode> auxList = new ArrayList<>();
@@ -88,6 +88,16 @@ public class PDG {
             sliceCriteria.put(entry.getKey(), auxList);
         }
         return sliceCriteria;
+    }
+
+    public List<BasicBlock> getBoundaryBlocksForLocalVariableOcurrence(GraphNode localVariable, GraphNode localVariableOcurrence){
+        List<BasicBlock> boundaryBlock = new ArrayList<>();
+        for(BasicBlock basicBlock : cfg.getBasicBlocks()){
+            if(basicBlock.getDominatedBlocks().contains(localVariableOcurrence.getBasicBlock()) && basicBlock.getReachableBlocks().contains(localVariableOcurrence.getBasicBlock())){
+                boundaryBlock.add(basicBlock);
+            }
+        }
+        return boundaryBlock;
     }
     public List<GraphNode> getAllLocalVariablesForThisMethod(){
         return allLocalVariablesForMethod;
