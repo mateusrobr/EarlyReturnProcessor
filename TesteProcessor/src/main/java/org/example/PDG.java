@@ -13,10 +13,8 @@ import spoon.support.reflect.code.CtAssignmentImpl;
 import spoon.support.reflect.code.CtBlockImpl;
 import spoon.support.reflect.code.CtLocalVariableImpl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PDG {
     private CFG cfg;
@@ -99,6 +97,22 @@ public class PDG {
         }
         return boundaryBlock;
     }
+
+
+    public Map<GraphNode, List<BasicBlock>> getAllBoundaryBlocksForCompleteComputation(){
+        Map<GraphNode, List<BasicBlock>> boundaryBlocksForCompleteComputation = new HashMap<>();
+        for(Map.Entry<GraphNode,List<GraphNode>> entry : getStatementsLocalVariableIsAssigned().entrySet()){
+            //List<BasicBlock> basicBlockList = new ArrayList<>();
+            HashSet<BasicBlock> basicBlockSet = new LinkedHashSet<>();
+            for(GraphNode localVariableAssignedOcurrence : entry.getValue()){
+                basicBlockSet.addAll(getBoundaryBlocksForLocalVariableOcurrence(entry.getKey(), localVariableAssignedOcurrence));
+            }
+            boundaryBlocksForCompleteComputation.put(entry.getKey(), (ArrayList<BasicBlock>)basicBlockSet.stream()
+                    .collect(Collectors.toList()));
+        }
+        return boundaryBlocksForCompleteComputation;
+    }
+    //public Map<GraphNode, List<BasicBlock>>
     public List<GraphNode> getAllLocalVariablesForThisMethod(){
         return allLocalVariablesForMethod;
     }

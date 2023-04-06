@@ -117,7 +117,6 @@ public class CFG {
                 statementList.add(statement);
             }
         }
-
         return statementList;
     }
 
