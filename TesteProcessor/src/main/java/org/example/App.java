@@ -2,7 +2,9 @@ package org.example;
 
 import spoon.Launcher;
 import spoon.reflect.declaration.CtMethod;
+import spoon.reflect.reference.CtVariableReference;
 import spoon.reflect.visitor.filter.NamedElementFilter;
+import spoon.reflect.visitor.filter.TypeFilter;
 
 import java.util.List;
 import java.util.Map;
@@ -52,6 +54,8 @@ public class App {
             for(BasicBlock basicBlock : entry.getValue()){
                 for(GraphNode node : basicBlock.getNodes()){
                     System.out.println(node);
+                    System.out.println("CtReferences: ");
+                    System.out.println(node.getStatement().getElements(new TypeFilter<>(CtVariableReference.class)));
                 }
             }
             System.out.println("----------------------------------");
