@@ -2,9 +2,11 @@ package org.example;
 
 import spoon.Launcher;
 import spoon.reflect.declaration.CtMethod;
+import spoon.reflect.reference.CtReference;
 import spoon.reflect.reference.CtVariableReference;
 import spoon.reflect.visitor.filter.NamedElementFilter;
 import spoon.reflect.visitor.filter.TypeFilter;
+import spoon.support.reflect.code.CtIfImpl;
 
 import java.util.List;
 import java.util.Map;
@@ -46,19 +48,28 @@ public class App {
                 }
             }
         }*/
-
+        for (Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksWithIntersection().entrySet()) {
+            System.out.println("Entry: " + entry.getKey());
+            System.out.println("Values: " + entry.getValue());
+        }
+    }
         //System.out.println(pdg.getAllBoundaryBlocksForCompleteComputation());
-        for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
+        /*for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
             System.out.println("Variable: " + entry.getKey());
             System.out.println("Statements that are part of the complete computation");
             for(BasicBlock basicBlock : entry.getValue()){
                 for(GraphNode node : basicBlock.getNodes()){
                     System.out.println(node);
-                    System.out.println("CtReferences: ");
-                    System.out.println(node.getStatement().getElements(new TypeFilter<>(CtVariableReference.class)));
+                    //System.out.println("CtReferences: ");
+                    if(node.getStatement() instanceof CtIfImpl){
+                        //System.out.println(((CtIfImpl) node.getStatement()).getCondition().getElements(new TypeFilter<>(CtVariableReference.class)));
+                    }
+                    else {
+                        //System.out.println(node.getStatement().getElements(new TypeFilter<>(CtVariableReference.class)));
+                    }
                 }
             }
             System.out.println("----------------------------------");
-        }
-    }
+        }*/
+
 }
