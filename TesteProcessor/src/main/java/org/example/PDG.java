@@ -14,7 +14,6 @@ import spoon.support.reflect.code.CtBlockImpl;
 import spoon.support.reflect.code.CtLocalVariableImpl;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class PDG {
     private CFG cfg;
@@ -113,7 +112,7 @@ public class PDG {
         return boundaryBlocksForCompleteComputation;
     }*/
 
-    public Map<GraphNode, List<BasicBlock>> getAllBoundaryBlocksWithIntersection(){
+    public Map<GraphNode, List<BasicBlock>> getAllBoundaryBlocksWithRepeatedBlocks(){
         Map<GraphNode, List<BasicBlock>> boundaryBlocksForCompleteComputation = new HashMap<>();
         for(Map.Entry<GraphNode,List<GraphNode>> entry : getStatementsLocalVariableIsAssigned().entrySet()){
             List<BasicBlock> basicBlockList = new ArrayList<>();

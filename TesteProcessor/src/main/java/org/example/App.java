@@ -2,11 +2,7 @@ package org.example;
 
 import spoon.Launcher;
 import spoon.reflect.declaration.CtMethod;
-import spoon.reflect.reference.CtReference;
-import spoon.reflect.reference.CtVariableReference;
 import spoon.reflect.visitor.filter.NamedElementFilter;
-import spoon.reflect.visitor.filter.TypeFilter;
-import spoon.support.reflect.code.CtIfImpl;
 
 import java.util.List;
 import java.util.Map;
@@ -48,12 +44,11 @@ public class App {
                 }
             }
         }*/
-        for (Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksWithIntersection().entrySet()) {
+        for (Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksWithRepeatedBlocks().entrySet()) {
             PDGSlice slice = new PDGSlice(entry.getKey(), entry.getValue());
             slice.printSlice();
             System.out.println(slice.getBoundaryBlockIntersectionFromBoundaryBlockRaw());
         }
-
 
 
         //System.out.println(pdg.getAllBoundaryBlocksForCompleteComputation());
