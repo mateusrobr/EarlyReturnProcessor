@@ -49,10 +49,13 @@ public class App {
             }
         }*/
         for (Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksWithIntersection().entrySet()) {
-            System.out.println("Entry: " + entry.getKey());
-            System.out.println("Values: " + entry.getValue());
+            PDGSlice slice = new PDGSlice(entry.getKey(), entry.getValue());
+            slice.printSlice();
+            System.out.println(slice.getBoundaryBlockIntersectionFromBoundaryBlockRaw());
         }
-    }
+
+
+
         //System.out.println(pdg.getAllBoundaryBlocksForCompleteComputation());
         /*for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
             System.out.println("Variable: " + entry.getKey());
@@ -71,5 +74,5 @@ public class App {
             }
             System.out.println("----------------------------------");
         }*/
-
+    }
 }
