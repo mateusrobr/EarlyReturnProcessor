@@ -14,6 +14,7 @@ import spoon.support.reflect.code.CtBlockImpl;
 import spoon.support.reflect.code.CtLocalVariableImpl;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PDG {
     private CFG cfg;
@@ -98,7 +99,7 @@ public class PDG {
     }
 
 
-    /*public Map<GraphNode, List<BasicBlock>> getAllBoundaryBlocksForCompleteComputation(){
+    public Map<GraphNode, List<BasicBlock>> getAllBoundaryBlocksForCompleteComputation(){
         Map<GraphNode, List<BasicBlock>> boundaryBlocksForCompleteComputation = new HashMap<>();
         for(Map.Entry<GraphNode,List<GraphNode>> entry : getStatementsLocalVariableIsAssigned().entrySet()){
             //List<BasicBlock> basicBlockList = new ArrayList<>();
@@ -110,19 +111,9 @@ public class PDG {
                     .collect(Collectors.toList()));
         }
         return boundaryBlocksForCompleteComputation;
-    }*/
-
-    public Map<GraphNode, List<BasicBlock>> getAllBoundaryBlocksWithRepeatedBlocks(){
-        Map<GraphNode, List<BasicBlock>> boundaryBlocksForCompleteComputation = new HashMap<>();
-        for(Map.Entry<GraphNode,List<GraphNode>> entry : getStatementsLocalVariableIsAssigned().entrySet()){
-            List<BasicBlock> basicBlockList = new ArrayList<>();
-            for(GraphNode localVariableAssignedOcurrence : entry.getValue()){
-                basicBlockList.addAll(getBoundaryBlocksForLocalVariableOcurrence(entry.getKey(), localVariableAssignedOcurrence));
-            }
-            boundaryBlocksForCompleteComputation.put(entry.getKey(), basicBlockList);
-        }
-        return boundaryBlocksForCompleteComputation;
     }
+
+
 
     /*public List<BasicBlock> getBoundaryBlockIntersection(Map.Entry<GraphNode, List<BasicBlock>> entry){
         List<BasicBlock> basicBlockIntersection = new ArrayList<>();

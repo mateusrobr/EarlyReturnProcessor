@@ -1,9 +1,17 @@
 package org.example;
 
+import org.eclipse.jdt.core.dom.Block;
+import spoon.FluentLauncher;
 import spoon.Launcher;
+import spoon.reflect.code.CtBlock;
+import spoon.reflect.code.CtCodeSnippetStatement;
+import spoon.reflect.code.CtStatement;
 import spoon.reflect.declaration.CtMethod;
+import spoon.reflect.declaration.ModifierKind;
+import spoon.reflect.reference.CtTypeReference;
+import spoon.reflect.reference.CtVariableReference;
 import spoon.reflect.visitor.filter.NamedElementFilter;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,50 +32,40 @@ public class App {
 
 
         Launcher launcher = new Launcher();
-        launcher.addInputResource(pathExample);
-        launcher.buildModel();
+        launcher.addInputResource(pathHome);
+//        FluentLauncher fluentLauncher = new FluentLauncher();
+//        fluentLauncher.outputDirectory("C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src");
 
+        launcher.buildModel();
         CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
 
-
-        //System.out.println(method.prettyprint());
         PDG pdg = new PDG(method);
-        //System.out.println(pdg.getStatementsLocalVariableIsAssigned());
-        //CFG cfg = new CFG(method);
-        //System.out.println(cfg.getBasicBlocks());
 
-        /*for(Map.Entry<GraphNode,List<GraphNode>> entry : pdg.getStatementsLocalVariableIsAssigned().entrySet()){
-            for(GraphNode localVariableAssignedOcurrence : entry.getValue()){
-                System.out.println("Boundary block for: " + localVariableAssignedOcurrence);
-                System.out.println(pdg.getBoundaryBlocksForLocalVariableOcurrence(entry.getKey(), localVariableAssignedOcurrence));
-
-                }
-            }
-        }*/
-        for (Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksWithRepeatedBlocks().entrySet()) {
-            PDGSlice slice = new PDGSlice(entry.getKey(), entry.getValue());
-            slice.printSlice();
-            System.out.println(slice.getBoundaryBlockIntersectionFromBoundaryBlockRaw());
+        for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
+            System.out.println(entry);
         }
 
-
-        //System.out.println(pdg.getAllBoundaryBlocksForCompleteComputation());
-        /*for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
-            System.out.println("Variable: " + entry.getKey());
-            System.out.println("Statements that are part of the complete computation");
-            for(BasicBlock basicBlock : entry.getValue()){
-                for(GraphNode node : basicBlock.getNodes()){
-                    System.out.println(node);
-                    //System.out.println("CtReferences: ");
-                    if(node.getStatement() instanceof CtIfImpl){
-                        //System.out.println(((CtIfImpl) node.getStatement()).getCondition().getElements(new TypeFilter<>(CtVariableReference.class)));
-                    }
-                    else {
-                        //System.out.println(node.getStatement().getElements(new TypeFilter<>(CtVariableReference.class)));
-                    }
-                }
-            }
-            System.out.println("----------------------------------");
-        }*/
+        // this slice of code below need to be put in a spoon processor
+//        CtMethod createdMethod = launcher.createFactory().createMethod();
+//        createdMethod.setSimpleName("metodoMovido");
+//        createdMethod.setVisibility(ModifierKind.PUBLIC);
+//        CtTypeReference<String> typeReference = launcher.createFactory().createCtTypeReference(String.class);
+//        createdMethod.setType(typeReference);
+//        CtCodeSnippetStatement snippetStatement = launcher.getFactory().createCodeSnippetStatement();
+//        CtBlock block = launcher.createFactory().Code().createCtBlock(snippetStatement);
+//        List<CtStatement> statementThatAreBeingMoved = new ArrayList<>();
+//        for(List<BasicBlock> basicBlocks : pdg.getAllBoundaryBlocksForCompleteComputation().values()){
+//            BasicBlock bloco_1 = basicBlocks.get(0);
+//
+//            for(GraphNode node : bloco_1.getNodes()){
+//                CtStatement statement = node.getStatement();
+//                statementThatAreBeingMoved.add(statement.clone());
+//            }
+//            break;
+//        }
+//        block.setStatements(statementThatAreBeingMoved);
+//        createdMethod.setBody(block);
+//        System.out.println(method.prettyprint());
+//        System.out.println(createdMethod.prettyprint());
+        }
     }
-}
