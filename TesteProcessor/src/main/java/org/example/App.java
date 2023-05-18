@@ -45,6 +45,7 @@ public class App {
             System.out.println(entry);
         }
 
+
         // this slice of code below need to be put in a spoon processor
 //        CtMethod createdMethod = launcher.createFactory().createMethod();
 //        createdMethod.setSimpleName("metodoMovido");

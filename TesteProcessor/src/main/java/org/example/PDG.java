@@ -39,10 +39,6 @@ public class PDG {
         getMapOfLocalVariableAndAllOcurrencesOfLocalVariable();
 
     }
-
-    private List<CtLocalVariable> getAllCtLocalVariableFromMethod(CtMethod targetMethod){
-        return targetMethod.getElements(new TypeFilter<>(CtLocalVariable.class));
-    }
     public Map<GraphNode, List<GraphNode>> getMapOfLocalVariableAndAllOcurrencesOfLocalVariable(){
         Map<GraphNode, List<GraphNode>> statementMap = new HashMap<>();
         List<List<GraphNode>> auxList = new ArrayList<>();
@@ -112,15 +108,6 @@ public class PDG {
         }
         return boundaryBlocksForCompleteComputation;
     }
-
-
-
-    /*public List<BasicBlock> getBoundaryBlockIntersection(Map.Entry<GraphNode, List<BasicBlock>> entry){
-        List<BasicBlock> basicBlockIntersection = new ArrayList<>();
-
-
-        return basicBlockIntersection;
-    }*/
     public List<GraphNode> getAllLocalVariablesForThisMethod(){
         return allLocalVariablesForMethod;
     }
