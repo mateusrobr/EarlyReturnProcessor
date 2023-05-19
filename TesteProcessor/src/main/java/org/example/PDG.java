@@ -7,7 +7,6 @@ import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.reference.CtReference;
 import spoon.reflect.visitor.chain.CtConsumer;
-import spoon.reflect.visitor.filter.TypeFilter;
 import spoon.reflect.visitor.filter.VariableReferenceFunction;
 import spoon.support.reflect.code.CtAssignmentImpl;
 import spoon.support.reflect.code.CtBlockImpl;
@@ -21,11 +20,14 @@ public class PDG {
     private List<GraphNode> allLocalVariablesForMethod;
 
     private Map<GraphNode, List<GraphNode>> localVariablesOcurrences;
+
+    private Map<GraphNode, List<GraphNode>> localVariableAssigmentOcurrences;
     public PDG(CtMethod targetMethod){
         cfg = new CFG(targetMethod);
         allLocalVariablesForMethod = new ArrayList<>();
         this.fromGraphNodesGetLocalVariables();
         localVariablesOcurrences = getMapOfLocalVariableAndAllOcurrencesOfLocalVariable();
+        localVariableAssigmentOcurrences = getStatementsLocalVariableIsAssigned();
     }
 
     private void fromGraphNodesGetLocalVariables(){
@@ -84,7 +86,7 @@ public class PDG {
         return sliceCriteria;
     }
 
-    public List<BasicBlock> getBoundaryBlocksForLocalVariableOcurrence(GraphNode localVariable, GraphNode localVariableOcurrence){
+    public List<BasicBlock> getBoundaryBlocksForLocalVariableOcurrence( GraphNode localVariableOcurrence){
         List<BasicBlock> boundaryBlock = new ArrayList<>();
         for(BasicBlock basicBlock : cfg.getBasicBlocks()){
             if(basicBlock.getDominatedBlocks().contains(localVariableOcurrence.getBasicBlock()) && basicBlock.getReachableBlocks().contains(localVariableOcurrence.getBasicBlock())){
@@ -93,25 +95,38 @@ public class PDG {
         }
         return boundaryBlock;
     }
-
-
     public Map<GraphNode, List<BasicBlock>> getAllBoundaryBlocksForCompleteComputation(){
         Map<GraphNode, List<BasicBlock>> boundaryBlocksForCompleteComputation = new HashMap<>();
-        for(Map.Entry<GraphNode,List<GraphNode>> entry : getStatementsLocalVariableIsAssigned().entrySet()){
-            //List<BasicBlock> basicBlockList = new ArrayList<>();
+        for(Map.Entry<GraphNode,List<GraphNode>> entry : localVariableAssigmentOcurrences.entrySet()/*getStatementsLocalVariableIsAssigned().entrySet()*/){
+            //HashSet used to get a list without repetead basicblocks
             HashSet<BasicBlock> basicBlockSet = new LinkedHashSet<>();
             for(GraphNode localVariableAssignedOcurrence : entry.getValue()){
-                basicBlockSet.addAll(getBoundaryBlocksForLocalVariableOcurrence(entry.getKey(), localVariableAssignedOcurrence));
+                basicBlockSet.addAll(getBoundaryBlocksForLocalVariableOcurrence( localVariableAssignedOcurrence));
             }
             boundaryBlocksForCompleteComputation.put(entry.getKey(), (ArrayList<BasicBlock>)basicBlockSet.stream()
                     .collect(Collectors.toList()));
         }
         return boundaryBlocksForCompleteComputation;
     }
+
+    public Map<GraphNode, List<List<BasicBlock>>> getBoundaryBlocksForLocalAssigments(){
+        Map<GraphNode, List<List<BasicBlock>>> returnedMap = new HashMap<>();
+        for(Map.Entry<GraphNode, List<GraphNode>> entry : localVariableAssigmentOcurrences.entrySet()){
+            List<List<BasicBlock>> intersection = new ArrayList<>();
+            for(GraphNode node : entry.getValue()){
+                intersection.add(getBoundaryBlocksForLocalVariableOcurrence(node));
+            }
+            returnedMap.put(entry.getKey(),intersection);
+        }
+        return returnedMap;
+    }
     public List<GraphNode> getAllLocalVariablesForThisMethod(){
         return allLocalVariablesForMethod;
     }
     public Map<GraphNode, List<GraphNode>> getLocalVariablesOcurrences(){
         return localVariablesOcurrences;
+    }
+    public Map<GraphNode, List<GraphNode>> getLocalVariableAssigmentOcurrences(){
+        return localVariableAssigmentOcurrences;
     }
 }

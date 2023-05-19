@@ -5,6 +5,8 @@ import java.util.List;
 
 public class PDGSlice {
     GraphNode localVariable;
+
+    List<GraphNode> localVariableAssigmentOcurrences;
     List<BasicBlock> boundaryBlockRaw;
 
     List<BasicBlock> boundaryBlockIntersection;
@@ -14,6 +16,7 @@ public class PDGSlice {
     public PDGSlice(GraphNode localVariable, List<BasicBlock> completeComputationBasicBlocks){
         this.localVariable = localVariable;
         this.boundaryBlockRaw = completeComputationBasicBlocks;
+        //this.localVariableAssigmentOcurrences = assignementOcurrences;
     }
 
     public List<BasicBlock> getBoundaryBlockIntersectionFromBoundaryBlockRaw(){
@@ -29,5 +32,6 @@ public class PDGSlice {
     public void printSlice(){
         System.out.println("Local Variable: " + localVariable);
         System.out.println("Blocks " + boundaryBlockRaw);
+        //System.out.println("Assignement " + localVariableAssigmentOcurrences);
     }
 }

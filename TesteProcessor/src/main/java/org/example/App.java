@@ -1,19 +1,9 @@
 package org.example;
 
-import org.eclipse.jdt.core.dom.Block;
-import spoon.FluentLauncher;
 import spoon.Launcher;
-import spoon.reflect.code.CtBlock;
-import spoon.reflect.code.CtCodeSnippetStatement;
-import spoon.reflect.code.CtStatement;
 import spoon.reflect.declaration.CtMethod;
-import spoon.reflect.declaration.ModifierKind;
-import spoon.reflect.reference.CtTypeReference;
-import spoon.reflect.reference.CtVariableReference;
 import spoon.reflect.visitor.filter.NamedElementFilter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+
 
 
 /**
@@ -22,6 +12,7 @@ import java.util.Map;
  */
 public class App {
     public static void main(String[] args) {
+
         //String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
         String path = "C:\\Users\\Kurumi\\Desktop\\ERP\\EarlyReturnProcessor\\TesteProcessor\\src\\main\\java\\BaseMethodsForTesting";
         String pathExample = "C:\\Users\\Kurumi\\Desktop\\SpoonTests\\spoonTests\\src\\main\\java\\org\\example";
@@ -41,9 +32,12 @@ public class App {
 
         PDG pdg = new PDG(method);
 
-        for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
-            System.out.println(entry);
-        }
+//        for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
+//            PDGSlice candidate = new PDGSlice(entry.getKey(), entry.getValue());
+//            System.out.println(entry);
+//        }
+//        System.out.println(pdg.getLocalVariableAssigmentOcurrences());
+        System.out.println(pdg.getBoundaryBlocksForLocalAssigments());
 
 
         // this slice of code below need to be put in a spoon processor
