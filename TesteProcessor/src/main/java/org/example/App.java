@@ -4,6 +4,8 @@ import spoon.Launcher;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.visitor.filter.NamedElementFilter;
 
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -37,8 +39,12 @@ public class App {
 //            System.out.println(entry);
 //        }
 //        System.out.println(pdg.getLocalVariableAssigmentOcurrences());
-        System.out.println(pdg.getBoundaryBlocksForLocalAssigments());
-
+        ;
+        for(List<List<BasicBlock>> blockList : pdg.getBoundaryBlocksForLocalAssigmentsInSeparetedLists().values()){
+            System.out.println(blockList);
+            System.out.println();
+        }
+        System.out.println(pdg.getIntersectionOfBoundaryBlocks());
 
         // this slice of code below need to be put in a spoon processor
 //        CtMethod createdMethod = launcher.createFactory().createMethod();

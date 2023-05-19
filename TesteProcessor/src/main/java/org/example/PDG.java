@@ -109,7 +109,7 @@ public class PDG {
         return boundaryBlocksForCompleteComputation;
     }
 
-    public Map<GraphNode, List<List<BasicBlock>>> getBoundaryBlocksForLocalAssigments(){
+    public Map<GraphNode, List<List<BasicBlock>>> getBoundaryBlocksForLocalAssigmentsInSeparetedLists(){
         Map<GraphNode, List<List<BasicBlock>>> returnedMap = new HashMap<>();
         for(Map.Entry<GraphNode, List<GraphNode>> entry : localVariableAssigmentOcurrences.entrySet()){
             List<List<BasicBlock>> intersection = new ArrayList<>();
@@ -120,6 +120,23 @@ public class PDG {
         }
         return returnedMap;
     }
+
+    public Map<GraphNode, List<BasicBlock>> getIntersectionOfBoundaryBlocks(){
+        Map<GraphNode, List<BasicBlock>> intersection = new HashMap<>();
+        for(Map.Entry<GraphNode, List<List<BasicBlock>>> entry : getBoundaryBlocksForLocalAssigmentsInSeparetedLists().entrySet()){
+            HashSet<BasicBlock> intersectionSet = new HashSet<>(entry.getValue().get(0));
+
+            for (int i = 1; i < entry.getValue().size(); i++)
+            {
+                HashSet<BasicBlock> set = new HashSet<>(entry.getValue().get(i));
+
+                intersectionSet.retainAll(set);
+            }
+            intersection.put(entry.getKey(), intersectionSet.stream().collect(Collectors.toList()));
+        }
+        return intersection;
+    }
+
     public List<GraphNode> getAllLocalVariablesForThisMethod(){
         return allLocalVariablesForMethod;
     }
