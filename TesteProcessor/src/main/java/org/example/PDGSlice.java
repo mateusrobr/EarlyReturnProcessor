@@ -5,25 +5,21 @@ import java.util.List;
 
 public class PDGSlice {
     GraphNode localVariable;
+    List<BasicBlock> boundaryBlockCompleteComputation;
 
-    List<GraphNode> localVariableAssigmentOcurrences;
-    List<BasicBlock> boundaryBlockRaw;
+    BasicBlock region;
 
-    List<BasicBlock> boundaryBlockIntersection;
-
-    List<BasicBlock> boundaryBlockUnion;
-
-    public PDGSlice(GraphNode localVariable, List<BasicBlock> completeComputationBasicBlocks){
+    public PDGSlice(GraphNode localVariable, List<BasicBlock> completeComputationBasicBlocks, BasicBlock region){
         this.localVariable = localVariable;
-        this.boundaryBlockRaw = completeComputationBasicBlocks;
-        //this.localVariableAssigmentOcurrences = assignementOcurrences;
+        this.boundaryBlockCompleteComputation = completeComputationBasicBlocks;
+        this.region = region;
     }
 
     public List<BasicBlock> getBoundaryBlockIntersectionFromBoundaryBlockRaw(){
         List<BasicBlock> boundaryBlockIntersection = new ArrayList<>();
-        for(int i =0; i < boundaryBlockRaw.size(); i++) {
-            if (boundaryBlockRaw.lastIndexOf(boundaryBlockRaw.get(i)) != i)  {
-                boundaryBlockIntersection.add(boundaryBlockRaw.get(i));
+        for(int i = 0; i < boundaryBlockCompleteComputation.size(); i++) {
+            if (boundaryBlockCompleteComputation.lastIndexOf(boundaryBlockCompleteComputation.get(i)) != i)  {
+                boundaryBlockIntersection.add(boundaryBlockCompleteComputation.get(i));
             }
         }
         return boundaryBlockIntersection;
@@ -31,7 +27,7 @@ public class PDGSlice {
 
     public void printSlice(){
         System.out.println("Local Variable: " + localVariable);
-        System.out.println("Blocks " + boundaryBlockRaw);
-        //System.out.println("Assignement " + localVariableAssigmentOcurrences);
+        System.out.println("Blocks " + boundaryBlockCompleteComputation);
+        System.out.println("Regio " + region);
     }
 }

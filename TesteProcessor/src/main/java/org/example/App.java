@@ -34,17 +34,15 @@ public class App {
 
         PDG pdg = new PDG(method);
 
-//        for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
-//            PDGSlice candidate = new PDGSlice(entry.getKey(), entry.getValue());
-//            System.out.println(entry);
-//        }
-//        System.out.println(pdg.getLocalVariableAssigmentOcurrences());
-        ;
-        for(List<List<BasicBlock>> blockList : pdg.getBoundaryBlocksForLocalAssigmentsInSeparetedLists().values()){
-            System.out.println(blockList);
-            System.out.println();
+        for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
+            System.out.println("");
+            for(BasicBlock block: pdg.getIntersectionOfBoundaryBlocks().get(entry.getKey())){
+                PDGSlice candidate = new PDGSlice(entry.getKey(), entry.getValue(), block);
+                candidate.printSlice();
+            }
         }
-        System.out.println(pdg.getIntersectionOfBoundaryBlocks());
+        System.out.println(pdg.getLocalVariableAssigmentOcurrences());
+
 
         // this slice of code below need to be put in a spoon processor
 //        CtMethod createdMethod = launcher.createFactory().createMethod();
