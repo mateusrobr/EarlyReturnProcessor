@@ -1,16 +1,13 @@
 package org.example;
 
-import spoon.reflect.code.CtAssignment;
-import spoon.reflect.code.CtLocalVariable;
-import spoon.reflect.code.CtStatement;
+import spoon.reflect.code.*;
 import spoon.reflect.declaration.CtElement;
+import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.reference.CtReference;
 import spoon.reflect.visitor.chain.CtConsumer;
 import spoon.reflect.visitor.filter.VariableReferenceFunction;
-import spoon.support.reflect.code.CtAssignmentImpl;
-import spoon.support.reflect.code.CtBlockImpl;
-import spoon.support.reflect.code.CtLocalVariableImpl;
+import spoon.support.reflect.code.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -75,9 +72,13 @@ public class PDG {
             for (GraphNode node : entry.getValue()){
                 if(node.getStatement() instanceof CtAssignmentImpl){
                     CtAssignment assignment = (CtAssignment) node.getStatement();
-                    CtReference reference = (CtReference) assignment.getAssigned().getDirectChildren().get(0);
-                    if(localVariable.getSimpleName().equals(reference.getSimpleName())){
-                        auxList.add(node);
+
+                    if(!(assignment.getAssigned() instanceof CtFieldWrite)){
+
+                        CtReference reference = (CtReference) assignment.getAssigned().getDirectChildren().get(0);
+                        if(localVariable.getSimpleName().equals(reference.getSimpleName())){
+                            auxList.add(node);
+                        }
                     }
                 }
             }
@@ -137,6 +138,10 @@ public class PDG {
         return intersection;
     }
 
+
+    public boolean nodeIsNotAField(GraphNode node){
+        return node.getStatement() instanceof CtFieldAccess || node.getStatement() instanceof CtFieldWrite;
+    }
     public List<GraphNode> getAllLocalVariablesForThisMethod(){
         return allLocalVariablesForMethod;
     }

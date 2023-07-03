@@ -34,14 +34,22 @@ public class App {
 
         PDG pdg = new PDG(method);
 
-        for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
-            System.out.println("");
-            for(BasicBlock block: pdg.getIntersectionOfBoundaryBlocks().get(entry.getKey())){
-                PDGSlice candidate = new PDGSlice(entry.getKey(), entry.getValue(), block);
-                candidate.printSlice();
+//        for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
+//            System.out.println("");
+//            for(BasicBlock block: pdg.getIntersectionOfBoundaryBlocks().get(entry.getKey())){
+//                PDGSlice candidate = new PDGSlice(entry.getKey(), entry.getValue(), block);
+//                candidate.printSlice();
+//            }
+//        }
+        for(Map.Entry<GraphNode,List<GraphNode>>entry : pdg.getLocalVariableAssigmentOcurrences().entrySet()){
+            System.out.println("Variable: " + entry.getKey());
+            System.out.println("Statements:");
+            for(GraphNode node : entry.getValue()){
+                System.out.println(node);
             }
+            System.out.println("-------------------------------------");
+
         }
-        System.out.println(pdg.getLocalVariableAssigmentOcurrences());
 
 
         // this slice of code below need to be put in a spoon processor
