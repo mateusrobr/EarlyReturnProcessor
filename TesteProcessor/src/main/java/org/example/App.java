@@ -41,11 +41,15 @@ public class App {
 //
 //        }
         //System.out.println(pdg.getLocalVariablesOcurrences());
-        pdg.addDependencesToNodes();
-        for(GraphNode node : pdg.getCfg().getAllNodes()){
-            System.out.println(node);
-            System.out.println(node.getDependence());
+        //pdg.addDependencesToNodes();
+        for (Map.Entry<GraphNode,List<GraphNode>> entry : pdg.getLocalVariablesOcurrences().entrySet()){
+            System.out.println("key: " + entry.getKey());
+            System.out.println(entry.getValue());
         }
+//        for(GraphNode node : pdg.getCfg().getAllNodes()){
+//            System.out.println(node);
+//            System.out.println(node.getDependence());
+//        }
 
     }
 }
