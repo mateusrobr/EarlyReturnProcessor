@@ -15,7 +15,7 @@ GraphNode {
     private Set<GraphEdgeNode> incomingEdges;
     private Set<GraphEdgeNode> outgoingEdges;
 
-    private List<GraphNode> dependence;
+    private List<GraphEdgeNode> dependence;
     private BasicBlock basicBlock;
 
     private boolean isLeader;
@@ -87,7 +87,13 @@ GraphNode {
         basicBlock.addNode(this);
     }
     public void setDependence(GraphNode node){
-        this.dependence.add(node);
+        GraphEdgeNode newEdge = new GraphEdgeNode();
+        newEdge.setSrc(this);
+        newEdge.setDst(node);
+        this.dependence.add(newEdge);
+    }
+    public List<GraphEdgeNode> getDependence(){
+        return this.dependence;
     }
     public BasicBlock getBasicBlock(){return this.basicBlock;}
 

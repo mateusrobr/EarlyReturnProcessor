@@ -41,5 +41,9 @@ public class App {
 //
 //        }
         pdg.addDependencesToNodes();
+        for(GraphNode node : pdg.getCfg().getAllNodes()){
+            System.out.println(node);
+            System.out.println(node.getDependence());
+        }
     }
 }
