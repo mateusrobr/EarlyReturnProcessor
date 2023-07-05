@@ -3,7 +3,9 @@ package org.example;
 import spoon.reflect.code.CtStatement;
 import spoon.support.reflect.code.CtIfImpl;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 public class
@@ -13,6 +15,7 @@ GraphNode {
     private Set<GraphEdgeNode> incomingEdges;
     private Set<GraphEdgeNode> outgoingEdges;
 
+    private List<GraphNode> dependence;
     private BasicBlock basicBlock;
 
     private boolean isLeader;
@@ -25,6 +28,7 @@ GraphNode {
         this.statement = statement;
         incomingEdges = new LinkedHashSet<GraphEdgeNode>();
         outgoingEdges = new LinkedHashSet<GraphEdgeNode>();
+        dependence = new ArrayList<>();
     }
 
     public void setIncomingEdge(GraphEdgeNode incomingEdge){
@@ -81,6 +85,9 @@ GraphNode {
     public void setBasicBlock(BasicBlock basicBlock){
         this.basicBlock = basicBlock;
         basicBlock.addNode(this);
+    }
+    public void setDependence(GraphNode node){
+        this.dependence.add(node);
     }
     public BasicBlock getBasicBlock(){return this.basicBlock;}
 

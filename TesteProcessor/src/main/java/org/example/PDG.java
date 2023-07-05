@@ -4,8 +4,11 @@ import spoon.reflect.code.*;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtMethod;
+import spoon.reflect.path.CtRole;
 import spoon.reflect.reference.CtReference;
+import spoon.reflect.reference.CtVariableReference;
 import spoon.reflect.visitor.chain.CtConsumer;
+import spoon.reflect.visitor.filter.TypeFilter;
 import spoon.reflect.visitor.filter.VariableReferenceFunction;
 import spoon.support.reflect.code.*;
 
@@ -138,9 +141,40 @@ public class PDG {
         return intersection;
     }
 
+    public void addDependencesToNodes(){
 
-    public boolean nodeIsNotAField(GraphNode node){
-        return node.getStatement() instanceof CtFieldAccess || node.getStatement() instanceof CtFieldWrite;
+        List<CtReference> referenceList = new ArrayList<>();
+        for( GraphNode node : cfg.getAllNodes()){
+            System.out.println("Node: " + node);
+            System.out.println("CtReferences: ");
+            if(node.getStatement() instanceof CtIfImpl){
+                CtIf branchNode = (CtIf) node.getStatement();
+                System.out.println("References raw: ");
+                System.out.println(branchNode.getCondition().filterChildren(new TypeFilter<>(CtVariableReference.class)).list());
+                for(Object reference: branchNode.getCondition().filterChildren(new TypeFilter<>(CtVariableReference.class)).list()){
+                    System.out.println(getCompleteVariable(node, (CtReference) reference));
+                    System.out.println(getCompleteVariable(node, (CtReference) reference).getClass());
+                }
+            }
+            else{
+                System.out.println("References raw: ");
+                System.out.println(node.getStatement().filterChildren(new TypeFilter<>(CtVariableReference.class)).list());
+                for(Object reference: node.getStatement().filterChildren(new TypeFilter<>(CtVariableReference.class)).list()){
+                    System.out.println(getCompleteVariable(node, (CtReference) reference));
+                    System.out.println(getCompleteVariable(node, (CtReference) reference).getClass());
+                }
+            }
+            //System.out.println(node.getStatement().getElements(new TypeFilter<>(CtStatement.class)));
+        }
+    }
+
+
+    public CtElement getCompleteVariable(GraphNode parent, CtReference child){
+        CtElement wantedStatement = child.getParent();
+        while(wantedStatement.getParent() != parent.getStatement()){
+            wantedStatement = wantedStatement.getParent();
+        }
+        return wantedStatement;
     }
     public List<GraphNode> getAllLocalVariablesForThisMethod(){
         return allLocalVariablesForMethod;
