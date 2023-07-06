@@ -5,6 +5,8 @@ public class GraphEdgeBasicBlock {
     private BasicBlock src;
     private BasicBlock dst;
 
+    private boolean controlEdge;
+
     public GraphEdgeBasicBlock(){}
 
     public void setSrc(BasicBlock src){
@@ -21,6 +23,13 @@ public class GraphEdgeBasicBlock {
 
     public BasicBlock getSrc() {
         return src;
+    }
+
+    public void setIsControlEdge(boolean isControlEdge){
+        this.controlEdge = isControlEdge;
+    }
+    public boolean isControlEdge(){
+        return controlEdge;
     }
 
     public String toString(){

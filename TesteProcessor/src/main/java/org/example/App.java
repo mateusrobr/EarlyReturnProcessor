@@ -42,11 +42,12 @@ public class App {
 //        }
         //System.out.println(pdg.getLocalVariablesOcurrences());
         pdg.addDependencesToNodes();
-
-        for(GraphNode node : pdg.getCfg().getAllNodes()){
-            System.out.println(node);
-            System.out.println(node.getDependence());
-        }
+        System.out.println(pdg.getAllBoundaryBlocksForCompleteComputation());
+        //pdg.getAllBoundaryBlocksForCompleteComputation();
+//        for(GraphNode node : pdg.getCfg().getAllNodes()){
+//            System.out.println(node);
+//            System.out.println(node.getDependence());
+//        }
 
     }
 }

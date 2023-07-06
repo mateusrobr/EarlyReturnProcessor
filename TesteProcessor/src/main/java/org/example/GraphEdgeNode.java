@@ -5,6 +5,7 @@ public class GraphEdgeNode {
     private GraphNode src;
     private GraphNode dst;
 
+    private boolean controlEdge;
 
     public GraphEdgeNode(){
     }
@@ -24,6 +25,12 @@ public class GraphEdgeNode {
         return src;
     }
 
+    public void setIsControlEdge(boolean isControlEdge){
+        this.controlEdge = isControlEdge;
+    }
+    public boolean getIsControlEdge(){
+        return controlEdge;
+    }
     public String toString(){
         return "src: " + src + "\n" +" dst: " + dst;
     }
