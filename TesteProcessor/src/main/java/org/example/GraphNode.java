@@ -41,7 +41,10 @@ GraphNode {
     }
 
     public void setOutgoingEdges(GraphEdgeNode outgoingEdge){
-        outgoingEdges.add(outgoingEdge);
+        //outgoingEdges.add(outgoingEdge);
+        if(outgoingEdge.getSrc().getStatement() instanceof CtIfImpl){
+            outgoingEdge.setIsControlEdge(true);
+        }
         if(outgoingEdge.getDst().getBasicBlock() != outgoingEdge.getSrc().getBasicBlock()){
             GraphEdgeBasicBlock newEdge = new GraphEdgeBasicBlock();
             newEdge.setSrc(outgoingEdge.getSrc().getBasicBlock());
@@ -49,6 +52,8 @@ GraphNode {
             outgoingEdge.getSrc().getBasicBlock().setOutgoingEdges(newEdge);
 
         }
+        outgoingEdges.add(outgoingEdge);
+
     }
 
     public Set<GraphEdgeNode> getIncomingEdges(){

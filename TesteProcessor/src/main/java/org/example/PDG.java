@@ -171,10 +171,10 @@ public class PDG {
             }
             else{
                 for (Object reference : node.getStatement().filterChildren(new TypeFilter<>(CtVariableReference.class)).list()){
-                    System.out.println("reference: " + reference);
+                    //System.out.println("reference: " + reference);
                     CtReference reference1 = (CtReference) reference;
                     for(Map.Entry<GraphNode, List<CtReference>> entry : referencesAux.entrySet()){
-                        System.out.println(entry.getValue().contains(reference));
+                        //System.out.println(entry.getValue().contains(reference));
                         if(entry.getValue().contains(reference)){
                             if(node.getStatement() instanceof CtAssignmentImpl){
                                 CtAssignment assignment = (CtAssignment) node.getStatement();

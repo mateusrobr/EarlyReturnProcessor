@@ -46,6 +46,7 @@ public class CFG {
         basicBlockListForThisBlock.add(newBasicBlock);
         int numberOfBasicBlocksForThisBlock = 1;
         int numberOfStatementsForThisBlock = 0;
+
         boolean isAnyStatementNeedingEdge = false;
 
         for (CtStatement statement : statementList){
