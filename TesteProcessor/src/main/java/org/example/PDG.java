@@ -54,19 +54,6 @@ public class PDG {
             List<CtReference> referenceList = new ArrayList<>();
             entry.getKey().getStatement().map(new VariableReferenceFunction()).forEach(new CtConsumer<CtReference>() {
                 public void accept(CtReference t){
-//                    if(!(auxList.get(auxList.size() - 1).contains(getGraphNodeFromCtReference(t, allCFGCtStatements)))){
-//                        auxList.get(auxList.size() - 1).add(getGraphNodeFromCtReference(t, allCFGCtStatements));
-//                    }
-//                    else{
-//                        int startPos = cfg.getAllNodes().indexOf(getGraphNodeFromCtReference(t, allCFGCtStatements)) + 1;
-//                        List<GraphNode> subList = new ArrayList<>();
-//                        subList = cfg.getAllNodes().subList(startPos, cfg.getAllNodes().size() - 1);
-//                        List<CtStatement> subListCtStatement = new ArrayList<>();
-//                        subListCtStatement = allCFGCtStatements.subList(allCFGCtStatements.indexOf(getGraphNodeFromCtReference(t, allCFGCtStatements).getStatement()) + 1, allCFGCtStatements.size() - 1);
-//
-//                        auxList.get(auxList.size() - 1).add(subList.get(subList.indexOf(getGraphNodeFromCtReference(t, subListCtStatement))));
-//
-//                    }
                     auxList.get(auxList.size() - 1).add(getGraphNodeFromCtReference(t, allCFGCtStatements));
                     referenceList.add(t);
                 }
@@ -185,10 +172,24 @@ public class PDG {
             else{
                 for (Object reference : node.getStatement().filterChildren(new TypeFilter<>(CtVariableReference.class)).list()){
                     System.out.println("reference: " + reference);
+                    CtReference reference1 = (CtReference) reference;
                     for(Map.Entry<GraphNode, List<CtReference>> entry : referencesAux.entrySet()){
                         System.out.println(entry.getValue().contains(reference));
                         if(entry.getValue().contains(reference)){
-                            node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements())) -1 ));
+                            if(node.getStatement() instanceof CtAssignmentImpl){
+                                CtAssignment assignment = (CtAssignment) node.getStatement();
+                                CtReference referenceTest = (CtReference) assignment.getAssigned().getDirectChildren().get(0);
+                                if(referenceTest.getSimpleName().equals(reference1.getSimpleName())){
+                                    continue;
+                                }
+                            }
+                            int index = localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements()));
+                            //System.out.println(index);
+                            if(index == 0){
+                                node.setDependence(entry.getKey());
+                                continue;
+                            }
+                            node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index - 1));
                         }
                     }
                 }
