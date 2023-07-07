@@ -204,9 +204,20 @@ public class PDG {
                     }
                 }
             }
+            CtReference objectReference = (CtReference) reference;
             for(Map.Entry<GraphNode, List<CtReference>> entry : referencesAux.entrySet()){
-                if(entry.getValue().contains(reference)){
-                    node.setDataDependenceLocalStatements(localVariablesOcurrences.get(entry.getKey()).get( localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements())) -1 ));
+                if(entry.getValue().contains(objectReference)){
+                    //node.setDataDependenceLocalStatements(localVariablesOcurrences.get(entry.getKey()).get( localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements())) -1 ));
+                    List<GraphNode> assignmentsWithIdSmaller = getAssignmentNodesSmallerId(getGraphNodeFromCtReference(objectReference, cfg.getAllCtStatements()), entry.getKey());
+                    for(int i = assignmentsWithIdSmaller.size() -1; i >= 0 ; i-- ){
+                        if(isReferenceInTheBoundaryBlocks(assignmentsWithIdSmaller.get(i), node)){
+                            //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
+                            node.setDataDependenceLocalStatements(assignmentsWithIdSmaller.get(i));
+                            return;
+                        }
+                    }
+                    //In case there's no assignment before this node
+                    node.setDataDependenceLocalStatements(entry.getKey());
                 }
 
             }
