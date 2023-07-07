@@ -160,43 +160,75 @@ public class PDG {
         for(GraphNode node : cfg.getAllNodes()){
             //System.out.println(node);
             if(node.getStatement() instanceof CtIfImpl){
-                CtIf branchNode = (CtIf) node.getStatement();;
-                for(Object reference : branchNode.getCondition().filterChildren(new TypeFilter<>(CtVariableReference.class)).list()){
-                    for(Map.Entry<GraphNode, List<CtReference>> entry : referencesAux.entrySet()){
-                        if(entry.getValue().contains(reference)){
-                            node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements())) -1 ));
-                        }
-                    }
-                }
+               CtIf branchNode = (CtIf) node.getStatement();;
+//                for(Object reference : branchNode.getCondition().filterChildren(new TypeFilter<>(CtVariableReference.class)).list()){
+//                    for(Map.Entry<GraphNode, List<CtReference>> entry : referencesAux.entrySet()){
+//                        if(entry.getValue().contains(reference)){
+//                            node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements())) -1 ));
+//                        }
+//                    }
+//                }
+                searchDependency(branchNode, node);
             }
             else{
                 for (Object reference : node.getStatement().filterChildren(new TypeFilter<>(CtVariableReference.class)).list()){
                     //System.out.println("reference: " + reference);
                     CtReference reference1 = (CtReference) reference;
-                    for(Map.Entry<GraphNode, List<CtReference>> entry : referencesAux.entrySet()){
-                        //System.out.println(entry.getValue().contains(reference));
-                        if(entry.getValue().contains(reference)){
-                            if(node.getStatement() instanceof CtAssignmentImpl){
-                                CtAssignment assignment = (CtAssignment) node.getStatement();
-                                CtReference referenceTest = (CtReference) assignment.getAssigned().getDirectChildren().get(0);
-                                if(referenceTest.getSimpleName().equals(reference1.getSimpleName())){
-                                    continue;
-                                }
-                            }
-                            int index = localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements()));
-                            //System.out.println(index);
-                            if(index == 0){
-                                node.setDependence(entry.getKey());
-                                continue;
-                            }
-                            node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index - 1));
-                        }
-                    }
+                    searchDependency(reference1, node);
+//                    for(Map.Entry<GraphNode, List<CtReference>> entry : referencesAux.entrySet()){
+//                        //System.out.println(entry.getValue().contains(reference));
+//                        if(entry.getValue().contains(reference)){
+//                            if(node.getStatement() instanceof CtAssignmentImpl){
+//                                CtAssignment assignment = (CtAssignment) node.getStatement();
+//                                CtReference referenceTest = (CtReference) assignment.getAssigned().getDirectChildren().get(0);
+//                                if(referenceTest.getSimpleName().equals(reference1.getSimpleName())){
+//                                    continue;
+//                                }
+//                            }
+//                            int index = localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements()));
+//                            //System.out.println(index);
+//                            if(index == 0){
+//                                node.setDependence(entry.getKey());
+//                                continue;
+//                            }
+//                            node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index - 1));
+//                        }
+//                    }
                 }
             }
         }
     }
+    private void searchDependency(CtIf branchNode, GraphNode node){
 
+        for(Object reference : branchNode.getCondition().filterChildren(new TypeFilter<>(CtVariableReference.class)).list()){
+            for(Map.Entry<GraphNode, List<CtReference>> entry : referencesAux.entrySet()){
+                if(entry.getValue().contains(reference)){
+                    node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements())) -1 ));
+                }
+            }
+        }
+    }
+    private void searchDependency(CtReference reference, GraphNode node){
+        for(Map.Entry<GraphNode, List<CtReference>> entry : referencesAux.entrySet()){
+            //System.out.println(entry.getValue().contains(reference));
+            if(entry.getValue().contains(reference)){
+                if(node.getStatement() instanceof CtAssignmentImpl){
+                    CtAssignment assignment = (CtAssignment) node.getStatement();
+                    CtReference referenceTest = (CtReference) assignment.getAssigned().getDirectChildren().get(0);
+                    if(referenceTest.getSimpleName().equals(reference.getSimpleName())){
+                        continue;
+                    }
+                }
+                int index = localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements()));
+                //System.out.println(index);
+                if(index == 0){
+                    node.setDependence(entry.getKey());
+                    continue;
+                }
+                node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index - 1));
+            }
+        }
+    }
 
     public CtElement getCompleteVariable(GraphNode parent, CtReference child){
         CtElement wantedStatement = child.getParent();

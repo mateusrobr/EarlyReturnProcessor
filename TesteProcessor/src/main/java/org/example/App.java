@@ -49,18 +49,19 @@ public class App {
 //                System.out.println(edge.getIsControlEdge());
 //            }
 //        }
-        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
-            System.out.println(block);
-            for (GraphEdgeBasicBlock edge : block.getOutgoingEdges()){
-                System.out.println(edge);
-                System.out.println(edge.isControlEdge());
-            }
-        }
-        //pdg.getAllBoundaryBlocksForCompleteComputation();
-//        for(GraphNode node : pdg.getCfg().getAllNodes()){
-//            System.out.println(node);
-//            System.out.println(node.getDependence());
+
+//        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
+//            System.out.println(block);
+//            for (GraphEdgeBasicBlock edge : block.getOutgoingEdges()){
+//                System.out.println(edge);
+//                System.out.println(edge.isControlEdge());
+//            }
 //        }
+        pdg.getAllBoundaryBlocksForCompleteComputation();
+        for(GraphNode node : pdg.getCfg().getAllNodes()){
+            System.out.println(node);
+            System.out.println(node.getDependence());
+        }
 
     }
 }
