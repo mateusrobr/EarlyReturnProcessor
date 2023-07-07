@@ -2,9 +2,9 @@ package org.example;
 
 import spoon.reflect.code.*;
 import spoon.reflect.declaration.CtElement;
-import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtMethod;
-import spoon.reflect.path.CtRole;
+import spoon.reflect.declaration.CtParameter;
+import spoon.reflect.reference.CtParameterReference;
 import spoon.reflect.reference.CtReference;
 import spoon.reflect.reference.CtVariableReference;
 import spoon.reflect.visitor.chain.CtConsumer;
@@ -12,7 +12,6 @@ import spoon.reflect.visitor.filter.TypeFilter;
 import spoon.reflect.visitor.filter.VariableReferenceFunction;
 import spoon.support.reflect.code.*;
 
-import java.lang.ref.Reference;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,11 +21,13 @@ public class PDG {
 
     private Map<GraphNode, List<GraphNode>> localVariablesOcurrences;
     private Map<GraphNode, List<CtReference>> referencesAux;
-
     private Map<GraphNode, List<GraphNode>> localVariableAssigmentOcurrences;
+
+    private List<CtParameter> parameterMethod;
     public PDG(CtMethod targetMethod){
         cfg = new CFG(targetMethod);
         allLocalVariablesForMethod = new ArrayList<>();
+        parameterMethod = targetMethod.filterChildren(new TypeFilter<>(CtParameter.class)).list();
         this.fromGraphNodesGetLocalVariables();
         referencesAux = new LinkedHashMap<>();
         localVariablesOcurrences = getMapOfLocalVariableAndAllOcurrencesOfLocalVariable();
@@ -64,6 +65,26 @@ public class PDG {
 
         return statementMap;
     }
+//    public Map<GraphNode, List<GraphNode>> getMapOfParameterAndAllOcurrencesOfLocalVariable(){
+//        Map<GraphNode, List<GraphNode>> statementMap = new HashMap<>();
+//        List<List<GraphNode>> auxList = new ArrayList<>();
+//        List<CtStatement> allCFGCtStatements = cfg.getAllCtStatements();
+//        for(Map.Entry<GraphNode, CtStatement> entry : cfg.getMapGraphNodeCtStatement().entrySet()){
+//            auxList.add(new ArrayList<>());
+//            List<GraphNode> subList = new ArrayList<>();
+//            List<CtReference> referenceList = new ArrayList<>();
+//            entry.getKey().getStatement().map(new VariableReferenceFunction()).forEach(new CtConsumer<CtReference>() {
+//                public void accept(CtReference t){
+//                    auxList.get(auxList.size() - 1).add(getGraphNodeFromCtReference(t, allCFGCtStatements));
+//                    referenceList.add(t);
+//                }
+//            });
+//            referencesAux.put(entry.getKey(),referenceList);
+//            statementMap.put(entry.getKey(), auxList.get(auxList.size() - 1));
+//        }
+//
+//        return statementMap;
+//    }
     public GraphNode getGraphNodeFromCtReference(CtReference reference, List<CtStatement> statementList){
         CtElement completeStatement =  reference.getParent();
 
@@ -156,44 +177,16 @@ public class PDG {
     }
 
     public void addDependencesToNodes(){
-        //System.out.println(localVariablesOcurrences);
         for(GraphNode node : cfg.getAllNodes()){
-            //System.out.println(node);
             if(node.getStatement() instanceof CtIfImpl){
                CtIf branchNode = (CtIf) node.getStatement();;
-//                for(Object reference : branchNode.getCondition().filterChildren(new TypeFilter<>(CtVariableReference.class)).list()){
-//                    for(Map.Entry<GraphNode, List<CtReference>> entry : referencesAux.entrySet()){
-//                        if(entry.getValue().contains(reference)){
-//                            node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements())) -1 ));
-//                        }
-//                    }
-//                }
+
                 searchDependency(branchNode, node);
             }
             else{
                 for (Object reference : node.getStatement().filterChildren(new TypeFilter<>(CtVariableReference.class)).list()){
-                    //System.out.println("reference: " + reference);
                     CtReference reference1 = (CtReference) reference;
                     searchDependency(reference1, node);
-//                    for(Map.Entry<GraphNode, List<CtReference>> entry : referencesAux.entrySet()){
-//                        //System.out.println(entry.getValue().contains(reference));
-//                        if(entry.getValue().contains(reference)){
-//                            if(node.getStatement() instanceof CtAssignmentImpl){
-//                                CtAssignment assignment = (CtAssignment) node.getStatement();
-//                                CtReference referenceTest = (CtReference) assignment.getAssigned().getDirectChildren().get(0);
-//                                if(referenceTest.getSimpleName().equals(reference1.getSimpleName())){
-//                                    continue;
-//                                }
-//                            }
-//                            int index = localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements()));
-//                            //System.out.println(index);
-//                            if(index == 0){
-//                                node.setDependence(entry.getKey());
-//                                continue;
-//                            }
-//                            node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index - 1));
-//                        }
-//                    }
                 }
             }
         }
@@ -203,12 +196,25 @@ public class PDG {
         for(Object reference : branchNode.getCondition().filterChildren(new TypeFilter<>(CtVariableReference.class)).list()){
             for(Map.Entry<GraphNode, List<CtReference>> entry : referencesAux.entrySet()){
                 if(entry.getValue().contains(reference)){
-                    node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements())) -1 ));
+                    node.setDataDependenceLocalStatements(localVariablesOcurrences.get(entry.getKey()).get( localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements())) -1 ));
+                }
+                else if (reference instanceof CtParameterReference) {
+
                 }
             }
         }
     }
     private void searchDependency(CtReference reference, GraphNode node){
+        if(reference instanceof CtParameterReference){
+            CtParameterReference parameterReference = (CtParameterReference) reference;
+            for(CtParameter methodParameter : parameterMethod){
+                if(methodParameter.getSimpleName().equals(parameterReference.getSimpleName())){
+                    //System.out.println();
+                    //System.out.println("Node " + node + " Depence on parameter: " + methodParameter.getSimpleName());
+                    node.setDataDependenceParameters(methodParameter);
+                }
+            }
+        }
         for(Map.Entry<GraphNode, List<CtReference>> entry : referencesAux.entrySet()){
             //System.out.println(entry.getValue().contains(reference));
             if(entry.getValue().contains(reference)){
@@ -219,28 +225,16 @@ public class PDG {
                         continue;
                     }
                 }
-                int index = localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements()));
-//                //System.out.println(index);
-//                if(index == 0){
-//                    node.setDependence(entry.getKey());
-//                    continue;
-//                }
-//                if(localVariableAssigmentOcurrences.get(entry.getKey()).contains(getGraphNodeFromCtReference(reference,cfg.getAllCtStatements()))){
-//                    if(isReferenceInTheBoundaryBlocks(reference, node)){
-//                        node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
-//                    }
-//                }
                 List<GraphNode> assignmentsWithIdSmaller = getAssignmentNodesSmallerId(getGraphNodeFromCtReference(reference, cfg.getAllCtStatements()), entry.getKey());
                 for(int i = assignmentsWithIdSmaller.size() -1; i >= 0 ; i-- ){
                     if(isReferenceInTheBoundaryBlocks(assignmentsWithIdSmaller.get(i), node)){
                         //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
-                        node.setDependence(assignmentsWithIdSmaller.get(i));
+                        node.setDataDependenceLocalStatements(assignmentsWithIdSmaller.get(i));
                         return;
                     }
                 }
                 //In case there's no assignment before this node
-                node.setDependence(entry.getKey());
-                //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index - 1));
+                node.setDataDependenceLocalStatements(entry.getKey());
             }
         }
     }
@@ -248,7 +242,6 @@ public class PDG {
         List<BasicBlock> boundaryBlockNode = getBoundaryBlocksForLocalVariableOcurrence(node);
         GraphNode referenceGraphNode = getGraphNodeFromCtReference(reference, cfg.getAllCtStatements());
         return boundaryBlockNode.contains(referenceGraphNode.getBasicBlock());
-
     }
     private boolean isReferenceInTheBoundaryBlocks(GraphNode nodeTested, GraphNode node){
         List<BasicBlock> boundaryBlockNode = getBoundaryBlocksForLocalVariableOcurrence(node);
@@ -284,6 +277,9 @@ public class PDG {
     }
     public Map<GraphNode, List<GraphNode>> getLocalVariableAssigmentOcurrences(){
         return localVariableAssigmentOcurrences;
+    }
+    public List<CtParameter> getParametersMethod(){
+        return this.parameterMethod;
     }
     public CFG getCfg(){
         return this.cfg;

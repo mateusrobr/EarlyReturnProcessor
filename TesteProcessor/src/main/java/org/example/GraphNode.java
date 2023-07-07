@@ -1,6 +1,7 @@
 package org.example;
 
 import spoon.reflect.code.CtStatement;
+import spoon.reflect.declaration.CtParameter;
 import spoon.support.reflect.code.CtIfImpl;
 
 import java.util.ArrayList;
@@ -15,7 +16,9 @@ GraphNode {
     private Set<GraphEdgeNode> incomingEdges;
     private Set<GraphEdgeNode> outgoingEdges;
 
-    private List<GraphEdgeNode> dependence;
+    private List<GraphEdgeNode> dataDependenceLocalStatements;
+
+    private List<CtParameter> dataDependenceParameters;
     private BasicBlock basicBlock;
 
     private boolean isLeader;
@@ -28,7 +31,8 @@ GraphNode {
         this.statement = statement;
         incomingEdges = new LinkedHashSet<GraphEdgeNode>();
         outgoingEdges = new LinkedHashSet<GraphEdgeNode>();
-        dependence = new ArrayList<>();
+        dataDependenceLocalStatements = new ArrayList<>();
+        dataDependenceParameters = new ArrayList<>();
     }
 
     public void setIncomingEdge(GraphEdgeNode incomingEdge){
@@ -94,14 +98,20 @@ GraphNode {
         this.basicBlock = basicBlock;
         basicBlock.addNode(this);
     }
-    public void setDependence(GraphNode node){
+    public void setDataDependenceLocalStatements(GraphNode node){
         GraphEdgeNode newEdge = new GraphEdgeNode();
         newEdge.setSrc(this);
         newEdge.setDst(node);
-        this.dependence.add(newEdge);
+        this.dataDependenceLocalStatements.add(newEdge);
     }
-    public List<GraphEdgeNode> getDependence(){
-        return this.dependence;
+    public void setDataDependenceParameters(CtParameter parameter){
+        dataDependenceParameters.add(parameter);
+    }
+    public List<CtParameter> getDataDependenceParameters(){
+        return this.dataDependenceParameters;
+    }
+    public List<GraphEdgeNode> getDataDependenceLocalStatements(){
+        return this.dataDependenceLocalStatements;
     }
     public BasicBlock getBasicBlock(){return this.basicBlock;}
 

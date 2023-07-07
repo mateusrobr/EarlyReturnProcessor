@@ -7,6 +7,7 @@ public class GraphEdgeNode {
 
     private boolean controlEdge;
 
+
     public GraphEdgeNode(){
     }
     public GraphNode getDst(){
