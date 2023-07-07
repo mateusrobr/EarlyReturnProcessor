@@ -220,14 +220,23 @@ public class PDG {
                     }
                 }
                 int index = localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements()));
-                //System.out.println(index);
-                if(index == 0){
-                    node.setDependence(entry.getKey());
-                    continue;
+//                //System.out.println(index);
+//                if(index == 0){
+//                    node.setDependence(entry.getKey());
+//                    continue;
+//                }
+                if(isReferenceInTheBoundaryBlocks(reference, node)){
+                    node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
                 }
-                node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index - 1));
+                //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index - 1));
             }
         }
+    }
+    private boolean isReferenceInTheBoundaryBlocks(CtReference reference, GraphNode node){
+        List<BasicBlock> boundaryBlockNode = getBoundaryBlocksForLocalVariableOcurrence(node);
+        GraphNode referenceGraphNode = getGraphNodeFromCtReference(reference, cfg.getAllCtStatements());
+        return boundaryBlockNode.contains(referenceGraphNode.getBasicBlock());
+
     }
 
     public CtElement getCompleteVariable(GraphNode parent, CtReference child){
