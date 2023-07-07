@@ -225,8 +225,18 @@ public class PDG {
 //                    node.setDependence(entry.getKey());
 //                    continue;
 //                }
-                if(isReferenceInTheBoundaryBlocks(reference, node)){
-                    node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
+//                if(localVariableAssigmentOcurrences.get(entry.getKey()).contains(getGraphNodeFromCtReference(reference,cfg.getAllCtStatements()))){
+//                    if(isReferenceInTheBoundaryBlocks(reference, node)){
+//                        node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
+//                    }
+//                }
+                List<GraphNode> assignmentsWithIdSmaller = getAssignmentNodesSmallerId(getGraphNodeFromCtReference(reference, cfg.getAllCtStatements()), entry.getKey());
+                for(int i = assignmentsWithIdSmaller.size() -1; i >= 0 ; i-- ){
+                    if(isReferenceInTheBoundaryBlocks(assignmentsWithIdSmaller.get(i), node)){
+                        //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
+                        node.setDependence(assignmentsWithIdSmaller.get(i));
+                        return;
+                    }
                 }
                 //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index - 1));
             }
@@ -238,6 +248,24 @@ public class PDG {
         return boundaryBlockNode.contains(referenceGraphNode.getBasicBlock());
 
     }
+    private boolean isReferenceInTheBoundaryBlocks(GraphNode nodeTested, GraphNode node){
+        List<BasicBlock> boundaryBlockNode = getBoundaryBlocksForLocalVariableOcurrence(node);
+        return boundaryBlockNode.contains(nodeTested.getBasicBlock());
+    }
+    private List<GraphNode> getAssignmentNodesSmallerId(GraphNode node, GraphNode key){
+        List<GraphNode> assignNodesWithSmallerId = new ArrayList<>();
+        for (GraphNode assigNode : localVariableAssigmentOcurrences.get(key)){
+            if(node.getId() > assigNode.getId()){
+               assignNodesWithSmallerId.add(assigNode);
+            }
+            else{
+                //If the Id is bigger so doesnt make sense continue because this dependence is for nodes that preceed this current node.
+                break;
+            }
+        }
+        return assignNodesWithSmallerId;
+    }
+
 
     public CtElement getCompleteVariable(GraphNode parent, CtReference child){
         CtElement wantedStatement = child.getParent();
