@@ -48,9 +48,11 @@ public class App {
         pdg.addDependencesToNodes();
 //        pdg.getAllBoundaryBlocksForCompleteComputation();
         for(GraphNode node : pdg.getCfg().getAllNodes()){
-            System.out.println(node);
+            System.out.println("node being analyzed: " + node);
             System.out.println("Data dependence for Local Statements: "+node.getDataDependenceLocalStatements());
             System.out.println("Data dapendencie for Parameters: " + node.getDataDependenceParameters());
+            System.out.println();
+            System.out.println("---------------------------------------");
         }
 
     }

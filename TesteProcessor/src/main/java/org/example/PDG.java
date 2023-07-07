@@ -194,27 +194,37 @@ public class PDG {
     private void searchDependency(CtIf branchNode, GraphNode node){
 
         for(Object reference : branchNode.getCondition().filterChildren(new TypeFilter<>(CtVariableReference.class)).list()){
+            if(reference instanceof CtParameterReference){
+                CtParameterReference parameterReference = (CtParameterReference) reference;
+                for(CtParameter methodParameter : parameterMethod){
+                    if(methodParameter.getSimpleName().equals(parameterReference.getSimpleName())){
+
+                        node.setDataDependenceParameters(methodParameter);
+                        return; // If is a parameter then it's not needed to continue
+                    }
+                }
+            }
             for(Map.Entry<GraphNode, List<CtReference>> entry : referencesAux.entrySet()){
                 if(entry.getValue().contains(reference)){
                     node.setDataDependenceLocalStatements(localVariablesOcurrences.get(entry.getKey()).get( localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements())) -1 ));
                 }
-                else if (reference instanceof CtParameterReference) {
 
-                }
             }
         }
     }
     private void searchDependency(CtReference reference, GraphNode node){
+        //Verify if the reference for the dependency is a parameter
         if(reference instanceof CtParameterReference){
             CtParameterReference parameterReference = (CtParameterReference) reference;
             for(CtParameter methodParameter : parameterMethod){
                 if(methodParameter.getSimpleName().equals(parameterReference.getSimpleName())){
-                    //System.out.println();
-                    //System.out.println("Node " + node + " Depence on parameter: " + methodParameter.getSimpleName());
+
                     node.setDataDependenceParameters(methodParameter);
+                    return; // If is a parameter then it's not needed to continue
                 }
             }
         }
+        // if its not a parameter then it's necessary search through the local nodes.
         for(Map.Entry<GraphNode, List<CtReference>> entry : referencesAux.entrySet()){
             //System.out.println(entry.getValue().contains(reference));
             if(entry.getValue().contains(reference)){
