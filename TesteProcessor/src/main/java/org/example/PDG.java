@@ -156,9 +156,9 @@ public class PDG {
     }
 
     public void addDependencesToNodes(){
-        System.out.println(localVariablesOcurrences);
+        //System.out.println(localVariablesOcurrences);
         for(GraphNode node : cfg.getAllNodes()){
-            System.out.println(node);
+            //System.out.println(node);
             if(node.getStatement() instanceof CtIfImpl){
                 CtIf branchNode = (CtIf) node.getStatement();;
                 for(Object reference : branchNode.getCondition().filterChildren(new TypeFilter<>(CtVariableReference.class)).list()){

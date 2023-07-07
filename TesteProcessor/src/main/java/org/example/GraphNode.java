@@ -49,6 +49,9 @@ GraphNode {
             GraphEdgeBasicBlock newEdge = new GraphEdgeBasicBlock();
             newEdge.setSrc(outgoingEdge.getSrc().getBasicBlock());
             newEdge.setDst(outgoingEdge.getDst().getBasicBlock());
+            if(outgoingEdge.getIsControlEdge()){
+                newEdge.setIsControlEdge(true);
+            }
             outgoingEdge.getSrc().getBasicBlock().setOutgoingEdges(newEdge);
 
         }
