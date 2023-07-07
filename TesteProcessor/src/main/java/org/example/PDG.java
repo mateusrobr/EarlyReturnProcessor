@@ -238,6 +238,8 @@ public class PDG {
                         return;
                     }
                 }
+                //In case there's no assignment before this node
+                node.setDependence(entry.getKey());
                 //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index - 1));
             }
         }
