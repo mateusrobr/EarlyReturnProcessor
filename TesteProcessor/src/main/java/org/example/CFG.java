@@ -53,15 +53,7 @@ public class CFG {
             numberOfStatementsForThisBlock++;
             GraphNode newNode = new GraphNode(statement);
             newNode.setBasicBlock(basicBlockListForThisBlock.get(numberOfBasicBlocksForThisBlock - 1));
-//            if(numberOfBasicBlocksForThisBlock > 1){
-//                if(basicBlockList.indexOf( basicBlockListForThisBlock.get( 0 ) )- 1 == -1){
-//                    newNode.getBasicBlock().setControlDependent(basicBlockList.get(0));
-//                }
-//                else{
-//                    newNode.getBasicBlock().setControlDependent(basicBlockList.get(basicBlockList.indexOf( basicBlockListForThisBlock.get( 0 ) )- 1));
-//                }
-//                //newNode.getBasicBlock().setControlDependent(basicBlockList.get(basicBlockList.indexOf( basicBlockListForThisBlock.get( 0 ) )- 1));
-//            }
+
             setControlDependenceOfNewNode(numberOfBasicBlocksForThisBlock,basicBlockList,basicBlockListForThisBlock,newNode);
 
             allNodes.add(newNode);
@@ -73,8 +65,12 @@ public class CFG {
                 outgoingEdge.setDst(newNode);
                 outgoingEdge.setSrc(allNodes.get( idFromPreviousStatement ) );
                 allNodes.get(idFromPreviousStatement).setOutgoingEdges(outgoingEdge);
+                int indexThisNode;
+                indexThisNode = newNode.getId() - 1;
 
                 getBasicBlocksFromCtBlock(basicBlockList, ((CtIfImpl) statement).getThenStatement(), allNodes, true);
+
+                allNodes.get(indexThisNode + 1).getBasicBlock().setControlDependent(newNode.getBasicBlock());
 
                 addLastNodesFromCodiditionalBranch();
 
