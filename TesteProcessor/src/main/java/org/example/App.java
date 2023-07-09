@@ -27,17 +27,22 @@ public class App {
         String pathHome = "C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src";
         //String targetClassName = "Main";
 
-
-        //Launcher launcher = new Launcher();
-        //launcher.addInputResource(pathHome);
+        Launcher launcher = new Launcher();
+        launcher.addInputResource(pathHome);
 //        FluentLauncher fluentLauncher = new FluentLauncher();
 //        fluentLauncher.outputDirectory("C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src");
 
-        //launcher.buildModel();
-        //CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
+        launcher.buildModel();
+        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
+        PDG pdg = new PDG(method);
+        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
+            System.out.println("Block: " + block);
+            System.out.println(block.getNodes());
+            System.out.println("Is controld dependent on Block: " + block.getControlDependent());
+            System.out.println("--------------------------");
+        }
 
-
-        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "printDocument");
+        //MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "printDocument");
 
 
    }

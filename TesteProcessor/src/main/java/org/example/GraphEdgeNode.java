@@ -28,6 +28,7 @@ public class GraphEdgeNode {
 
     public void setIsControlEdge(boolean isControlEdge){
         this.controlEdge = isControlEdge;
+
     }
     public boolean getIsControlEdge(){
         return controlEdge;

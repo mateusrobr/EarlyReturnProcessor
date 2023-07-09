@@ -15,6 +15,8 @@ public class BasicBlock {
     private Set<GraphEdgeBasicBlock> incomingEdges;
     private List<GraphEdgeBasicBlock> outgoingEdges;
 
+    private BasicBlock controlDependent;
+
     private List<BasicBlock> reachableBlocks;
     private List<BasicBlock> dominatedBlocks;
 
@@ -52,6 +54,7 @@ public class BasicBlock {
         }
         if(!isDuplicatedEdge){
             this.outgoingEdges.add(outgoingEdge);
+            GraphEdgeBasicBlock incomingEdge = new GraphEdgeBasicBlock();
         }
     }
 
@@ -141,6 +144,13 @@ public class BasicBlock {
                 this.dominatedBlocks.add(basicBlock);
             }
         }
+    }
+    public void setControlDependent(BasicBlock block){
+        this.controlDependent = block;
+    }
+
+    public BasicBlock getControlDependent() {
+        return controlDependent;
     }
 
     public List<BasicBlock> getReachableBlocks() {
