@@ -1,5 +1,9 @@
 package org.example;
 
+import spoon.Launcher;
+import spoon.reflect.code.CtLocalVariable;
+import spoon.reflect.declaration.CtMethod;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,10 +13,10 @@ public class PDGSlice {
 
     BasicBlock region;
 
-    public PDGSlice(GraphNode localVariable, List<BasicBlock> completeComputationBasicBlocks, BasicBlock region){
+    public PDGSlice(GraphNode localVariable, List<BasicBlock> completeComputationBasicBlocks){
         this.localVariable = localVariable;
         this.boundaryBlockCompleteComputation = completeComputationBasicBlocks;
-        this.region = region;
+        //this.region = region;
     }
 
     public List<BasicBlock> getBoundaryBlockIntersectionFromBoundaryBlockRaw(){
@@ -23,6 +27,13 @@ public class PDGSlice {
             }
         }
         return boundaryBlockIntersection;
+    }
+
+    public CtMethod produceNewMethod(Launcher launcher){
+        CtMethod newMethod = launcher.getFactory().createMethod();
+        CtLocalVariable localVariableaux = (CtLocalVariable) localVariable.getStatement();
+        System.out.println(localVariableaux.getType());
+        return newMethod;
     }
 
     public void printSlice(){

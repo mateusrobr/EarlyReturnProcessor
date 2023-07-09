@@ -34,9 +34,9 @@ public class App {
 //        fluentLauncher.outputDirectory("C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src");
 
         launcher.buildModel();
-        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
+        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "testeIfs")).get(0);
 
-        PDG pdg = new PDG(method);
+        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "testeIfs");
 //        for(Object object : method.filterChildren(new TypeFilter<>(CtParameter.class)).list()){
 //            CtParameter parameter = (CtParameter) object;;
 //            CtStatement statementTest = (CtStatement) parameter;
@@ -45,15 +45,15 @@ public class App {
 
 
         //System.out.println(pdg.getLocalVariablesOcurrences());
-        pdg.addDependencesToNodes();
+        //pdg.addDependencesToNodes();
 //        pdg.getAllBoundaryBlocksForCompleteComputation();
-        for(GraphNode node : pdg.getCfg().getAllNodes()){
-            System.out.println("node being analyzed: " + node);
-            System.out.println("Data dependence for Local Statements: "+node.getDataDependenceLocalStatements());
-            System.out.println("Data dapendencie for Parameters: " + node.getDataDependenceParameters());
-            System.out.println();
-            System.out.println("---------------------------------------");
-        }
-
-    }
+//        for(GraphNode node : pdg.getCfg().getAllNodes()){
+//            System.out.println("node being analyzed: " + node);
+//            System.out.println("Data dependence for Local Statements: "+node.getDataDependenceLocalStatements());
+//            System.out.println("Data dapendencie for Parameters: " + node.getDataDependenceParameters());
+//            System.out.println();
+//            System.out.println("---------------------------------------");
+//        }
+//
+   }
 }
