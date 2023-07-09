@@ -6,7 +6,7 @@ public class GraphEdgeNode {
     private GraphNode dst;
 
     private boolean controlEdge;
-
+    private boolean isElseStamentInCode;
 
     public GraphEdgeNode(){
     }
@@ -31,6 +31,13 @@ public class GraphEdgeNode {
     }
     public boolean getIsControlEdge(){
         return controlEdge;
+    }
+    public void setElseStamentInCode(boolean isElseStamentInCode){
+        this.isElseStamentInCode = isElseStamentInCode;
+    }
+
+    public boolean isElseStamentInCode() {
+        return isElseStamentInCode;
     }
     public String toString(){
         return "src: " + src + "\n" +" dst: " + dst;

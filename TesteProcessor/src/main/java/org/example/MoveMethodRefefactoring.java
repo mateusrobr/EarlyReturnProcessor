@@ -29,11 +29,13 @@ public class MoveMethodRefefactoring {
         this.pdg = new PDG(method);
         this.pdg.addDependencesToNodes();
         for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
-            System.out.println(entry.getValue());
-            candidates.add(new PDGSlice(entry.getKey(),entry.getValue()));
+            //System.out.println(entry.getValue());
+            candidates.add(new PDGSlice(entry.getKey(),entry.getValue(),launcher));
         }
         for(PDGSlice candidate: candidates){
             candidate.printSlice();
+            System.out.println(candidate.produceNewMethod());
+            candidate.produceNewMethod().prettyprint();
         }
     }
 }

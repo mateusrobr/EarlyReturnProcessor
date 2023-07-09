@@ -74,6 +74,7 @@ public class CFG {
                     GraphEdgeNode falseBranchOutgoingEdge = new GraphEdgeNode();
                     falseBranchOutgoingEdge.setDst(allNodes.get( idFromFirstStatementFalseBranch ));
                     falseBranchOutgoingEdge.setSrc(newNode);
+                    falseBranchOutgoingEdge.setElseStamentInCode(true);
                     newNode.setOutgoingEdges(falseBranchOutgoingEdge);
                 }
                 else{

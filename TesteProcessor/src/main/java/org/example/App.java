@@ -28,32 +28,17 @@ public class App {
         //String targetClassName = "Main";
 
 
-        Launcher launcher = new Launcher();
-        launcher.addInputResource(pathHome);
+        //Launcher launcher = new Launcher();
+        //launcher.addInputResource(pathHome);
 //        FluentLauncher fluentLauncher = new FluentLauncher();
 //        fluentLauncher.outputDirectory("C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src");
 
-        launcher.buildModel();
-        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "testeIfs")).get(0);
-
-        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "testeIfs");
-//        for(Object object : method.filterChildren(new TypeFilter<>(CtParameter.class)).list()){
-//            CtParameter parameter = (CtParameter) object;;
-//            CtStatement statementTest = (CtStatement) parameter;
-//            //GraphNode node = pdg.getGraphNodeFromCtReference(parameter, pdg.getCfg().getAllCtStatements());
-//        }
+        //launcher.buildModel();
+        //CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
 
 
-        //System.out.println(pdg.getLocalVariablesOcurrences());
-        //pdg.addDependencesToNodes();
-//        pdg.getAllBoundaryBlocksForCompleteComputation();
-//        for(GraphNode node : pdg.getCfg().getAllNodes()){
-//            System.out.println("node being analyzed: " + node);
-//            System.out.println("Data dependence for Local Statements: "+node.getDataDependenceLocalStatements());
-//            System.out.println("Data dapendencie for Parameters: " + node.getDataDependenceParameters());
-//            System.out.println();
-//            System.out.println("---------------------------------------");
-//        }
-//
+        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "printDocument");
+
+
    }
 }
