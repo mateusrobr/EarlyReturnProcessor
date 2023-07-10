@@ -1,10 +1,7 @@
 package org.example;
 
 import spoon.Launcher;
-import spoon.reflect.code.CtBlock;
-import spoon.reflect.code.CtIf;
-import spoon.reflect.code.CtLocalVariable;
-import spoon.reflect.code.CtStatement;
+import spoon.reflect.code.*;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
 import spoon.reflect.visitor.filter.TypeFilter;
@@ -68,8 +65,17 @@ public class PDGSlice {
                             if(baseRegion.getOutgoingEdges().get(1).getIsControlEdgeCFG()){
                                 ifStatement.setElseStatement(getCtBlockFromBasicBlock(block));
                             }
+                            else{
+                                CtStatementList list = getCtBlockFromBasicBlock(block);
+                                for(CtStatement statement : list){
+                                    newCtBlock.addStatement(statement.clone());
+                                }
+                            }
                         }else{
-
+                            CtStatementList list = getCtBlockFromBasicBlock(block);
+                            for(CtStatement statement : list){
+                                newCtBlock.addStatement(statement.clone());
+                            }
                         }
                     }
                 }
