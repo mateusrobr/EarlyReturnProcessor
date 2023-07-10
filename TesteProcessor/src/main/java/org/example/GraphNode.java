@@ -46,13 +46,15 @@ GraphNode {
 
     public void setOutgoingEdges(GraphEdgeNode outgoingEdge, boolean isControlEdgeCFG){
         //outgoingEdges.add(outgoingEdge);
-        if(isControlEdgeCFG){
-            outgoingEdge.setIsControlEdge(true);
-        }
+//        if(isControlEdgeCFG){
+//            outgoingEdge.setIsControlEdge(true);
+//        }
+        outgoingEdge.setIsControlEdge(isControlEdgeCFG);
         if(outgoingEdge.getDst().getBasicBlock() != outgoingEdge.getSrc().getBasicBlock()){
             GraphEdgeBasicBlock newEdge = new GraphEdgeBasicBlock();
             newEdge.setSrc(outgoingEdge.getSrc().getBasicBlock());
             newEdge.setDst(outgoingEdge.getDst().getBasicBlock());
+            newEdge.setIsControlEdge(isControlEdgeCFG);
 
             outgoingEdge.getSrc().getBasicBlock().setOutgoingEdges(newEdge);
 

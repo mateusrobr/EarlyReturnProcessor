@@ -53,13 +53,20 @@ public class PDGSlice {
 
     public CtBlock getCtBlockFromBasicBlock(BasicBlock baseRegion){
         CtBlock newCtBlock = this.launcher.getFactory().createBlock();
-        //alreadyVisited.add(block);
         for(GraphNode node : baseRegion.getNodes()) {
             if (node.getStatement() instanceof CtIfImpl) {
                 CtIf nodeIfStatement = (CtIf) node.getStatement();
                 CtIf ifStatement = this.launcher.getFactory().createIf();
                 ifStatement.setCondition(nodeIfStatement.getCondition());
                 newCtBlock.addStatement(ifStatement);
+                if(mapAux.get(baseRegion).size() > 0){
+                    ifStatement.setThenStatement(getCtBlockFromBasicBlock( mapAux.get(baseRegion).get(0) ));
+                }
+                if(mapAux.get(baseRegion).size() > 1){
+                    if(baseRegion.getOutgoingEdges().get(1).isControlEdge()){
+                        ifStatement.setElseStatement(getCtBlockFromBasicBlock(mapAux.get(baseRegion).get(1)));
+                    }
+                }
 
 
             } else {
@@ -76,9 +83,7 @@ public class PDGSlice {
         CtLocalVariable localVariableaux = (CtLocalVariable) localVariable.getStatement();
         newMethod.setType(localVariableaux.getType());
         newMethod.setSimpleName("newMethod" + totalNewMethods);
-        //Map<BasicBlock, List<GraphNode>> mapAux = new LinkedHashMap<>();
 
-        Map<BasicBlock, List<BasicBlock>> mapAux = new LinkedHashMap<>();
         for(BasicBlock completeComputationBlock : boundaryBlockCompleteComputation){
             List<BasicBlock> listAux = new ArrayList<>();
             for(BasicBlock blocks: boundaryBlockCompleteComputation){
@@ -88,9 +93,10 @@ public class PDGSlice {
                     }
                 }
             }
-            mapAux.put(completeComputationBlock,listAux);
+            this.mapAux.put(completeComputationBlock,listAux);
         }
 
+        newMethod.setBody(getCtBlockFromBasicBlock(boundaryBlockCompleteComputation.get(0)));
 
 
         return newMethod;

@@ -27,39 +27,28 @@ public class App {
         String pathHome = "C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src";
         String targetClassName = "Main";
 
-        Launcher launcher = new Launcher();
-        launcher.addInputResource(pathHome);
+        //Launcher launcher = new Launcher();
+        //launcher.addInputResource(pathHome);
 //        FluentLauncher fluentLauncher = new FluentLauncher();
 //        fluentLauncher.outputDirectory("C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src");
 
-        launcher.buildModel();
-        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
-        PDG pdg = new PDG(method);
+        //launcher.buildModel();
+        //CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
+        //PDG pdg = new PDG(method);
 
 //        for(BasicBlock blocks : pdg.getCfg().getBasicBlocks()){
+//            System.out.println(blocks);
 //            for(GraphEdgeBasicBlock edge : blocks.getOutgoingEdges()){
+//                System.out.println(edge);
 //                if(edge.isControlEdge()){
-//                    System.out.println(blocks.getId());
-//                    System.out.println(edge);
+//                    System.out.println("Control edge CFG");
+//                }
+//                else{
+//                    System.out.println("Not control Edge CFG");
 //                }
 //            }
 //        }
-        for(GraphNode node : pdg.getCfg().getAllNodes()){
-            System.out.println(node);
-            for(GraphEdgeNode edge : node.getOutgoingEdges()){
-                System.out.println("Edge: " + edge);
-                if(edge.getIsControlEdge()){
-                    System.out.println("é control edge");
-                }
-                else {
-                    System.out.println("Não é control edge");
-                }
-            }
-        }
 
-
-        //MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "printDocument");
-
-
+        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "printDocument");
    }
 }
