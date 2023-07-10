@@ -34,8 +34,8 @@ public class MoveMethodRefefactoring {
         }
         for(PDGSlice candidate: candidates){
             candidate.printSlice();
-            System.out.println(candidate.produceNewMethod());
-            candidate.produceNewMethod().prettyprint();
+            //System.out.println(candidate.produceNewMethod());
+            candidate.produceNewMethod();
         }
     }
 }

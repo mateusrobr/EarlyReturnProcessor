@@ -34,15 +34,15 @@ public class App {
 
         launcher.buildModel();
         CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
-        PDG pdg = new PDG(method);
-        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
-            System.out.println("Block: " + block);
-            System.out.println(block.getNodes());
-            System.out.println("Is controld dependent on Block: " + block.getControlDependent());
-            System.out.println("--------------------------");
-        }
+        //PDG pdg = new PDG(method);
+//        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
+//            System.out.println("Block: " + block);
+//            System.out.println(block.getNodes());
+//            System.out.println("Is controld dependent on Block: " + block.getControlDependent());
+//            System.out.println("--------------------------");
+//        }
 
-        //MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "printDocument");
+        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "printDocument");
 
 
    }

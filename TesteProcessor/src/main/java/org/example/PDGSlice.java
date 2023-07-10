@@ -6,10 +6,10 @@ import spoon.reflect.code.CtIf;
 import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
+import spoon.reflect.visitor.filter.TypeFilter;
 import spoon.support.reflect.code.CtIfImpl;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class PDGSlice {
     static private int totalNewMethods = 0;
@@ -48,38 +48,6 @@ public class PDGSlice {
 
         return newCtBlock;
     }
-//    public CtBlock getCtBlockFromBasicBlock(BasicBlock block){
-//        CtBlock newCtBlock = this.launcher.getFactory().createBlock();
-//        //alreadyVisited.add(block);
-//
-//        for(GraphNode node : block.getNodes()){
-//            if(node.getStatement() instanceof CtIfImpl){
-//                CtIf nodeIfStatement = (CtIf) node.getStatement();
-//                CtIf ifStatement = this.launcher.getFactory().createIf();
-//                ifStatement.setCondition(nodeIfStatement.getCondition());
-//                List<GraphEdgeNode> edges = new ArrayList<>(node.getOutgoingEdges());
-//                if(edges.size() > 0){
-//                    ifStatement.setThenStatement(getCtBlockFromBasicBlock(edges.get(0).getDst().getBasicBlock()));
-//                }
-//                if(edges.size() > 1){
-//                    ifStatement.setElseStatement(getCtBlockFromBasicBlock(edges.get(1).getDst().getBasicBlock()));
-//                }
-//                //ifStatement.setThenStatement(getCtBlockFromBasicBlock(edges.get(0).getDst().getBasicBlock()));
-//                newCtBlock.addStatement(ifStatement);
-//
-////                for(GraphEdgeNode edge : node.getOutgoingEdges()){
-////
-////                }
-//                //CtBlock ifElseBlock = getIfElseCtBlocks();
-//
-//            }
-//            else{
-//            newCtBlock.addStatement(node.getStatement().clone());
-//            }
-//        }
-//
-//        return newCtBlock;
-//    }
 
     public CtBlock getCtBlockFromBasicBlock(BasicBlock block){
         CtBlock newCtBlock = this.launcher.getFactory().createBlock();
@@ -101,21 +69,29 @@ public class PDGSlice {
 
     public CtMethod produceNewMethod(){
         totalNewMethods++;
-        List<CtBlock> blockList = new ArrayList<>();
         CtMethod newMethod = this.launcher.getFactory().createMethod();
+        Map<BasicBlock, List<BasicBlock>> mapAux = new LinkedHashMap<>();
         CtLocalVariable localVariableaux = (CtLocalVariable) localVariable.getStatement();
         newMethod.setType(localVariableaux.getType());
         newMethod.setSimpleName("newMethod" + totalNewMethods);
-        for (int i = 0 ; i < boundaryBlockCompleteComputation.size() ; i++){
-            blockList.add(getCtBlockFromBasicBlock(boundaryBlockCompleteComputation.get(i)));
+
+        for(BasicBlock completeComputationBlock : boundaryBlockCompleteComputation){
+            List<BasicBlock> listAux = new ArrayList<>();
+            for(BasicBlock blocks: boundaryBlockCompleteComputation){
+                if(blocks.getControlDependent() != null){
+                    if(blocks.getControlDependent().getId() == completeComputationBlock.getId()){
+                        listAux.add(blocks);
+                    }
+                }
+            }
+            mapAux.put(completeComputationBlock,listAux);
         }
-        System.out.println("Variable: " + localVariable);
-        for (CtBlock block : blockList){
-            System.out.println(block.prettyprint());
-        }
+
         return newMethod;
     }
+    private CtBlock connectStatements(List<BasicBlock> basicBlocksDependentOnTheCurrent,BasicBlock ){
 
+    }
     public void printSlice(){
         System.out.println("Local Variable: " + localVariable);
         System.out.println("Blocks " + boundaryBlockCompleteComputation);
