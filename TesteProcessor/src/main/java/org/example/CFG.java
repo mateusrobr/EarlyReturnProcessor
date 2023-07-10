@@ -64,7 +64,7 @@ public class CFG {
                 int idFromPreviousStatement = allNodes.size() - 2;
                 outgoingEdge.setDst(newNode);
                 outgoingEdge.setSrc(allNodes.get( idFromPreviousStatement ) );
-                allNodes.get(idFromPreviousStatement).setOutgoingEdges(outgoingEdge);
+                allNodes.get(idFromPreviousStatement).setOutgoingEdges(outgoingEdge, false);
                 int indexThisNode;
                 indexThisNode = newNode.getId() - 1;
 
@@ -82,7 +82,7 @@ public class CFG {
                     falseBranchOutgoingEdge.setDst(allNodes.get( idFromFirstStatementFalseBranch ));
                     falseBranchOutgoingEdge.setSrc(newNode);
                     falseBranchOutgoingEdge.setElseStamentInCode(true);
-                    newNode.setOutgoingEdges(falseBranchOutgoingEdge);
+                    newNode.setOutgoingEdges(falseBranchOutgoingEdge,true);
                     allNodes.get( idFromFirstStatementFalseBranch ).getBasicBlock().setControlDependent(newNode.getBasicBlock());
                 }
                 else{
@@ -103,10 +103,19 @@ public class CFG {
             }
             else{
                 outgoingEdge.setDst(newNode);
-                if (numberOfStatementsForThisBlock > 1 || isRecursive == true) {
+                if (numberOfStatementsForThisBlock > 1 || isRecursive /*== true*/) {
                     int SrcId = allNodes.size() - 2;
                     outgoingEdge.setSrc( allNodes.get( SrcId ) );
-                    allNodes.get( SrcId ).setOutgoingEdges( outgoingEdge );
+                    //allNodes.get( SrcId ).setOutgoingEdges( outgoingEdge );
+                    if(allNodes.get(SrcId).getStatement() instanceof CtIfImpl && (newNode.getStatement().getParent().equals(((CtIfImpl) allNodes.get(SrcId).getStatement()).getThenStatement()) || newNode.getStatement().getParent().equals(((CtIfImpl) allNodes.get(SrcId).getStatement()).getElseStatement()))){
+                        outgoingEdge.setIsControlEdge(true);
+                        allNodes.get( SrcId ).setOutgoingEdges( outgoingEdge,true );
+                    }
+                    else {
+                        allNodes.get( SrcId ).setOutgoingEdges( outgoingEdge , false);
+                    }
+
+                    //allNodes.get( SrcId ).setOutgoingEdges( outgoingEdge );
                     if( isAnyStatementNeedingEdge ) {
                         connectLastNodesFromConditionalBranch(newNode);
 
@@ -165,7 +174,7 @@ public class CFG {
             outgoingEdgeConditionalStatement.setDst(newNode);
             outgoingEdgeConditionalStatement.setSrc(node);
 
-            node.setOutgoingEdges(outgoingEdgeConditionalStatement);
+            node.setOutgoingEdges(outgoingEdgeConditionalStatement,false);
         }
     }
 

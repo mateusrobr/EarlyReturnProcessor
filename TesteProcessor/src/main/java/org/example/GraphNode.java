@@ -41,21 +41,19 @@ GraphNode {
         GraphEdgeNode outgoingEdge = new GraphEdgeNode();
         outgoingEdge.setSrc(incomingEdge.getDst());
         outgoingEdge.setDst(incomingEdge.getSrc());
-        setOutgoingEdges(outgoingEdge);
+        //setOutgoingEdges(outgoingEdge);
     }
 
-    public void setOutgoingEdges(GraphEdgeNode outgoingEdge){
+    public void setOutgoingEdges(GraphEdgeNode outgoingEdge, boolean isControlEdgeCFG){
         //outgoingEdges.add(outgoingEdge);
-        if(outgoingEdge.getSrc().getStatement() instanceof CtIfImpl){
+        if(isControlEdgeCFG){
             outgoingEdge.setIsControlEdge(true);
         }
         if(outgoingEdge.getDst().getBasicBlock() != outgoingEdge.getSrc().getBasicBlock()){
             GraphEdgeBasicBlock newEdge = new GraphEdgeBasicBlock();
             newEdge.setSrc(outgoingEdge.getSrc().getBasicBlock());
             newEdge.setDst(outgoingEdge.getDst().getBasicBlock());
-            if(outgoingEdge.getIsControlEdge()){
-                newEdge.setIsControlEdge(true);
-            }
+
             outgoingEdge.getSrc().getBasicBlock().setOutgoingEdges(newEdge);
 
         }

@@ -17,6 +17,8 @@ public class BasicBlock {
 
     private BasicBlock controlDependent;
 
+    private List<BasicBlock> blocksThatDependOnThis;
+
     private List<BasicBlock> reachableBlocks;
     private List<BasicBlock> dominatedBlocks;
 
@@ -30,6 +32,7 @@ public class BasicBlock {
         reachableBlocks.add(this);
         dominatedBlocks = new ArrayList<>();
         dominatedBlocks.add(this);
+        blocksThatDependOnThis = new ArrayList<>();
     }
 
 

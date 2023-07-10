@@ -25,7 +25,7 @@ public class App {
         String path = "C:\\Users\\Kurumi\\Desktop\\ERP\\EarlyReturnProcessor\\TesteProcessor\\src\\main\\java\\BaseMethodsForTesting";
         String pathExample = "C:\\Users\\Kurumi\\Desktop\\SpoonTests\\spoonTests\\src\\main\\java\\org\\example";
         String pathHome = "C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src";
-        //String targetClassName = "Main";
+        String targetClassName = "Main";
 
         Launcher launcher = new Launcher();
         launcher.addInputResource(pathHome);
@@ -34,15 +34,31 @@ public class App {
 
         launcher.buildModel();
         CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
-        //PDG pdg = new PDG(method);
-//        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
-//            System.out.println("Block: " + block);
-//            System.out.println(block.getNodes());
-//            System.out.println("Is controld dependent on Block: " + block.getControlDependent());
-//            System.out.println("--------------------------");
-//        }
+        PDG pdg = new PDG(method);
 
-        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "printDocument");
+//        for(BasicBlock blocks : pdg.getCfg().getBasicBlocks()){
+//            for(GraphEdgeBasicBlock edge : blocks.getOutgoingEdges()){
+//                if(edge.isControlEdge()){
+//                    System.out.println(blocks.getId());
+//                    System.out.println(edge);
+//                }
+//            }
+//        }
+        for(GraphNode node : pdg.getCfg().getAllNodes()){
+            System.out.println(node);
+            for(GraphEdgeNode edge : node.getOutgoingEdges()){
+                System.out.println("Edge: " + edge);
+                if(edge.getIsControlEdge()){
+                    System.out.println("é control edge");
+                }
+                else {
+                    System.out.println("Não é control edge");
+                }
+            }
+        }
+
+
+        //MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "printDocument");
 
 
    }

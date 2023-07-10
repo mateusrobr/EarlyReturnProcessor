@@ -4,6 +4,7 @@ import spoon.Launcher;
 import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtIf;
 import spoon.reflect.code.CtLocalVariable;
+import spoon.reflect.code.CtStatement;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
 import spoon.reflect.visitor.filter.TypeFilter;
@@ -16,7 +17,7 @@ public class PDGSlice {
     private GraphNode localVariable;
     private List<BasicBlock> boundaryBlockCompleteComputation;
 
-    private List<BasicBlock> alreadyVisited;
+    private  Map<BasicBlock, List<BasicBlock>> mapAux;
 
     private Launcher launcher;
     private BasicBlock region;
@@ -25,6 +26,7 @@ public class PDGSlice {
         this.localVariable = localVariable;
         this.boundaryBlockCompleteComputation = completeComputationBasicBlocks;
         this.launcher = launcher;
+        mapAux = new LinkedHashMap<>();
         //this.region = region;
     }
 
@@ -49,15 +51,16 @@ public class PDGSlice {
         return newCtBlock;
     }
 
-    public CtBlock getCtBlockFromBasicBlock(BasicBlock block){
+    public CtBlock getCtBlockFromBasicBlock(BasicBlock baseRegion){
         CtBlock newCtBlock = this.launcher.getFactory().createBlock();
         //alreadyVisited.add(block);
-        for(GraphNode node : block.getNodes()) {
+        for(GraphNode node : baseRegion.getNodes()) {
             if (node.getStatement() instanceof CtIfImpl) {
                 CtIf nodeIfStatement = (CtIf) node.getStatement();
                 CtIf ifStatement = this.launcher.getFactory().createIf();
                 ifStatement.setCondition(nodeIfStatement.getCondition());
                 newCtBlock.addStatement(ifStatement);
+
 
             } else {
                 newCtBlock.addStatement(node.getStatement().clone());
@@ -67,14 +70,15 @@ public class PDGSlice {
         return newCtBlock;
     }
 
-    public CtMethod produceNewMethod(){
+    public CtMethod produceNewMethod() {
         totalNewMethods++;
         CtMethod newMethod = this.launcher.getFactory().createMethod();
-        Map<BasicBlock, List<BasicBlock>> mapAux = new LinkedHashMap<>();
         CtLocalVariable localVariableaux = (CtLocalVariable) localVariable.getStatement();
         newMethod.setType(localVariableaux.getType());
         newMethod.setSimpleName("newMethod" + totalNewMethods);
+        //Map<BasicBlock, List<GraphNode>> mapAux = new LinkedHashMap<>();
 
+        Map<BasicBlock, List<BasicBlock>> mapAux = new LinkedHashMap<>();
         for(BasicBlock completeComputationBlock : boundaryBlockCompleteComputation){
             List<BasicBlock> listAux = new ArrayList<>();
             for(BasicBlock blocks: boundaryBlockCompleteComputation){
@@ -87,11 +91,11 @@ public class PDGSlice {
             mapAux.put(completeComputationBlock,listAux);
         }
 
+
+
         return newMethod;
     }
-    private CtBlock connectStatements(List<BasicBlock> basicBlocksDependentOnTheCurrent,BasicBlock ){
 
-    }
     public void printSlice(){
         System.out.println("Local Variable: " + localVariable);
         System.out.println("Blocks " + boundaryBlockCompleteComputation);
