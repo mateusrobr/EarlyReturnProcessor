@@ -54,7 +54,7 @@ GraphNode {
             GraphEdgeBasicBlock newEdge = new GraphEdgeBasicBlock();
             newEdge.setSrc(outgoingEdge.getSrc().getBasicBlock());
             newEdge.setDst(outgoingEdge.getDst().getBasicBlock());
-            newEdge.setIsControlEdge(isControlEdgeCFG);
+            newEdge.setIsControlEdgeCFG(isControlEdgeCFG);
 
             outgoingEdge.getSrc().getBasicBlock().setOutgoingEdges(newEdge);
 

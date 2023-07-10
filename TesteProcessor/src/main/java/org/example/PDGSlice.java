@@ -60,13 +60,20 @@ public class PDGSlice {
                 ifStatement.setCondition(nodeIfStatement.getCondition());
                 newCtBlock.addStatement(ifStatement);
                 if(mapAux.get(baseRegion).size() > 0){
-                    ifStatement.setThenStatement(getCtBlockFromBasicBlock( mapAux.get(baseRegion).get(0) ));
-                }
-                if(mapAux.get(baseRegion).size() > 1){
-                    if(baseRegion.getOutgoingEdges().get(1).isControlEdge()){
-                        ifStatement.setElseStatement(getCtBlockFromBasicBlock(mapAux.get(baseRegion).get(1)));
+                    for(BasicBlock block : mapAux.get(baseRegion)){
+                        if(baseRegion.getOutgoingEdges().get(0).getDst().equals(block)){
+                            ifStatement.setThenStatement(getCtBlockFromBasicBlock(block));
+
+                        } else if (baseRegion.getOutgoingEdges().get(1).getDst().equals(block) ) {
+                            if(baseRegion.getOutgoingEdges().get(1).getIsControlEdgeCFG()){
+                                ifStatement.setElseStatement(getCtBlockFromBasicBlock(block));
+                            }
+                        }else{
+
+                        }
                     }
                 }
+
 
 
             } else {

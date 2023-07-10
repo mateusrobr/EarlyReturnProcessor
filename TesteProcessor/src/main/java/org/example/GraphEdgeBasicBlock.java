@@ -7,7 +7,7 @@ public class GraphEdgeBasicBlock {
 
     private boolean controlEdge;
 
-    private boolean controlEdgeCDG;
+    private boolean controlEdgeCFG;
 
     private boolean isElseStamentInCode;
     public GraphEdgeBasicBlock(){}
@@ -35,11 +35,11 @@ public class GraphEdgeBasicBlock {
         return controlEdge;
     }
 
-    public void setIsControlEdgeCDG(boolean isControlEdgeCDG){
-        this.controlEdgeCDG = isControlEdgeCDG;
+    public void setIsControlEdgeCFG(boolean isControlEdgeCDG){
+        this.controlEdgeCFG = isControlEdgeCDG;
     }
-    public boolean getIsControlEdgeCDG(){
-        return controlEdgeCDG;
+    public boolean getIsControlEdgeCFG(){
+        return controlEdgeCFG;
     }
 
     public void setElseStamentInCode(boolean isElseStamentInCode){

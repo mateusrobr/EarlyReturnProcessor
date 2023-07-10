@@ -27,27 +27,29 @@ public class App {
         String pathHome = "C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src";
         String targetClassName = "Main";
 
-        //Launcher launcher = new Launcher();
-        //launcher.addInputResource(pathHome);
+
+        Launcher launcher = new Launcher();
+        launcher.addInputResource(pathHome);
 //        FluentLauncher fluentLauncher = new FluentLauncher();
 //        fluentLauncher.outputDirectory("C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src");
 
-        //launcher.buildModel();
-        //CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
-        //PDG pdg = new PDG(method);
+        launcher.buildModel();
+        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
+        PDG pdg = new PDG(method);
 
-//        for(BasicBlock blocks : pdg.getCfg().getBasicBlocks()){
-//            System.out.println(blocks);
-//            for(GraphEdgeBasicBlock edge : blocks.getOutgoingEdges()){
-//                System.out.println(edge);
-//                if(edge.isControlEdge()){
-//                    System.out.println("Control edge CFG");
-//                }
-//                else{
-//                    System.out.println("Not control Edge CFG");
-//                }
-//            }
-//        }
+        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
+            for(GraphEdgeBasicBlock edge : block.getOutgoingEdges()){
+                System.out.println(edge);
+                if(edge.getIsControlEdgeCFG()){
+                    System.out.println("Control edge");
+                }
+                else{
+                    System.out.println("Nao é control edge");
+                }
+            }
+        }
+
+
 
         MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "printDocument");
    }
