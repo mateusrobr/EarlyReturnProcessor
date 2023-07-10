@@ -28,29 +28,30 @@ public class App {
         String targetClassName = "Main";
 
 
-        //Launcher launcher = new Launcher();
-        //launcher.addInputResource(pathHome);
-//        FluentLauncher fluentLauncher = new FluentLauncher();
-//        fluentLauncher.outputDirectory("C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src");
-
-        //launcher.buildModel();
-        //CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
-        //PDG pdg = new PDG(method);
-
+//        Launcher launcher = new Launcher();
+//        launcher.addInputResource(pathHome);
+//        launcher.buildModel();
+//        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "setOutgoingEdges")).get(0);
+//        PDG pdg = new PDG(method);
 //        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
-//            for(GraphEdgeBasicBlock edge : block.getOutgoingEdges()){
+//            System.out.println(block);
+//            for (GraphEdgeBasicBlock edge : block.getOutgoingEdges()){
 //                System.out.println(edge);
 //                if(edge.getIsControlEdgeCFG()){
-//                    System.out.println("Control edge");
+//                    System.out.println("Control edge CFG");
 //                }
 //                else{
-//                    System.out.println("Nao é control edge");
+//                    System.out.println("Not control Edge CFG");
 //                }
 //            }
 //        }
 
-
-
-        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "printDocument");
+        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "setOutgoingEdges");
+        for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
+            entry.getKey().printSlice();
+            System.out.println("MapAux");
+            System.out.println(entry.getValue());
+            //entry.getKey().getMapAux();
+        }
    }
 }

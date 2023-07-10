@@ -105,14 +105,24 @@ public class PDGSlice {
                         listAux.add(blocks);
                     }
                 }
+                else {
+                    if(blocks.getId() != completeComputationBlock.getId() && blocks.getId() > completeComputationBlock.getId() && completeComputationBlock.getControlDependent() == null){
+                        listAux.add(blocks);
+                    }
+                }
             }
             this.mapAux.put(completeComputationBlock,listAux);
         }
-
+        if(boundaryBlockCompleteComputation.size() < 1){
+            return newMethod;
+        }
         newMethod.setBody(getCtBlockFromBasicBlock(boundaryBlockCompleteComputation.get(0)));
 
 
         return newMethod;
+    }
+    public Map<BasicBlock, List<BasicBlock>> getMapAux(){
+        return this.mapAux;
     }
 
     public void printSlice(){

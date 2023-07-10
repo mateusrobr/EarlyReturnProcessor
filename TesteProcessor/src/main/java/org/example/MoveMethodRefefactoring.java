@@ -7,6 +7,7 @@ import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.visitor.filter.NamedElementFilter;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ public class MoveMethodRefefactoring {
     private Launcher launcher;
     private CtModel model;
     private List<PDGSlice> candidates;
+    private Map<PDGSlice, CtMethod> candidateMap;
 
     public MoveMethodRefefactoring(String path,String targetMethod){
         this.candidates = new ArrayList<>();
@@ -24,18 +26,21 @@ public class MoveMethodRefefactoring {
         this.launcher.addInputResource(path);
         this.launcher.setSourceOutputDirectory(path);
         this.model = this.launcher.buildModel();
+        this.candidateMap = new LinkedHashMap<>();
         CtMethod method = (CtMethod) this.model.getElements(new NamedElementFilter(CtMethod.class, targetMethod)).get(0);
 
         this.pdg = new PDG(method);
         this.pdg.addDependencesToNodes();
         for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
-            //System.out.println(entry.getValue());
             candidates.add(new PDGSlice(entry.getKey(),entry.getValue(),launcher));
         }
         for(PDGSlice candidate: candidates){
-            candidate.printSlice();
-            //System.out.println(candidate.produceNewMethod());
-            System.out.println(candidate.produceNewMethod().prettyprint());
+
+            candidateMap.put(candidate, candidate.produceNewMethod());
         }
+    }
+
+    public Map<PDGSlice, CtMethod> getCandidateMap(){
+        return this.candidateMap;
     }
 }
