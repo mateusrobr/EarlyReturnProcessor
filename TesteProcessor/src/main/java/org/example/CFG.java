@@ -83,6 +83,7 @@ public class CFG {
                     falseBranchOutgoingEdge.setSrc(newNode);
                     falseBranchOutgoingEdge.setElseStamentInCode(true);
                     newNode.setOutgoingEdges(falseBranchOutgoingEdge);
+                    allNodes.get( idFromFirstStatementFalseBranch ).getBasicBlock().setControlDependent(newNode.getBasicBlock());
                 }
                 else{
                     int idFromIfStatementWithoutElseStatement = idFromPreviousStatement + 1;
@@ -194,7 +195,7 @@ public class CFG {
     private void setControlDependenceOfNewNode(int numberOfBasicBlocksForThisBlock, List<BasicBlock> basicBlockList, List<BasicBlock> basicBlockListForThisBlock, GraphNode newNode){
         if(numberOfBasicBlocksForThisBlock > 1){
             if(basicBlockList.indexOf( basicBlockListForThisBlock.get( 0 ) )- 1 == -1){
-                newNode.getBasicBlock().setControlDependent(basicBlockList.get(0));
+                newNode.getBasicBlock().setControlDependent(null);
             }
             else{
                 newNode.getBasicBlock().setControlDependent(basicBlockList.get(basicBlockList.indexOf( basicBlockListForThisBlock.get( 0 ) )- 1));
