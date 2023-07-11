@@ -107,7 +107,13 @@ public class PDGSlice {
                 }
                 else {
                     if(blocks.getId() != completeComputationBlock.getId() && blocks.getId() > completeComputationBlock.getId() && completeComputationBlock.getControlDependent() == null){
-                        listAux.add(blocks);
+                        if(mapAux.size() > 0){
+
+                        }
+                        else{
+                            listAux.add(blocks);
+                        }
+                        //listAux.add(blocks);
                     }
                 }
             }
@@ -117,7 +123,6 @@ public class PDGSlice {
             return newMethod;
         }
         newMethod.setBody(getCtBlockFromBasicBlock(boundaryBlockCompleteComputation.get(0)));
-
 
         return newMethod;
     }
