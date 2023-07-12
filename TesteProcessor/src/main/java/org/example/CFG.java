@@ -207,7 +207,8 @@ public class CFG {
                 newNode.getBasicBlock().setControlDependent(null);
             }
             else{
-                newNode.getBasicBlock().setControlDependent(basicBlockList.get(basicBlockList.indexOf( basicBlockListForThisBlock.get( 0 ) )- 1));
+                //newNode.getBasicBlock().setControlDependent(basicBlockList.get(basicBlockList.indexOf( basicBlockListForThisBlock.get( 0 ) )- 1));
+                newNode.getBasicBlock().setControlDependent(basicBlockListForThisBlock.get(0));
             }
             //newNode.getBasicBlock().setControlDependent(basicBlockList.get(basicBlockList.indexOf( basicBlockListForThisBlock.get( 0 ) )- 1));
         }
