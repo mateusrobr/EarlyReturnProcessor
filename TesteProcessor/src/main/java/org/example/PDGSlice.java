@@ -113,7 +113,6 @@ public class PDGSlice {
                         else{
                             listAux.add(blocks);
                         }
-                        //listAux.add(blocks);
                     }
                 }
             }

@@ -134,6 +134,15 @@ public class PDG {
         }
         return boundaryBlock;
     }
+    public List<BasicBlock> getReachedBlocksForNode( GraphNode localVariableOcurrence){
+        List<BasicBlock> reachableBlocks = new ArrayList<>();
+        for(BasicBlock basicBlock : cfg.getBasicBlocks()){
+            if(basicBlock.getReachableBlocks().contains(localVariableOcurrence.getBasicBlock())){
+                reachableBlocks.add(basicBlock);
+            }
+        }
+        return reachableBlocks;
+    }
     public Map<GraphNode, List<BasicBlock>> getAllBoundaryBlocksForCompleteComputation(){
         Map<GraphNode, List<BasicBlock>> boundaryBlocksForCompleteComputation = new HashMap<>();
         for(Map.Entry<GraphNode,List<GraphNode>> entry : localVariableAssigmentOcurrences.entrySet()/*getStatementsLocalVariableIsAssigned().entrySet()*/){
@@ -141,10 +150,14 @@ public class PDG {
             HashSet<BasicBlock> basicBlockSet = new LinkedHashSet<>();
             for(GraphNode localVariableAssignedOcurrence : entry.getValue()){
                 basicBlockSet.addAll(getBoundaryBlocksForLocalVariableOcurrence( localVariableAssignedOcurrence));
+                for(GraphEdgeNode dataDependenceEdge : localVariableAssignedOcurrence.getDataDependenceLocalStatements()){
+                    basicBlockSet.add(dataDependenceEdge.getDst().getBasicBlock());
+                }
             }
             boundaryBlocksForCompleteComputation.put(entry.getKey(), (ArrayList<BasicBlock>)basicBlockSet.stream()
                     .collect(Collectors.toList()));
         }
+
         return boundaryBlocksForCompleteComputation;
     }
 
@@ -215,6 +228,12 @@ public class PDG {
                             node.setDataDependenceLocalStatements(assignmentsWithIdSmaller.get(i));
                             return;
                         }
+//                        if(isReferenceInReachedBlocks(assignmentsWithIdSmaller.get(i), node)){
+//                            //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
+//                            node.setDataDependenceLocalStatements(assignmentsWithIdSmaller.get(i));
+//                            return;
+//                        }
+
                     }
                     //In case there's no assignment before this node
                     node.setDataDependenceLocalStatements(entry.getKey());
@@ -248,7 +267,12 @@ public class PDG {
                 }
                 List<GraphNode> assignmentsWithIdSmaller = getAssignmentNodesSmallerId(getGraphNodeFromCtReference(reference, cfg.getAllCtStatements()), entry.getKey());
                 for(int i = assignmentsWithIdSmaller.size() -1; i >= 0 ; i-- ){
-                    if(isReferenceInTheBoundaryBlocks(assignmentsWithIdSmaller.get(i), node)){
+//                    if(isReferenceInTheBoundaryBlocks(assignmentsWithIdSmaller.get(i), node)){
+//                        //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
+//                        node.setDataDependenceLocalStatements(assignmentsWithIdSmaller.get(i));
+//                        return;
+//                    }
+                    if(isReferenceInReachedBlocks(assignmentsWithIdSmaller.get(i), node)){
                         //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
                         node.setDataDependenceLocalStatements(assignmentsWithIdSmaller.get(i));
                         return;
@@ -265,7 +289,11 @@ public class PDG {
         return boundaryBlockNode.contains(referenceGraphNode.getBasicBlock());
     }
     private boolean isReferenceInTheBoundaryBlocks(GraphNode nodeTested, GraphNode node){
-        List<BasicBlock> boundaryBlockNode = getBoundaryBlocksForLocalVariableOcurrence(node);
+        List<BasicBlock> boundaryBlockNode = getReachedBlocksForNode(node);
+        return boundaryBlockNode.contains(nodeTested.getBasicBlock());
+    }
+    private boolean isReferenceInReachedBlocks(GraphNode nodeTested, GraphNode node){
+        List<BasicBlock> boundaryBlockNode = getReachedBlocksForNode(node);
         return boundaryBlockNode.contains(nodeTested.getBasicBlock());
     }
     private List<GraphNode> getAssignmentNodesSmallerId(GraphNode node, GraphNode key){
