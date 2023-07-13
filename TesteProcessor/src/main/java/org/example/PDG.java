@@ -23,6 +23,8 @@ public class PDG {
     private Map<GraphNode, List<CtReference>> referencesAux;
     private Map<GraphNode, List<GraphNode>> localVariableAssigmentOcurrences;
 
+    private Map<GraphNode, List<GraphNode>> removableStatements;
+
     private List<CtParameter> parameterMethod;
     public PDG(CtMethod targetMethod){
         cfg = new CFG(targetMethod);
