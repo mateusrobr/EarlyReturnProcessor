@@ -32,52 +32,53 @@ public class App {
         launcher.buildModel();
         CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
         PDG pdg = new PDG(method);
-        pdg.addDependencesToNodes();
-        Map<GraphNode, List<BasicBlock>> graphNodeListMap = pdg.getAllBoundaryBlocksForCompleteComputation();
-        Map<GraphNode, List<GraphNode>> statementsThatArePartOfCompleteCOmputation = new LinkedHashMap<>();
-        Map<GraphNode, List<GraphNode>> statementsThatAreNotPartOfCompleteComputation = new LinkedHashMap<>();
-        for(Map.Entry<GraphNode, List<BasicBlock>> entry : graphNodeListMap.entrySet()){
-            List<GraphNode> nodes = new ArrayList<>();
-            for(BasicBlock block : entry.getValue()){
-                nodes.addAll(block.getNodes());
-            }
-            statementsThatArePartOfCompleteCOmputation.put(entry.getKey(), nodes);
-        }
-        for(Map.Entry<GraphNode, List<GraphNode>> entry : statementsThatArePartOfCompleteCOmputation.entrySet()){
-            List<GraphNode> nodes = new ArrayList<>();
-            for(GraphNode node : pdg.getCfg().getAllNodes()){
-                if(!entry.getValue().contains(node)){
-                    nodes.add(node);
-                }
-            }
-            statementsThatAreNotPartOfCompleteComputation.put(entry.getKey(), nodes);
-        }
-
-        for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatArePartOfCompleteCOmputation.entrySet()){
-            System.out.println(entry.getKey());
-            for (GraphNode node : statementsThatArePartOfCompleteCOmputation.get(entry.getKey())){
-                for(GraphEdgeNode edge : node.getOutgoingEdges()){
-                    if(edge.getIsControlEdge()){
-                       if(statementsThatAreNotPartOfCompleteComputation.get(entry.getKey()).contains(edge.getDst())){
-                           System.out.println("Node is indispensable: " + node);
-                       }
-                    }
-                }
-            }
-            System.out.println("-------------------------------------------");
-        }
-        for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatAreNotPartOfCompleteComputation.entrySet()){
-            System.out.println(entry.getKey());
-            for (GraphNode node : statementsThatAreNotPartOfCompleteComputation.get(entry.getKey())){
-                for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){
-                    if(statementsThatArePartOfCompleteCOmputation.get(entry.getKey()).contains(edge.getDst())){
-                        System.out.println(edge);
-                        System.out.println("Node indispesable data: " + edge.getDst());
-                    }
-                }
-            }
-            System.out.println("-------------------------------------------");
-        }
+        //pdg.addDependencesToNodes();
+        System.out.println(pdg.getRemaingNodes());
+//        Map<GraphNode, List<BasicBlock>> graphNodeListMap = pdg.getAllBoundaryBlocksForCompleteComputation();
+//        Map<GraphNode, List<GraphNode>> statementsThatArePartOfCompleteCOmputation = new LinkedHashMap<>();
+//        Map<GraphNode, List<GraphNode>> statementsThatAreNotPartOfCompleteComputation = new LinkedHashMap<>();
+//        for(Map.Entry<GraphNode, List<BasicBlock>> entry : graphNodeListMap.entrySet()){
+//            List<GraphNode> nodes = new ArrayList<>();
+//            for(BasicBlock block : entry.getValue()){
+//                nodes.addAll(block.getNodes());
+//            }
+//            statementsThatArePartOfCompleteCOmputation.put(entry.getKey(), nodes);
+//        }
+//        for(Map.Entry<GraphNode, List<GraphNode>> entry : statementsThatArePartOfCompleteCOmputation.entrySet()){
+//            List<GraphNode> nodes = new ArrayList<>();
+//            for(GraphNode node : pdg.getCfg().getAllNodes()){
+//                if(!entry.getValue().contains(node)){
+//                    nodes.add(node);
+//                }
+//            }
+//            statementsThatAreNotPartOfCompleteComputation.put(entry.getKey(), nodes);
+//        }
+//
+//        for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatArePartOfCompleteCOmputation.entrySet()){
+//            System.out.println(entry.getKey());
+//            for (GraphNode node : statementsThatArePartOfCompleteCOmputation.get(entry.getKey())){
+//                for(GraphEdgeNode edge : node.getOutgoingEdges()){
+//                    if(edge.getIsControlEdge()){
+//                       if(statementsThatAreNotPartOfCompleteComputation.get(entry.getKey()).contains(edge.getDst())){
+//                           System.out.println("Node is indispensable: " + node);
+//                       }
+//                    }
+//                }
+//            }
+//            System.out.println("-------------------------------------------");
+//        }
+//        for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatAreNotPartOfCompleteComputation.entrySet()){
+//            System.out.println(entry.getKey());
+//            for (GraphNode node : statementsThatAreNotPartOfCompleteComputation.get(entry.getKey())){
+//                for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){
+//                    if(statementsThatArePartOfCompleteCOmputation.get(entry.getKey()).contains(edge.getDst())){
+//                        System.out.println(edge);
+//                        System.out.println("Node indispesable data: " + edge.getDst());
+//                    }
+//                }
+//            }
+//            System.out.println("-------------------------------------------");
+//        }
 
 
 //        System.out.println(statementsThatArePartOfCompleteCOmputation);

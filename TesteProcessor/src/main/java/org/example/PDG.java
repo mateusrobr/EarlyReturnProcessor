@@ -23,7 +23,9 @@ public class PDG {
     private Map<GraphNode, List<CtReference>> referencesAux;
     private Map<GraphNode, List<GraphNode>> localVariableAssigmentOcurrences;
 
-    private Map<GraphNode, List<GraphNode>> removableStatements;
+    private Map<GraphNode,List<BasicBlock>> completeComputationBoundaryBlocks;
+
+    private Map<GraphNode, List<GraphNode>> remaingNodesFromSlice;
 
     private List<CtParameter> parameterMethod;
     public PDG(CtMethod targetMethod){
@@ -34,6 +36,9 @@ public class PDG {
         referencesAux = new LinkedHashMap<>();
         localVariablesOcurrences = getMapOfLocalVariableAndAllOcurrencesOfLocalVariable();
         localVariableAssigmentOcurrences = getStatementsLocalVariableIsAssigned();
+        addDependencesToNodes();
+        completeComputationBoundaryBlocks = getAllBoundaryBlocksForCompleteComputation();
+        remaingNodesFromSlice = getRemaingNodesFromBoundaryBlocks();
     }
 
     private void fromGraphNodesGetLocalVariables(){
@@ -312,7 +317,60 @@ public class PDG {
         return assignNodesWithSmallerId;
     }
 
+    private Map<GraphNode,List<GraphNode>> getRemaingNodesFromBoundaryBlocks(){
+        Map<GraphNode,List<GraphNode>> remainingNodes = new LinkedHashMap<>();
+        Map<GraphNode, List<GraphNode>> statementsThatArePartOfCompleteCOmputation = new LinkedHashMap<>();
+        Map<GraphNode, List<GraphNode>> statementsThatAreNotPartOfCompleteComputation = new LinkedHashMap<>();
+        for(Map.Entry<GraphNode, List<BasicBlock>> entry : completeComputationBoundaryBlocks.entrySet()){
+            List<GraphNode> nodes = new ArrayList<>();
+            for(BasicBlock block : entry.getValue()){
+                nodes.addAll(block.getNodes());
+            }
+            statementsThatArePartOfCompleteCOmputation.put(entry.getKey(), nodes);
+            remainingNodes.put(entry.getKey(),new ArrayList<>());
+        }
+        for(Map.Entry<GraphNode, List<GraphNode>> entry : statementsThatArePartOfCompleteCOmputation.entrySet()){
+            List<GraphNode> nodes = new ArrayList<>();
+            for(GraphNode node : cfg.getAllNodes()){
+                if(!entry.getValue().contains(node)){
+                    nodes.add(node);
+                }
+            }
+            statementsThatAreNotPartOfCompleteComputation.put(entry.getKey(), nodes);
+        }
+        for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatArePartOfCompleteCOmputation.entrySet()){
+            System.out.println(entry.getKey());
+            List<GraphNode> listAux = new ArrayList<>();
+            for (GraphNode node : statementsThatArePartOfCompleteCOmputation.get(entry.getKey())){
+                for(GraphEdgeNode edge : node.getOutgoingEdges()){
+                    if(edge.getIsControlEdge()){
+                        if(statementsThatAreNotPartOfCompleteComputation.get(entry.getKey()).contains(edge.getDst())){
+                            listAux.add(node);
+                        }
+                    }
+                }
+            }
+            remainingNodes.get(entry.getKey()).addAll(listAux);
+        }
+        for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatAreNotPartOfCompleteComputation.entrySet()){
+            System.out.println(entry.getKey());
+            List<GraphNode> listAux2 = new ArrayList<>();
+            for (GraphNode node : statementsThatAreNotPartOfCompleteComputation.get(entry.getKey())){
+                for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){
+                    if(statementsThatArePartOfCompleteCOmputation.get(entry.getKey()).contains(edge.getDst())){
+                        listAux2.add(edge.getDst());
 
+                    }
+                }
+            }
+            remainingNodes.get(entry.getKey()).addAll(listAux2);
+        }
+
+        return remainingNodes;
+    }
+    public Map<GraphNode,List<GraphNode>> getRemaingNodes(){
+        return remaingNodesFromSlice;
+    }
     public CtElement getCompleteVariable(GraphNode parent, CtReference child){
         CtElement wantedStatement = child.getParent();
         while(wantedStatement.getParent() != parent.getStatement()){

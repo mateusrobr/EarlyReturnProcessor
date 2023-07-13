@@ -23,6 +23,7 @@ GraphNode {
 
     private boolean isLeader;
 
+
     private int id;
 
     private String name;
@@ -118,6 +119,7 @@ GraphNode {
     public CtStatement getStatement(){
         return this.statement;
     }
+
     public void deleteOutgoingEdge(){
         if(!outgoingEdges.isEmpty()){
             outgoingEdges.clear();
