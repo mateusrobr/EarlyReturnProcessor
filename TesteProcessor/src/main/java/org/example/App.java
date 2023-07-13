@@ -20,20 +20,20 @@ import java.util.*;
 public class App {
     public static void main(String[] args) {
 
-        //String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
-        String path = "C:\\Users\\Kurumi\\Desktop\\ERP\\EarlyReturnProcessor\\TesteProcessor\\src\\main\\java\\BaseMethodsForTesting";
+        String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
+        //String path = "C:\\Users\\Kurumi\\Desktop\\ERP\\EarlyReturnProcessor\\TesteProcessor\\src\\main\\java\\BaseMethodsForTesting";
         String pathExample = "C:\\Users\\Kurumi\\Desktop\\SpoonTests\\spoonTests\\src\\main\\java\\org\\example";
         String pathHome = "C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src";
         String targetClassName = "Main";
-
-
-        Launcher launcher = new Launcher();
-        launcher.addInputResource(pathHome);
-        launcher.buildModel();
-        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
-        PDG pdg = new PDG(method);
-        //pdg.addDependencesToNodes();
-        System.out.println(pdg.getRemaingNodes());
+//
+//
+//        Launcher launcher = new Launcher();
+//        launcher.addInputResource(pathHome);
+//        launcher.buildModel();
+//        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "testeIfs")).get(0);
+//        PDG pdg = new PDG(method);
+//        pdg.addDependencesToNodes();
+        //System.out.println(pdg.getRemaingNodes());
 //        Map<GraphNode, List<BasicBlock>> graphNodeListMap = pdg.getAllBoundaryBlocksForCompleteComputation();
 //        Map<GraphNode, List<GraphNode>> statementsThatArePartOfCompleteCOmputation = new LinkedHashMap<>();
 //        Map<GraphNode, List<GraphNode>> statementsThatAreNotPartOfCompleteComputation = new LinkedHashMap<>();
@@ -102,26 +102,20 @@ public class App {
 //        }
 //        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
 //            System.out.println(block);
-//            System.out.println(block.getControlDependent());
-//            System.out.println("----------------------");
+//            //System.out.println(block.getControlDependent());
 //            for (GraphEdgeBasicBlock edge : block.getOutgoingEdges()){
 //                System.out.println(edge);
-//                if(edge.getIsControlEdgeCFG()){
-//                    System.out.println("Control edge CFG");
-//                }
-//                else{
-//                    System.out.println("Not control Edge CFG");
-//                }
+//                System.out.println("----------------------------");
 //            }
 //        }
 
-//        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "printDocument");
+        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "testeIfs");
 
-//        for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
-//            entry.getKey().printSlice();
-//            System.out.println("MapAux");
-//            System.out.println(entry.getValue().prettyprint());
-//            //System.out.println(entry.getKey().getMapAux());
-//        }
+        for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
+            entry.getKey().printSlice();
+            System.out.println("MapAux");
+            System.out.println(entry.getValue().prettyprint());
+            //System.out.println(entry.getKey().getMapAux());
+        }
    }
 }

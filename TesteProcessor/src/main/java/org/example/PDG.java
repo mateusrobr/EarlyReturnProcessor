@@ -156,7 +156,12 @@ public class PDG {
             //HashSet used to get a list without repetead basicblocks
             HashSet<BasicBlock> basicBlockSet = new LinkedHashSet<>();
             for(GraphNode localVariableAssignedOcurrence : entry.getValue()){
-                basicBlockSet.addAll(getBoundaryBlocksForLocalVariableOcurrence( localVariableAssignedOcurrence));
+                for (BasicBlock block : getBoundaryBlocksForLocalVariableOcurrence( localVariableAssignedOcurrence)){
+                    if (block.getId() >= entry.getKey().getBasicBlock().getId()){
+                        basicBlockSet.add(block);
+                    }
+                }
+                //basicBlockSet.addAll(getBoundaryBlocksForLocalVariableOcurrence( localVariableAssignedOcurrence));
                 for(GraphEdgeNode dataDependenceEdge : localVariableAssignedOcurrence.getDataDependenceLocalStatements()){
                     basicBlockSet.add(dataDependenceEdge.getDst().getBasicBlock());
                 }
