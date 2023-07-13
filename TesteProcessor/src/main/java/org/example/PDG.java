@@ -357,7 +357,7 @@ public class PDG {
             List<GraphNode> listAux2 = new ArrayList<>();
             for (GraphNode node : statementsThatAreNotPartOfCompleteComputation.get(entry.getKey())){
                 for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){
-                    if(statementsThatArePartOfCompleteCOmputation.get(entry.getKey()).contains(edge.getDst())){
+                    if(statementsThatArePartOfCompleteCOmputation.get(entry.getKey()).contains(edge.getDst()) && localVariableAssigmentOcurrences.get(entry.getKey()).contains(edge.getDst())){
                         listAux2.add(edge.getDst());
 
                     }
