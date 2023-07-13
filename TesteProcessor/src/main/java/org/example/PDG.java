@@ -344,7 +344,7 @@ public class PDG {
             statementsThatAreNotPartOfCompleteComputation.put(entry.getKey(), nodes);
         }
         for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatArePartOfCompleteCOmputation.entrySet()){
-            System.out.println(entry.getKey());
+            //System.out.println(entry.getKey());
             List<GraphNode> listAux = new ArrayList<>();
             for (GraphNode node : statementsThatArePartOfCompleteCOmputation.get(entry.getKey())){
                 for(GraphEdgeNode edge : node.getOutgoingEdges()){
@@ -358,7 +358,7 @@ public class PDG {
             remainingNodes.get(entry.getKey()).addAll(listAux);
         }
         for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatAreNotPartOfCompleteComputation.entrySet()){
-            System.out.println(entry.getKey());
+            //System.out.println(entry.getKey());
             List<GraphNode> listAux2 = new ArrayList<>();
             for (GraphNode node : statementsThatAreNotPartOfCompleteComputation.get(entry.getKey())){
                 for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){

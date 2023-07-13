@@ -98,6 +98,14 @@ public class BasicBlock {
             }
         }
         getDominatedBlocksFromDirectDominatedBlocks();
+
+//        for(int i = 0 ; i < outgoingEdges.size() ; i++){
+//            if(!isBasicBlockInListAndAdd(outgoingEdges.get(i), dominatedBlocks) && outgoingEdges.get(i).isControlEdge()){
+//                outgoingEdges.get(i).getDst().getDominatedBlocksFromEdges();
+//            }
+//        }
+//
+//        getDominatedBlocksFromDirectDominatedBlocks();
     }
 
     private void getReachableBlocksFromDirectReachableBlock(){

@@ -30,10 +30,17 @@ public class App {
 //        Launcher launcher = new Launcher();
 //        launcher.addInputResource(pathHome);
 //        launcher.buildModel();
-//        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "testeIfs")).get(0);
+//        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "processCollection")).get(0);
 //        PDG pdg = new PDG(method);
 //        pdg.addDependencesToNodes();
-        //System.out.println(pdg.getRemaingNodes());
+//        //System.out.println(pdg.getAllBoundaryBlocksForCompleteComputation());
+//        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
+//            System.out.println(block);
+//            for(GraphNode node : block.getNodes()){
+//                System.out.println(node);
+//            }
+//            System.out.println("-----------------------------------");
+//        }
 //        Map<GraphNode, List<BasicBlock>> graphNodeListMap = pdg.getAllBoundaryBlocksForCompleteComputation();
 //        Map<GraphNode, List<GraphNode>> statementsThatArePartOfCompleteCOmputation = new LinkedHashMap<>();
 //        Map<GraphNode, List<GraphNode>> statementsThatAreNotPartOfCompleteComputation = new LinkedHashMap<>();
@@ -109,13 +116,13 @@ public class App {
 //            }
 //        }
 
-        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "testeIfs");
-
-        for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
-            entry.getKey().printSlice();
-            System.out.println("MapAux");
-            System.out.println(entry.getValue().prettyprint());
-            //System.out.println(entry.getKey().getMapAux());
-        }
+//        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "processCollection");
+//
+//        for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
+//            entry.getKey().printSlice();
+//            System.out.println("MapAux");
+//            System.out.println(entry.getValue().prettyprint());
+//            //System.out.println(entry.getKey().getMapAux());
+//        }
    }
 }
