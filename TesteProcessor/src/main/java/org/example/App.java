@@ -37,7 +37,7 @@ public class App {
         //pdg.addDependencesToNodes();
         for(GraphNode node : pdg.getCfg().getAllNodes()){
             System.out.println(node);
-            for (GraphEdgeNode edge : node.getDataDependenceLocalStatements()){
+            for (GraphEdgeNode edge : node.getOutgoingEdges()){
                 System.out.println(edge);
             }
             System.out.println("---------------------------------------");

@@ -173,7 +173,7 @@ public class CFG {
             GraphEdgeNode outgoingEdgeConditionalStatement = new GraphEdgeNode();
             outgoingEdgeConditionalStatement.setDst(newNode);
             outgoingEdgeConditionalStatement.setSrc(node);
-            if(node.getOutgoingEdges().size() < 1){
+            if(node.getOutgoingEdges().size() < 1  || node.getStatement() instanceof CtIfImpl){
                 node.setOutgoingEdges(outgoingEdgeConditionalStatement,false);
             }
             //node.setOutgoingEdges(outgoingEdgeConditionalStatement,false);

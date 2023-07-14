@@ -301,18 +301,6 @@ public class PDG {
         }
     }
     public void transverseThroughGraph(GraphNode src, GraphNode target, GraphNode nodeToBeAddedToDependence,List<GraphNode> visitedNodes){
-//        GraphNode nodeAux;
-//        if(isReferenceInReachedBlocks(src,target) && !visitedNodes.contains(src)){
-//            nodeAux = src;
-//            visitedNodes.add(nodeAux);
-//            for(GraphEdgeNode edge : nodeAux.getOutgoingEdges()){
-//                if(isReferenceInReachedBlocks(edge.getDst(), target) && edge.getDst() != target){
-//                    nodeAux = edge.getDst();
-//                    System.out.println(nodeAux);
-//                    transverseThroughGraph(nodeAux,target,visitedNodes);
-//                }
-//            }
-//        }
         GraphNode nodeAux;
         if(isReferenceInReachedBlocks(src,target) && !visitedNodes.contains(src)){
             //nodeAux = src;
