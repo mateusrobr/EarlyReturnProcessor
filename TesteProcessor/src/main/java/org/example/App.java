@@ -26,15 +26,32 @@ public class App {
             String pathHome = "C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src";
             String targetClassName = "Main";
             String targetMethod = "printDocument";
-            
+
 //
 //
-//        Launcher launcher = new Launcher();
-//        launcher.addInputResource(pathHome);
-//        launcher.buildModel();
-//        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "processCollection")).get(0);
-//        PDG pdg = new PDG(method);
-//        pdg.addDependencesToNodes();
+        Launcher launcher = new Launcher();
+        launcher.addInputResource(pathHome);
+        launcher.buildModel();
+        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "testeDependency")).get(0);
+        PDG pdg = new PDG(method);
+        //pdg.addDependencesToNodes();
+//        for (BasicBlock block : pdg.getCfg().getBasicBlocks()){
+//            System.out.println(block);
+//            for(GraphNode node : block.getNodes()){
+//                System.out.println(node);
+//            }
+//            System.out.println(block.getReachableBlocks());
+//            System.out.println("---------------------------");
+//        }
+        
+        pdg.transverseThroughGraph(pdg.getCfg().getAllNodes().get(2), pdg.getCfg().getAllNodes().get(8));
+//        for(GraphNode node : pdg.getCfg().getAllNodes()){
+//            System.out.println(node);
+//            for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){
+//                System.out.println(edge);
+//            }
+//            System.out.println("-----------------------------------");
+//        }
 //        //System.out.println(pdg.getAllBoundaryBlocksForCompleteComputation());
 //        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
 //            System.out.println(block);
@@ -118,14 +135,14 @@ public class App {
 //            }
 //        }
 
-        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, targetMethod);
-
-        for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
-            entry.getKey().printSlice();
-            System.out.println("MapAux");
-            System.out.println(entry.getValue().prettyprint());
-            //System.out.println(entry.getKey().getMapAux());
-        }
+//        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, targetMethod);
+//
+//        for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
+//            entry.getKey().printSlice();
+//            System.out.println("MapAux");
+//            System.out.println(entry.getValue().prettyprint());
+//            //System.out.println(entry.getKey().getMapAux());
+//        }
 
    }
 }

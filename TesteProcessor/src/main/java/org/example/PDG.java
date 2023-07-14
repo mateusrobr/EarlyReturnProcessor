@@ -234,18 +234,12 @@ public class PDG {
                 if(entry.getValue().contains(objectReference)){
                     //node.setDataDependenceLocalStatements(localVariablesOcurrences.get(entry.getKey()).get( localVariablesOcurrences.get(entry.getKey()).indexOf(getGraphNodeFromCtReference((CtReference) reference, cfg.getAllCtStatements())) -1 ));
                     List<GraphNode> assignmentsWithIdSmaller = getAssignmentNodesSmallerId(getGraphNodeFromCtReference(objectReference, cfg.getAllCtStatements()), entry.getKey());
-                    for(int i = assignmentsWithIdSmaller.size() -1; i >= 0 ; i-- ){
+                    for(int i = assignmentsWithIdSmaller.size() - 1; i >= 0 ; i-- ){
                         if(isReferenceInTheBoundaryBlocks(assignmentsWithIdSmaller.get(i), node)){
                             //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
                             node.setDataDependenceLocalStatements(assignmentsWithIdSmaller.get(i));
                             return;
                         }
-//                        if(isReferenceInReachedBlocks(assignmentsWithIdSmaller.get(i), node)){
-//                            //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
-//                            node.setDataDependenceLocalStatements(assignmentsWithIdSmaller.get(i));
-//                            return;
-//                        }
-
                     }
                     //In case there's no assignment before this node
                     node.setDataDependenceLocalStatements(entry.getKey());
@@ -279,19 +273,29 @@ public class PDG {
                 }
                 List<GraphNode> assignmentsWithIdSmaller = getAssignmentNodesSmallerId(getGraphNodeFromCtReference(reference, cfg.getAllCtStatements()), entry.getKey());
                 for(int i = assignmentsWithIdSmaller.size() -1; i >= 0 ; i-- ){
-//                    if(isReferenceInTheBoundaryBlocks(assignmentsWithIdSmaller.get(i), node)){
-//                        //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
-//                        node.setDataDependenceLocalStatements(assignmentsWithIdSmaller.get(i));
-//                        return;
-//                    }
+
                     if(isReferenceInReachedBlocks(assignmentsWithIdSmaller.get(i), node)){
                         //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
                         node.setDataDependenceLocalStatements(assignmentsWithIdSmaller.get(i));
                         return;
                     }
                 }
+                //setDataDependenceCorrect(assignmentsWithIdSmaller, node);
                 //In case there's no assignment before this node
                 node.setDataDependenceLocalStatements(entry.getKey());
+            }
+        }
+    }
+    public void transverseThroughGraph(GraphNode src, GraphNode target){
+        GraphNode nodeAux;
+        if(isReferenceInReachedBlocks(src,target)){
+            nodeAux = src;
+            for(GraphEdgeNode edge : nodeAux.getOutgoingEdges()){
+                if(isReferenceInReachedBlocks(edge.getDst(), target)){
+                    nodeAux = edge.getDst();
+                    System.out.println(nodeAux);
+                    transverseThroughGraph(nodeAux,target);
+                }
             }
         }
     }
