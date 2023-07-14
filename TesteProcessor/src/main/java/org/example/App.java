@@ -32,20 +32,21 @@ public class App {
         Launcher launcher = new Launcher();
         launcher.addInputResource(pathHome);
         launcher.buildModel();
-        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "testeDependency")).get(0);
+        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
         PDG pdg = new PDG(method);
         //pdg.addDependencesToNodes();
-//        for (BasicBlock block : pdg.getCfg().getBasicBlocks()){
-//            System.out.println(block);
-//            for(GraphNode node : block.getNodes()){
-//                System.out.println(node);
-//            }
-//            System.out.println(block.getReachableBlocks());
-//            System.out.println("---------------------------");
-//        }
-        List<GraphNode> visitedNodes = new ArrayList<>();
-        pdg.transverseThroughGraph(pdg.getCfg().getAllNodes().get(2), pdg.getCfg().getAllNodes().get(8), visitedNodes);
-        System.out.println(visitedNodes);
+        for(GraphNode node : pdg.getCfg().getAllNodes()){
+            System.out.println(node);
+            for (GraphEdgeNode edge : node.getDataDependenceLocalStatements()){
+                System.out.println(edge);
+            }
+            System.out.println("---------------------------------------");
+        }
+//        List<GraphNode> visitedNodes = new ArrayList<>();
+//        pdg.transverseThroughGraph(pdg.getCfg().getAllNodes().get(6), pdg.getCfg().getAllNodes().get(8),pdg.getCfg().getAllNodes().get(6) ,visitedNodes);
+//        pdg.transverseThroughGraph(pdg.getCfg().getAllNodes().get(7), pdg.getCfg().getAllNodes().get(8),pdg.getCfg().getAllNodes().get(7), visitedNodes);
+//        pdg.transverseThroughGraph(pdg.getCfg().getAllNodes().get(2), pdg.getCfg().getAllNodes().get(8),pdg.getCfg().getAllNodes().get(2),visitedNodes);
+//        System.out.println(visitedNodes);
 //        for(GraphNode node : pdg.getCfg().getAllNodes()){
 //            System.out.println(node);
 //            for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){

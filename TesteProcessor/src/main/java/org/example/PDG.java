@@ -272,21 +272,35 @@ public class PDG {
                     }
                 }
                 List<GraphNode> assignmentsWithIdSmaller = getAssignmentNodesSmallerId(getGraphNodeFromCtReference(reference, cfg.getAllCtStatements()), entry.getKey());
+//                for(int i = assignmentsWithIdSmaller.size() -1; i >= 0 ; i-- ){
+//
+//                    if(isReferenceInReachedBlocks(assignmentsWithIdSmaller.get(i), node)){
+//                        //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
+//                        node.setDataDependenceLocalStatements(assignmentsWithIdSmaller.get(i));
+//                        return;
+//                    }
+//                }
+                List<GraphNode> visitedNodes = new ArrayList<>();
                 for(int i = assignmentsWithIdSmaller.size() -1; i >= 0 ; i-- ){
-
-                    if(isReferenceInReachedBlocks(assignmentsWithIdSmaller.get(i), node)){
-                        //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
+                    if(node.getBasicBlock() == assignmentsWithIdSmaller.get(i).getBasicBlock()){
                         node.setDataDependenceLocalStatements(assignmentsWithIdSmaller.get(i));
                         return;
                     }
+                    else{
+                        transverseThroughGraph(assignmentsWithIdSmaller.get(i), node, assignmentsWithIdSmaller.get(i),visitedNodes);
+                    }
                 }
-                //setDataDependenceCorrect(assignmentsWithIdSmaller, node);
-                //In case there's no assignment before this node
-                node.setDataDependenceLocalStatements(entry.getKey());
+                if(node.getDataDependenceLocalStatements().size() == 0){
+                    node.setDataDependenceLocalStatements(entry.getKey());
+                    return;
+                }
+                else{
+                    return;
+                }
             }
         }
     }
-    public void transverseThroughGraph(GraphNode src, GraphNode target, List<GraphNode> visitedNodes){
+    public void transverseThroughGraph(GraphNode src, GraphNode target, GraphNode nodeToBeAddedToDependence,List<GraphNode> visitedNodes){
 //        GraphNode nodeAux;
 //        if(isReferenceInReachedBlocks(src,target) && !visitedNodes.contains(src)){
 //            nodeAux = src;
@@ -304,11 +318,16 @@ public class PDG {
             //nodeAux = src;
             visitedNodes.add(src);
             for(GraphEdgeNode edge : src.getOutgoingEdges()){
-                if(isReferenceInReachedBlocks(edge.getDst(), target) && edge.getDst() != target){
-                    if(!visitedNodes.contains(edge.getDst())){
-                        nodeAux = edge.getDst();
-                        System.out.println(nodeAux);
-                        transverseThroughGraph(nodeAux,target,visitedNodes);
+                if(isReferenceInReachedBlocks(edge.getDst(), target)){
+                    if(edge.getDst().getBasicBlock() == target.getBasicBlock()){
+                        target.setDataDependenceLocalStatements(nodeToBeAddedToDependence);
+                    }
+                    else{
+                        if(!visitedNodes.contains(edge.getDst())){
+                            nodeAux = edge.getDst();
+                            //System.out.println(nodeAux);
+                            transverseThroughGraph(nodeAux,target,nodeToBeAddedToDependence,visitedNodes);
+                        }
                     }
                 }
             }
