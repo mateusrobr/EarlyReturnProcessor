@@ -43,8 +43,9 @@ public class App {
 //            System.out.println(block.getReachableBlocks());
 //            System.out.println("---------------------------");
 //        }
-        
-        pdg.transverseThroughGraph(pdg.getCfg().getAllNodes().get(2), pdg.getCfg().getAllNodes().get(8));
+        List<GraphNode> visitedNodes = new ArrayList<>();
+        pdg.transverseThroughGraph(pdg.getCfg().getAllNodes().get(2), pdg.getCfg().getAllNodes().get(8), visitedNodes);
+        System.out.println(visitedNodes);
 //        for(GraphNode node : pdg.getCfg().getAllNodes()){
 //            System.out.println(node);
 //            for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){

@@ -286,15 +286,30 @@ public class PDG {
             }
         }
     }
-    public void transverseThroughGraph(GraphNode src, GraphNode target){
+    public void transverseThroughGraph(GraphNode src, GraphNode target, List<GraphNode> visitedNodes){
+//        GraphNode nodeAux;
+//        if(isReferenceInReachedBlocks(src,target) && !visitedNodes.contains(src)){
+//            nodeAux = src;
+//            visitedNodes.add(nodeAux);
+//            for(GraphEdgeNode edge : nodeAux.getOutgoingEdges()){
+//                if(isReferenceInReachedBlocks(edge.getDst(), target) && edge.getDst() != target){
+//                    nodeAux = edge.getDst();
+//                    System.out.println(nodeAux);
+//                    transverseThroughGraph(nodeAux,target,visitedNodes);
+//                }
+//            }
+//        }
         GraphNode nodeAux;
-        if(isReferenceInReachedBlocks(src,target)){
-            nodeAux = src;
-            for(GraphEdgeNode edge : nodeAux.getOutgoingEdges()){
-                if(isReferenceInReachedBlocks(edge.getDst(), target)){
-                    nodeAux = edge.getDst();
-                    System.out.println(nodeAux);
-                    transverseThroughGraph(nodeAux,target);
+        if(isReferenceInReachedBlocks(src,target) && !visitedNodes.contains(src)){
+            //nodeAux = src;
+            visitedNodes.add(src);
+            for(GraphEdgeNode edge : src.getOutgoingEdges()){
+                if(isReferenceInReachedBlocks(edge.getDst(), target) && edge.getDst() != target){
+                    if(!visitedNodes.contains(edge.getDst())){
+                        nodeAux = edge.getDst();
+                        System.out.println(nodeAux);
+                        transverseThroughGraph(nodeAux,target,visitedNodes);
+                    }
                 }
             }
         }
