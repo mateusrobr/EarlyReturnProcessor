@@ -20,11 +20,13 @@ import java.util.*;
 public class App {
     public static void main(String[] args) {
 
-        String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
-        //String path = "C:\\Users\\Kurumi\\Desktop\\ERP\\EarlyReturnProcessor\\TesteProcessor\\src\\main\\java\\BaseMethodsForTesting";
-        String pathExample = "C:\\Users\\Kurumi\\Desktop\\SpoonTests\\spoonTests\\src\\main\\java\\org\\example";
-        String pathHome = "C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src";
-        String targetClassName = "Main";
+            String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
+            //String path = "C:\\Users\\Kurumi\\Desktop\\ERP\\EarlyReturnProcessor\\TesteProcessor\\src\\main\\java\\BaseMethodsForTesting";
+            String pathExample = "C:\\Users\\Kurumi\\Desktop\\SpoonTests\\spoonTests\\src\\main\\java\\org\\example";
+            String pathHome = "C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src";
+            String targetClassName = "Main";
+            String targetMethod = "printDocument";
+            
 //
 //
 //        Launcher launcher = new Launcher();
@@ -116,13 +118,14 @@ public class App {
 //            }
 //        }
 
-//        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, "processCollection");
-//
-//        for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
-//            entry.getKey().printSlice();
-//            System.out.println("MapAux");
-//            System.out.println(entry.getValue().prettyprint());
-//            //System.out.println(entry.getKey().getMapAux());
-//        }
+        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, targetMethod);
+
+        for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
+            entry.getKey().printSlice();
+            System.out.println("MapAux");
+            System.out.println(entry.getValue().prettyprint());
+            //System.out.println(entry.getKey().getMapAux());
+        }
+
    }
 }
