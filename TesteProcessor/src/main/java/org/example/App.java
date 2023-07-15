@@ -29,19 +29,13 @@ public class App {
 
 //
 //
-        Launcher launcher = new Launcher();
-        launcher.addInputResource(pathHome);
-        launcher.buildModel();
-        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
-        PDG pdg = new PDG(method);
-        //pdg.addDependencesToNodes();
-        for(GraphNode node : pdg.getCfg().getAllNodes()){
-            System.out.println(node);
-            for (GraphEdgeNode edge : node.getOutgoingEdges()){
-                System.out.println(edge);
-            }
-            System.out.println("---------------------------------------");
-        }
+//        Launcher launcher = new Launcher();
+//        launcher.addInputResource(pathHome);
+//        launcher.buildModel();
+//        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "testeIfElseIf")).get(0);
+//        System.out.println(method.prettyprint());
+//        PDG pdg = new PDG(method);
+//
 //        List<GraphNode> visitedNodes = new ArrayList<>();
 //        pdg.transverseThroughGraph(pdg.getCfg().getAllNodes().get(6), pdg.getCfg().getAllNodes().get(8),pdg.getCfg().getAllNodes().get(6) ,visitedNodes);
 //        pdg.transverseThroughGraph(pdg.getCfg().getAllNodes().get(7), pdg.getCfg().getAllNodes().get(8),pdg.getCfg().getAllNodes().get(7), visitedNodes);
@@ -137,14 +131,14 @@ public class App {
 //            }
 //        }
 
-//        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, targetMethod);
-//
-//        for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
-//            entry.getKey().printSlice();
-//            System.out.println("MapAux");
-//            System.out.println(entry.getValue().prettyprint());
-//            //System.out.println(entry.getKey().getMapAux());
-//        }
+        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, targetMethod);
+
+        for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
+            entry.getKey().printSlice();
+            System.out.println("MapAux");
+            System.out.println(entry.getValue().prettyprint());
+            //System.out.println(entry.getKey().getMapAux());
+        }
 
    }
 }

@@ -287,7 +287,7 @@ public class PDG {
                         return;
                     }
                     else{
-                        transverseThroughGraph(assignmentsWithIdSmaller.get(i), node, assignmentsWithIdSmaller.get(i),visitedNodes);
+                        transverseThroughGraph(assignmentsWithIdSmaller.get(i), node, assignmentsWithIdSmaller.get(i),visitedNodes, node.getDataDependenceLocalStatements().size());
                     }
                 }
                 if(node.getDataDependenceLocalStatements().size() == 0){
@@ -300,7 +300,7 @@ public class PDG {
             }
         }
     }
-    public void transverseThroughGraph(GraphNode src, GraphNode target, GraphNode nodeToBeAddedToDependence,List<GraphNode> visitedNodes){
+    public void transverseThroughGraph(GraphNode src, GraphNode target, GraphNode nodeToBeAddedToDependence,List<GraphNode> visitedNodes, int initialSizeDataDependenceList){
         GraphNode nodeAux;
         if(isReferenceInReachedBlocks(src,target) && !visitedNodes.contains(src)){
             //nodeAux = src;
@@ -308,13 +308,14 @@ public class PDG {
             for(GraphEdgeNode edge : src.getOutgoingEdges()){
                 if(isReferenceInReachedBlocks(edge.getDst(), target)){
                     if(edge.getDst().getBasicBlock() == target.getBasicBlock()){
-                        target.setDataDependenceLocalStatements(nodeToBeAddedToDependence);
+                        if(initialSizeDataDependenceList == target.getDataDependenceLocalStatements().size())
+                            target.setDataDependenceLocalStatements(nodeToBeAddedToDependence);
                     }
                     else{
                         if(!visitedNodes.contains(edge.getDst())){
                             nodeAux = edge.getDst();
                             //System.out.println(nodeAux);
-                            transverseThroughGraph(nodeAux,target,nodeToBeAddedToDependence,visitedNodes);
+                            transverseThroughGraph(nodeAux,target,nodeToBeAddedToDependence,visitedNodes, initialSizeDataDependenceList);
                         }
                     }
                 }
