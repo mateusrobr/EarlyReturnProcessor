@@ -20,140 +20,59 @@ import java.util.*;
 public class App {
     public static void main(String[] args) {
 
-        if(args.length == 2){
-            String pathHome = args[0];
-            String targetMethod = args[1];
-            MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, targetMethod);
+//        if(args.length == 2){
+//            String pathHome = args[0];
+//            String targetMethod = args[1];
+//            MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, targetMethod);
+//            for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
+//                entry.getKey().printSlice();
+//                System.out.println(entry.getValue().prettyprint());
+//                System.out.println("If statements that need to continue in the original Method");
+//                System.out.println(moveMethod.getPdg().getRemaingNodes().get(entry.getKey().getLocalVariable()));
+//                //System.out.println(entry.getKey().getMapAux());
+//            }
+//        }
+//        else{
+//            System.out.println("Incorrect Number of arguments, the correct way to use it is first argument being the path to the class and the seconde one being the name of the method ");
+//        }
 
-            for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
-                entry.getKey().printSlice();
-                System.out.println("MapAux");
-                System.out.println(entry.getValue().prettyprint());
-                //System.out.println(entry.getKey().getMapAux());
-            }
-        }
-        else{
-            System.out.println("Incorrect Number of arguments, the correct way to use it is first argument being the path to the class and the seconde one being the name of the method ");
-        }
 //        String path = "/home/facomp/IdeaProjects/IfCounterRepo/IfCounter/src/main/java/org/example";
 //        //String path = "C:\\Users\\Kurumi\\Desktop\\ERP\\EarlyReturnProcessor\\TesteProcessor\\src\\main\\java\\BaseMethodsForTesting";
 //        String pathExample = "C:\\Users\\Kurumi\\Desktop\\SpoonTests\\spoonTests\\src\\main\\java\\org\\example";
-//        String pathHome = "C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src";
+        String pathHome = "C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src";
 //        String targetClassName = "Main";
-//        String targetMethod = "printDocument";
-
-//
-//
+        String targetMethod = "printDocument";
 //        Launcher launcher = new Launcher();
 //        launcher.addInputResource(pathHome);
 //        launcher.buildModel();
-//        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "testeIfElseIf")).get(0);
-//        System.out.println(method.prettyprint());
+//        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
+//        //System.out.println(method.prettyprint());
 //        PDG pdg = new PDG(method);
-//
-//        List<GraphNode> visitedNodes = new ArrayList<>();
-//        pdg.transverseThroughGraph(pdg.getCfg().getAllNodes().get(6), pdg.getCfg().getAllNodes().get(8),pdg.getCfg().getAllNodes().get(6) ,visitedNodes);
-//        pdg.transverseThroughGraph(pdg.getCfg().getAllNodes().get(7), pdg.getCfg().getAllNodes().get(8),pdg.getCfg().getAllNodes().get(7), visitedNodes);
-//        pdg.transverseThroughGraph(pdg.getCfg().getAllNodes().get(2), pdg.getCfg().getAllNodes().get(8),pdg.getCfg().getAllNodes().get(2),visitedNodes);
-//        System.out.println(visitedNodes);
 //        for(GraphNode node : pdg.getCfg().getAllNodes()){
 //            System.out.println(node);
-//            for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){
+//            for(GraphEdgeNode edge : node.getOutgoingEdges()){
 //                System.out.println(edge);
+//                System.out.println(edge.getIsControlEdge());
 //            }
-//            System.out.println("-----------------------------------");
-//        }
-//        //System.out.println(pdg.getAllBoundaryBlocksForCompleteComputation());
-//        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
-//            System.out.println(block);
-//            for(GraphNode node : block.getNodes()){
-//                System.out.println(node);
-//            }
-//            System.out.println("-----------------------------------");
-//        }
-//        Map<GraphNode, List<BasicBlock>> graphNodeListMap = pdg.getAllBoundaryBlocksForCompleteComputation();
-//        Map<GraphNode, List<GraphNode>> statementsThatArePartOfCompleteCOmputation = new LinkedHashMap<>();
-//        Map<GraphNode, List<GraphNode>> statementsThatAreNotPartOfCompleteComputation = new LinkedHashMap<>();
-//        for(Map.Entry<GraphNode, List<BasicBlock>> entry : graphNodeListMap.entrySet()){
-//            List<GraphNode> nodes = new ArrayList<>();
-//            for(BasicBlock block : entry.getValue()){
-//                nodes.addAll(block.getNodes());
-//            }
-//            statementsThatArePartOfCompleteCOmputation.put(entry.getKey(), nodes);
-//        }
-//        for(Map.Entry<GraphNode, List<GraphNode>> entry : statementsThatArePartOfCompleteCOmputation.entrySet()){
-//            List<GraphNode> nodes = new ArrayList<>();
-//            for(GraphNode node : pdg.getCfg().getAllNodes()){
-//                if(!entry.getValue().contains(node)){
-//                    nodes.add(node);
-//                }
-//            }
-//            statementsThatAreNotPartOfCompleteComputation.put(entry.getKey(), nodes);
-//        }
-//
-//        for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatArePartOfCompleteCOmputation.entrySet()){
-//            System.out.println(entry.getKey());
-//            for (GraphNode node : statementsThatArePartOfCompleteCOmputation.get(entry.getKey())){
-//                for(GraphEdgeNode edge : node.getOutgoingEdges()){
-//                    if(edge.getIsControlEdge()){
-//                       if(statementsThatAreNotPartOfCompleteComputation.get(entry.getKey()).contains(edge.getDst())){
-//                           System.out.println("Node is indispensable: " + node);
-//                       }
-//                    }
-//                }
-//            }
-//            System.out.println("-------------------------------------------");
-//        }
-//        for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatAreNotPartOfCompleteComputation.entrySet()){
-//            System.out.println(entry.getKey());
-//            for (GraphNode node : statementsThatAreNotPartOfCompleteComputation.get(entry.getKey())){
-//                for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){
-//                    if(statementsThatArePartOfCompleteCOmputation.get(entry.getKey()).contains(edge.getDst())){
-//                        System.out.println(edge);
-//                        System.out.println("Node indispesable data: " + edge.getDst());
-//                    }
-//                }
-//            }
-//            System.out.println("-------------------------------------------");
-//        }
-
-
-//        System.out.println(statementsThatArePartOfCompleteCOmputation);
-//        for(Map.Entry<GraphNode, List<GraphNode>> entry : statementsThatArePartOfCompleteCOmputation.entrySet()){
-//            System.out.println("Variable: " + entry.getKey());
-//            for (GraphNode node : entry.getValue()){
-//                System.out.println(node);
-//            }
-//        }
-
-//        for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
-//            System.out.println(entry.getKey());
-//            for (BasicBlock block : entry.getValue()){
-//                System.out.println(block);
-//            }
-//        }
-//        for(GraphNode node : pdg.getCfg().getAllNodes()){
-//            System.out.println(node);
-//            System.out.println(node.getDataDependenceLocalStatements());
-//            System.out.println("---------------------------");
+//            System.out.println("-------------------------------------");
 //        }
 //        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
 //            System.out.println(block);
-//            //System.out.println(block.getControlDependent());
-//            for (GraphEdgeBasicBlock edge : block.getOutgoingEdges()){
-//                System.out.println(edge);
-//                System.out.println("----------------------------");
-//            }
+//            System.out.println(block.getControlDependent());
+//            System.out.println(block.getOutgoingEdges());
+//            System.out.println("--------------------------------------------------");
 //        }
 
-//        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, targetMethod);
-//
-//        for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
-//            entry.getKey().printSlice();
-//            System.out.println("MapAux");
-//            System.out.println(entry.getValue().prettyprint());
-//            //System.out.println(entry.getKey().getMapAux());
-//        }
+//        String pathHome = args[0];
+//        String targetMethod = args[1];
+        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, targetMethod);
+        for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
+            entry.getKey().printSlice();
+            System.out.println(entry.getValue().prettyprint());
+            System.out.println("If statements that need to continue in the original Method");
+            System.out.println(moveMethod.getPdg().getRemaingNodes().get(entry.getKey().getLocalVariable()));
+            //System.out.println(entry.getKey().getMapAux());
+        }
 
    }
 }

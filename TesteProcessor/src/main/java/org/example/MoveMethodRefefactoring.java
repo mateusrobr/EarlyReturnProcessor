@@ -39,7 +39,9 @@ public class MoveMethodRefefactoring {
             candidateMap.put(candidate, candidate.produceNewMethod());
         }
     }
-
+    public PDG getPdg(){
+        return  this.pdg;
+    }
     public Map<PDGSlice, CtMethod> getCandidateMap(){
         return this.candidateMap;
     }

@@ -380,23 +380,52 @@ public class PDG {
                             listAux.add(node);
                         }
                     }
+                    else{
+                        if(edge.getSrc().getBasicBlock() != edge.getDst().getBasicBlock()){
+                            if(edge.getDst().getBasicBlock().getControlDependent() == edge.getSrc().getBasicBlock()){
+                                if(statementsThatAreNotPartOfCompleteComputation.get(entry.getKey()).contains(edge.getDst())){
+                                    listAux.add(node.getBasicBlock().getControlDependent().getNodes().get( node.getBasicBlock().getControlDependent().getNodes().size() - 1 ));
+                                }
+                            }
+                        }
+                    }
                 }
             }
             remainingNodes.get(entry.getKey()).addAll(listAux);
         }
-        for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatAreNotPartOfCompleteComputation.entrySet()){
-            //System.out.println(entry.getKey());
-            List<GraphNode> listAux2 = new ArrayList<>();
-            for (GraphNode node : statementsThatAreNotPartOfCompleteComputation.get(entry.getKey())){
-                for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){
-                    if(statementsThatArePartOfCompleteCOmputation.get(entry.getKey()).contains(edge.getDst()) && localVariableAssigmentOcurrences.get(entry.getKey()).contains(edge.getDst())){
-                        listAux2.add(edge.getDst());
 
-                    }
-                }
-            }
-            remainingNodes.get(entry.getKey()).addAll(listAux2);
-        }
+//        for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatAreNotPartOfCompleteComputation.entrySet()){
+//            //System.out.println(entry.getKey());
+//            List<GraphNode> listAux = new ArrayList<>();
+//            for (GraphNode node : statementsThatAreNotPartOfCompleteComputation.get(entry.getKey())){
+//                if (completeComputationBoundaryBlocks.get(entry.getKey()).contains(node.getBasicBlock().getControlDependent())){
+//                    if(!completeComputationBoundaryBlocks.get(entry.getKey()).contains(node.getBasicBlock())){
+//                        List<BasicBlock> boundaryBlocks = completeComputationBoundaryBlocks.get(entry.getKey());
+//                        int indexBlock = boundaryBlocks.indexOf(node.getBasicBlock().getControlDependent());
+//                        if(!listAux.contains(boundaryBlocks.get(indexBlock).getNodes().get(boundaryBlocks.get(indexBlock).getNodes().size()-1))){
+//                            listAux.add(boundaryBlocks.get(indexBlock).getNodes().get(boundaryBlocks.get(indexBlock).getNodes().size()-1));
+//                        }
+//                        //listAux.add(boundaryBlocks.get(indexBlock).getNodes().get(boundaryBlocks.get(indexBlock).getNodes().size()-1));
+//                    }
+//                }
+//                remainingNodes.get(entry.getKey()).addAll(listAux);
+//            }
+//            //remainingNodes.get(entry.getKey()).addAll(listAux);
+//        }
+
+//        for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatAreNotPartOfCompleteComputation.entrySet()){
+//            //System.out.println(entry.getKey());
+//            List<GraphNode> listAux2 = new ArrayList<>();
+//            for (GraphNode node : statementsThatAreNotPartOfCompleteComputation.get(entry.getKey())){
+//                for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){
+//                    if(statementsThatArePartOfCompleteCOmputation.get(entry.getKey()).contains(edge.getDst()) && localVariableAssigmentOcurrences.get(entry.getKey()).contains(edge.getDst())){
+//                        listAux2.add(edge.getDst());
+//
+//                    }
+//                }
+//            }
+//            remainingNodes.get(entry.getKey()).addAll(listAux2);
+//        }
 
         return remainingNodes;
     }

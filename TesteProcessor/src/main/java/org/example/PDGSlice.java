@@ -128,10 +128,11 @@ public class PDGSlice {
     public Map<BasicBlock, List<BasicBlock>> getMapAux(){
         return this.mapAux;
     }
-
+    public GraphNode getLocalVariable(){
+        return this.localVariable;
+    }
     public void printSlice(){
         System.out.println("Local Variable: " + localVariable);
         System.out.println("Blocks " + boundaryBlockCompleteComputation);
-        //System.out.println("Regio " + region);
     }
 }
