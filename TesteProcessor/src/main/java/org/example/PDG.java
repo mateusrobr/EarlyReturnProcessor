@@ -394,24 +394,24 @@ public class PDG {
             remainingNodes.get(entry.getKey()).addAll(listAux);
         }
 
-//        for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatAreNotPartOfCompleteComputation.entrySet()){
-//            //System.out.println(entry.getKey());
-//            List<GraphNode> listAux = new ArrayList<>();
-//            for (GraphNode node : statementsThatAreNotPartOfCompleteComputation.get(entry.getKey())){
-//                if (completeComputationBoundaryBlocks.get(entry.getKey()).contains(node.getBasicBlock().getControlDependent())){
-//                    if(!completeComputationBoundaryBlocks.get(entry.getKey()).contains(node.getBasicBlock())){
-//                        List<BasicBlock> boundaryBlocks = completeComputationBoundaryBlocks.get(entry.getKey());
-//                        int indexBlock = boundaryBlocks.indexOf(node.getBasicBlock().getControlDependent());
-//                        if(!listAux.contains(boundaryBlocks.get(indexBlock).getNodes().get(boundaryBlocks.get(indexBlock).getNodes().size()-1))){
-//                            listAux.add(boundaryBlocks.get(indexBlock).getNodes().get(boundaryBlocks.get(indexBlock).getNodes().size()-1));
-//                        }
-//                        //listAux.add(boundaryBlocks.get(indexBlock).getNodes().get(boundaryBlocks.get(indexBlock).getNodes().size()-1));
-//                    }
-//                }
-//                remainingNodes.get(entry.getKey()).addAll(listAux);
-//            }
-//            //remainingNodes.get(entry.getKey()).addAll(listAux);
-//        }
+        for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatAreNotPartOfCompleteComputation.entrySet()){
+            //System.out.println(entry.getKey());
+            List<GraphNode> listAux = new ArrayList<>();
+            for (GraphNode node : statementsThatAreNotPartOfCompleteComputation.get(entry.getKey())){
+                for(GraphEdgeNode dataEdge : node.getDataDependenceLocalStatements() ){
+                    if(statementsThatAreNotPartOfCompleteComputation.get(entry.getKey()).contains(dataEdge.getSrc()) && statementsThatArePartOfCompleteCOmputation.get(entry.getKey()).contains(dataEdge.getDst())){
+                        if(!remainingNodes.get(entry.getKey()).contains(dataEdge.getDst())){
+                            if(!localVariableAssigmentOcurrences.get(entry.getKey()).contains(dataEdge.getDst())){
+                                System.out.println("Data dependence de " + dataEdge.getSrc() + " Para " + dataEdge.getDst());
+                                listAux.add(dataEdge.getDst());
+                            }
+                            
+                        }
+                    }
+                }
+            }
+            remainingNodes.get(entry.getKey()).addAll(listAux);
+        }
 
 //        for(Map.Entry<GraphNode, List<GraphNode>> entry: statementsThatAreNotPartOfCompleteComputation.entrySet()){
 //            //System.out.println(entry.getKey());

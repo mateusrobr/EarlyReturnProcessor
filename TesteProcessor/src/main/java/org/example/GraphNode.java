@@ -18,6 +18,10 @@ GraphNode {
 
     private List<GraphEdgeNode> dataDependenceLocalStatements;
 
+    private List<GraphEdgeNode> antiDependence;
+
+    private List<GraphEdgeNode> outPutDependence;
+
     private List<CtParameter> dataDependenceParameters;
     private BasicBlock basicBlock;
 
@@ -32,6 +36,8 @@ GraphNode {
         this.statement = statement;
         incomingEdges = new LinkedHashSet<GraphEdgeNode>();
         outgoingEdges = new LinkedHashSet<GraphEdgeNode>();
+        antiDependence = new ArrayList<>();
+        outPutDependence = new ArrayList<>();
         dataDependenceLocalStatements = new ArrayList<>();
         dataDependenceParameters = new ArrayList<>();
     }
@@ -113,6 +119,21 @@ GraphNode {
     }
     public List<GraphEdgeNode> getDataDependenceLocalStatements(){
         return this.dataDependenceLocalStatements;
+    }
+
+    public void setAntiDependence(GraphEdgeNode edge){
+        this.antiDependence.add(edge);
+    }
+    public List<GraphEdgeNode> getAntiDependence(){
+        return this.antiDependence;
+    }
+
+    public void setOutPutDependence(GraphEdgeNode edge){
+        this.outPutDependence.add(edge);
+
+    }
+    public List<GraphEdgeNode> getOutPutDependence(){
+        return this.outPutDependence;
     }
     public BasicBlock getBasicBlock(){return this.basicBlock;}
 
