@@ -1,12 +1,12 @@
-C:\Users\Mateus\Desktop\bolsa_02\EarlyReturnProcessor\TesteProcessor\src\main\java\org\example\EarlyReturnProcessor.java
-C:\Users\Mateus\Desktop\bolsa_02\EarlyReturnProcessor\TesteProcessor\src\main\java\org\example\GraphEdgeNode.java
-C:\Users\Mateus\Desktop\bolsa_02\EarlyReturnProcessor\TesteProcessor\src\main\java\org\example\GraphEdgeBasicBlock.java
-C:\Users\Mateus\Desktop\bolsa_02\EarlyReturnProcessor\TesteProcessor\src\main\java\org\example\PDG.java
-C:\Users\Mateus\Desktop\bolsa_02\EarlyReturnProcessor\TesteProcessor\src\main\java\org\example\GraphNode.java
-C:\Users\Mateus\Desktop\bolsa_02\EarlyReturnProcessor\TesteProcessor\src\main\java\BaseMethodsForTesting\MethodsTestDecomposition.java
-C:\Users\Mateus\Desktop\bolsa_02\EarlyReturnProcessor\TesteProcessor\src\main\java\org\example\BasicBlock.java
-C:\Users\Mateus\Desktop\bolsa_02\EarlyReturnProcessor\TesteProcessor\src\main\java\org\example\CFG.java
-C:\Users\Mateus\Desktop\bolsa_02\EarlyReturnProcessor\TesteProcessor\src\main\java\BaseMethodsForTesting\BaseMethodEarlyReturn.java
-C:\Users\Mateus\Desktop\bolsa_02\EarlyReturnProcessor\TesteProcessor\src\main\java\org\example\MoveMethodRefefactoring.java
-C:\Users\Mateus\Desktop\bolsa_02\EarlyReturnProcessor\TesteProcessor\src\main\java\org\example\PDGSlice.java
-C:\Users\Mateus\Desktop\bolsa_02\EarlyReturnProcessor\TesteProcessor\src\main\java\org\example\App.java
+/home/dev/Área de Trabalho/EarlyReturnProcessor/EarlyReturnProcessor/TesteProcessor/src/main/java/org/example/PDGSlice.java
+/home/dev/Área de Trabalho/EarlyReturnProcessor/EarlyReturnProcessor/TesteProcessor/src/main/java/BaseMethodsForTesting/MethodsTestDecomposition.java
+/home/dev/Área de Trabalho/EarlyReturnProcessor/EarlyReturnProcessor/TesteProcessor/src/main/java/BaseMethodsForTesting/BaseMethodEarlyReturn.java
+/home/dev/Área de Trabalho/EarlyReturnProcessor/EarlyReturnProcessor/TesteProcessor/src/main/java/org/example/App.java
+/home/dev/Área de Trabalho/EarlyReturnProcessor/EarlyReturnProcessor/TesteProcessor/src/main/java/org/example/CFG.java
+/home/dev/Área de Trabalho/EarlyReturnProcessor/EarlyReturnProcessor/TesteProcessor/src/main/java/org/example/MoveMethodRefefactoring.java
+/home/dev/Área de Trabalho/EarlyReturnProcessor/EarlyReturnProcessor/TesteProcessor/src/main/java/org/example/BasicBlock.java
+/home/dev/Área de Trabalho/EarlyReturnProcessor/EarlyReturnProcessor/TesteProcessor/src/main/java/org/example/EarlyReturnProcessor.java
+/home/dev/Área de Trabalho/EarlyReturnProcessor/EarlyReturnProcessor/TesteProcessor/src/main/java/org/example/GraphEdgeNode.java
+/home/dev/Área de Trabalho/EarlyReturnProcessor/EarlyReturnProcessor/TesteProcessor/src/main/java/org/example/PDG.java
+/home/dev/Área de Trabalho/EarlyReturnProcessor/EarlyReturnProcessor/TesteProcessor/src/main/java/org/example/GraphEdgeBasicBlock.java
+/home/dev/Área de Trabalho/EarlyReturnProcessor/EarlyReturnProcessor/TesteProcessor/src/main/java/org/example/GraphNode.java
