@@ -121,8 +121,11 @@ GraphNode {
         return this.dataDependenceLocalStatements;
     }
 
-    public void setAntiDependence(GraphEdgeNode edge){
-        this.antiDependence.add(edge);
+    public void setAntiDependence(GraphNode node){
+        GraphEdgeNode newEdge = new GraphEdgeNode();
+        newEdge.setSrc(this);
+        newEdge.setDst(node);
+        this.antiDependence.add(newEdge);
     }
     public List<GraphEdgeNode> getAntiDependence(){
         return this.antiDependence;

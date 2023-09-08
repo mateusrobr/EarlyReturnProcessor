@@ -54,9 +54,14 @@ public class App {
 
         for(GraphNode node : pdg.getCfg().getAllNodes()){
             System.out.println(node);
+            System.out.println("DataDependence");
             for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){
                 System.out.println(edge);
-                System.out.println(edge.getIsControlEdge());
+            }
+            System.out.println("---------------------------------");
+            System.out.println("AntiDependence");
+            for(GraphEdgeNode edge : node.getAntiDependence()){
+                System.out.println(edge);
             }
             System.out.println("-------------------------------------");
         }

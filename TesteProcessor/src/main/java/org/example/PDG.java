@@ -273,6 +273,7 @@ public class PDG {
                 }
 
                 searchDataDependence(reference,entry.getKey(), node);
+                searchAntiDependence(reference,entry.getKey(), node);
 
                 if(node.getDataDependenceLocalStatements().size() == 0){
                     node.setDataDependenceLocalStatements(entry.getKey());
@@ -294,11 +295,45 @@ public class PDG {
                 return;
             }
             else{
-                transverseThroughGraph(assignmentsWithIdSmaller.get(i), node, assignmentsWithIdSmaller.get(i),visitedNodes, node.getDataDependenceLocalStatements().size());
+                transverseThroughGraphDataDependence(assignmentsWithIdSmaller.get(i), node, assignmentsWithIdSmaller.get(i),visitedNodes, node.getDataDependenceLocalStatements().size());
             }
         }
     }
-    public void transverseThroughGraph(GraphNode src, GraphNode target, GraphNode nodeToBeAddedToDependence,List<GraphNode> visitedNodes, int initialSizeDataDependenceList){
+    private void searchAntiDependence(CtReference reference, GraphNode key, GraphNode node){
+        List<GraphNode> assignmentsWithBiggerId = getAssignmentNodesBiggerId(getGraphNodeFromCtReference(reference, cfg.getAllCtStatements()), key);
+        List<GraphNode> visitedNodes = new ArrayList<>();
+        for (int i = 0 ; i < assignmentsWithBiggerId.size() ; i++){
+            if(node.getBasicBlock() == assignmentsWithBiggerId.get(i).getBasicBlock()){
+                node.setAntiDependence(assignmentsWithBiggerId.get(i));
+            }
+            else{
+                transverseThroughGraphAntiDependence(node, assignmentsWithBiggerId.get(i), node,assignmentsWithBiggerId.get(i), visitedNodes, node.getAntiDependence().size());
+            }
+        }
+    }
+    public void transverseThroughGraphAntiDependence(GraphNode src, GraphNode target,GraphNode initialNode ,GraphNode nodeToBeAddedToDependence,List<GraphNode> visitedNodes, int initialSizeDataDependenceList){
+        GraphNode nodeAux;
+        if(isReferenceInReachedBlocks(src,target) && !visitedNodes.contains(src)){
+            //nodeAux = src;
+            visitedNodes.add(src);
+            for(GraphEdgeNode edge : src.getOutgoingEdges()){
+                if(isReferenceInReachedBlocks(edge.getDst(), target)){
+                    if(edge.getDst().getBasicBlock() == target.getBasicBlock()){
+                        if(initialSizeDataDependenceList == initialNode.getAntiDependence().size())
+                            initialNode.setAntiDependence(nodeToBeAddedToDependence);
+                    }
+                    else{
+                        if(!visitedNodes.contains(edge.getDst())){
+                            nodeAux = edge.getDst();
+                            //System.out.println(nodeAux);
+                            transverseThroughGraphAntiDependence(nodeAux,target,initialNode ,nodeToBeAddedToDependence,visitedNodes, initialSizeDataDependenceList);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public void transverseThroughGraphDataDependence(GraphNode src, GraphNode target, GraphNode nodeToBeAddedToDependence,List<GraphNode> visitedNodes, int initialSizeDataDependenceList){
         GraphNode nodeAux;
         if(isReferenceInReachedBlocks(src,target) && !visitedNodes.contains(src)){
             //nodeAux = src;
@@ -313,7 +348,7 @@ public class PDG {
                         if(!visitedNodes.contains(edge.getDst())){
                             nodeAux = edge.getDst();
                             //System.out.println(nodeAux);
-                            transverseThroughGraph(nodeAux,target,nodeToBeAddedToDependence,visitedNodes, initialSizeDataDependenceList);
+                            transverseThroughGraphDataDependence(nodeAux,target,nodeToBeAddedToDependence,visitedNodes, initialSizeDataDependenceList);
                         }
                     }
                 }
@@ -352,10 +387,7 @@ public class PDG {
             if(node.getId() < assigNode.getId()){
                 assignNodesWithSmallerId.add(assigNode);
             }
-            else{
-                //If the Id is bigger so doesnt make sense continue because this dependence is for nodes that preceed this current node.
-                break;
-            }
+
         }
         return assignNodesWithSmallerId;
     }
