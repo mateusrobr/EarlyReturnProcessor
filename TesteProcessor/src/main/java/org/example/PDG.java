@@ -271,25 +271,9 @@ public class PDG {
                         continue;
                     }
                 }
-                List<GraphNode> assignmentsWithIdSmaller = getAssignmentNodesSmallerId(getGraphNodeFromCtReference(reference, cfg.getAllCtStatements()), entry.getKey());
-//                for(int i = assignmentsWithIdSmaller.size() -1; i >= 0 ; i-- ){
-//
-//                    if(isReferenceInReachedBlocks(assignmentsWithIdSmaller.get(i), node)){
-//                        //node.setDependence(localVariablesOcurrences.get(entry.getKey()).get( index ));
-//                        node.setDataDependenceLocalStatements(assignmentsWithIdSmaller.get(i));
-//                        return;
-//                    }
-//                }
-                List<GraphNode> visitedNodes = new ArrayList<>();
-                for(int i = assignmentsWithIdSmaller.size() -1; i >= 0 ; i-- ){
-                    if(node.getBasicBlock() == assignmentsWithIdSmaller.get(i).getBasicBlock()){
-                        node.setDataDependenceLocalStatements(assignmentsWithIdSmaller.get(i));
-                        return;
-                    }
-                    else{
-                        transverseThroughGraph(assignmentsWithIdSmaller.get(i), node, assignmentsWithIdSmaller.get(i),visitedNodes, node.getDataDependenceLocalStatements().size());
-                    }
-                }
+
+                searchDataDependence(reference,entry.getKey(), node);
+
                 if(node.getDataDependenceLocalStatements().size() == 0){
                     node.setDataDependenceLocalStatements(entry.getKey());
                     return;
@@ -297,6 +281,20 @@ public class PDG {
                 else{
                     return;
                 }
+            }
+        }
+    }
+
+    private void searchDataDependence(CtReference reference, GraphNode key, GraphNode node){
+        List<GraphNode> assignmentsWithIdSmaller = getAssignmentNodesSmallerId(getGraphNodeFromCtReference(reference, cfg.getAllCtStatements()), key);
+        List<GraphNode> visitedNodes = new ArrayList<>();
+        for(int i = assignmentsWithIdSmaller.size() -1; i >= 0 ; i-- ){
+            if(node.getBasicBlock() == assignmentsWithIdSmaller.get(i).getBasicBlock()){
+                node.setDataDependenceLocalStatements(assignmentsWithIdSmaller.get(i));
+                return;
+            }
+            else{
+                transverseThroughGraph(assignmentsWithIdSmaller.get(i), node, assignmentsWithIdSmaller.get(i),visitedNodes, node.getDataDependenceLocalStatements().size());
             }
         }
     }
@@ -340,6 +338,19 @@ public class PDG {
         for (GraphNode assigNode : localVariableAssigmentOcurrences.get(key)){
             if(node.getId() > assigNode.getId()){
                assignNodesWithSmallerId.add(assigNode);
+            }
+            else{
+                //If the Id is bigger so doesnt make sense continue because this dependence is for nodes that preceed this current node.
+                break;
+            }
+        }
+        return assignNodesWithSmallerId;
+    }
+    private List<GraphNode> getAssignmentNodesBiggerId(GraphNode node, GraphNode key){
+        List<GraphNode> assignNodesWithSmallerId = new ArrayList<>();
+        for (GraphNode assigNode : localVariableAssigmentOcurrences.get(key)){
+            if(node.getId() < assigNode.getId()){
+                assignNodesWithSmallerId.add(assigNode);
             }
             else{
                 //If the Id is bigger so doesnt make sense continue because this dependence is for nodes that preceed this current node.
@@ -402,7 +413,7 @@ public class PDG {
                     if(statementsThatAreNotPartOfCompleteComputation.get(entry.getKey()).contains(dataEdge.getSrc()) && statementsThatArePartOfCompleteCOmputation.get(entry.getKey()).contains(dataEdge.getDst())){
                         if(!remainingNodes.get(entry.getKey()).contains(dataEdge.getDst())){
                             if(!localVariableAssigmentOcurrences.get(entry.getKey()).contains(dataEdge.getDst())){
-                                System.out.println("Data dependence de " + dataEdge.getSrc() + " Para " + dataEdge.getDst());
+                                //System.out.println("Data dependence de " + dataEdge.getSrc() + " Para " + dataEdge.getDst());
                                 listAux.add(dataEdge.getDst());
                             }
 

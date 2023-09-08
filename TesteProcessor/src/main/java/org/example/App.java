@@ -45,19 +45,21 @@ public class App {
         String targetClassName = "Main";
         String targetMethod = "printDocument";
         Launcher launcher = new Launcher();
-        launcher.addInputResource(pathDell);
+        launcher.addInputResource(pathHome);
         launcher.buildModel();
         CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
         //System.out.println(method.prettyprint());
         PDG pdg = new PDG(method);
-//        for(GraphNode node : pdg.getCfg().getAllNodes()){
-//            System.out.println(node);
-//            for(GraphEdgeNode edge : node.getOutgoingEdges()){
-//                System.out.println(edge);
-//                System.out.println(edge.getIsControlEdge());
-//            }
-//            System.out.println("-------------------------------------");
-//        }
+
+
+        for(GraphNode node : pdg.getCfg().getAllNodes()){
+            System.out.println(node);
+            for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){
+                System.out.println(edge);
+                System.out.println(edge.getIsControlEdge());
+            }
+            System.out.println("-------------------------------------");
+        }
 //        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
 //            System.out.println(block);
 //            System.out.println(block.getControlDependent());
