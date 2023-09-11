@@ -45,7 +45,7 @@ public class App {
         String targetClassName = "Main";
         String targetMethod = "printDocument";
         Launcher launcher = new Launcher();
-        launcher.addInputResource(pathHome);
+        launcher.addInputResource(pathDell);
         launcher.buildModel();
         CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
         //System.out.println(method.prettyprint());
@@ -64,6 +64,12 @@ public class App {
                 System.out.println(edge);
             }
             System.out.println("-------------------------------------");
+
+            System.out.println("OutputDependence");
+            for(GraphEdgeNode edge : node.getOutPutDependence()){
+                System.out.println(edge);
+            }
+            System.out.println("---------------------------------------------");
         }
 //        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
 //            System.out.println(block);

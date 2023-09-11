@@ -131,8 +131,12 @@ GraphNode {
         return this.antiDependence;
     }
 
-    public void setOutPutDependence(GraphEdgeNode edge){
-        this.outPutDependence.add(edge);
+    public void setOutPutDependence(GraphNode node){
+        GraphEdgeNode newEdge = new GraphEdgeNode();
+
+        newEdge.setSrc(this);
+        newEdge.setDst(node);
+        this.outPutDependence.add(newEdge);
 
     }
     public List<GraphEdgeNode> getOutPutDependence(){

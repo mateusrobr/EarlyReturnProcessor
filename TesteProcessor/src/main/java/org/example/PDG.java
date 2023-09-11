@@ -215,9 +215,57 @@ public class PDG {
                 }
             }
         }
+        addOutputDependecies();
     }
-    private void searchDependency(CtIf branchNode, GraphNode node){
 
+    private void addOutputDependecies(){
+        for( Map.Entry<GraphNode, List<GraphNode>> entry : localVariableAssigmentOcurrences.entrySet()){
+            List<GraphNode> assignmentOcurrencesAndDeclared = new ArrayList<>();
+            assignmentOcurrencesAndDeclared.add(entry.getKey());
+            assignmentOcurrencesAndDeclared.addAll(entry.getValue());
+
+            for (int i = 1 ; i < assignmentOcurrencesAndDeclared.size() ; i++){
+                List<GraphNode> visitedNodes = new ArrayList<>();
+                GraphNode srcNode = assignmentOcurrencesAndDeclared.get(i - 1);
+                for (int j = i ; j < assignmentOcurrencesAndDeclared.size() ; j++){
+                    GraphNode targetNOde = assignmentOcurrencesAndDeclared.get(j);
+                    if(srcNode.getBasicBlock().getId() == targetNOde.getBasicBlock().getId()){
+                        srcNode.setOutPutDependence(targetNOde);
+                    }
+                    else {
+                        transverseThroughGraphOutputDependences(srcNode,targetNOde,targetNOde,srcNode,visitedNodes,srcNode.getOutPutDependence().size());
+                    }
+                }
+            }
+        }
+    }
+    public void transverseThroughGraphOutputDependences(GraphNode src, GraphNode target, GraphNode nodeToBeAddedToDependence,GraphNode initialSrc,List<GraphNode> visitedNodes, int initialSizeOutputDependenceList){
+        GraphNode nodeAux;
+        if(isReferenceInReachedBlocks(src,target) && !visitedNodes.contains(src)){
+            //nodeAux = src;
+            visitedNodes.add(src);
+            for(GraphEdgeNode edge : src.getOutgoingEdges()){
+                if(isReferenceInReachedBlocks(edge.getDst(), target)){
+                    if(edge.getDst().getBasicBlock() == target.getBasicBlock()){
+                        if(initialSizeOutputDependenceList == target.getDataDependenceLocalStatements().size()){
+                            initialSrc.setOutPutDependence(nodeToBeAddedToDependence);
+                            System.out.println("adicionando "+ nodeToBeAddedToDependence +" como outdep de " + initialSrc);
+                        }
+
+                    }
+                    else{
+                        if(!visitedNodes.contains(edge.getDst())){
+                            nodeAux = edge.getDst();
+                            //System.out.println(nodeAux);
+                            transverseThroughGraphOutputDependences(nodeAux,target,nodeToBeAddedToDependence,initialSrc,visitedNodes, initialSizeOutputDependenceList);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void searchDependency(CtIf branchNode, GraphNode node){
         for(Object reference : branchNode.getCondition().filterChildren(new TypeFilter<>(CtVariableReference.class)).list()){
             if(reference instanceof CtParameterReference){
                 CtParameterReference parameterReference = (CtParameterReference) reference;
