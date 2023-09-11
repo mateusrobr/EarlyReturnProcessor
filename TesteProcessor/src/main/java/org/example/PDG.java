@@ -247,7 +247,7 @@ public class PDG {
             for(GraphEdgeNode edge : src.getOutgoingEdges()){
                 if(isReferenceInReachedBlocks(edge.getDst(), target)){
                     if(edge.getDst().getBasicBlock() == target.getBasicBlock()){
-                        if(initialSizeOutputDependenceList == target.getDataDependenceLocalStatements().size()){
+                        if(initialSizeOutputDependenceList == initialSrc.getOutPutDependence().size()){
                             initialSrc.setOutPutDependence(nodeToBeAddedToDependence);
                             System.out.println("adicionando "+ nodeToBeAddedToDependence +" como outdep de " + initialSrc);
                         }
