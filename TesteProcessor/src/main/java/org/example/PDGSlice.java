@@ -16,6 +16,7 @@ public class PDGSlice {
 
     private  Map<BasicBlock, List<BasicBlock>> mapAux;
 
+    private List<GraphNode> graphNodes;
     private Launcher launcher;
     private BasicBlock region;
 
@@ -24,6 +25,8 @@ public class PDGSlice {
         this.boundaryBlockCompleteComputation = completeComputationBasicBlocks;
         this.launcher = launcher;
         mapAux = new LinkedHashMap<>();
+        graphNodes = new ArrayList<>();
+        selectAllGraphNodes();
         //this.region = region;
     }
 
@@ -125,6 +128,15 @@ public class PDGSlice {
 
         return newMethod;
     }
+    private void cleanSlices(){
+
+    }
+    private void selectAllGraphNodes(){
+        for(BasicBlock block : boundaryBlockCompleteComputation){
+            graphNodes.addAll(block.getNodes());
+        }
+    }
+
     public Map<BasicBlock, List<BasicBlock>> getMapAux(){
         return this.mapAux;
     }
@@ -134,5 +146,6 @@ public class PDGSlice {
     public void printSlice(){
         System.out.println("Local Variable: " + localVariable);
         System.out.println("Blocks " + boundaryBlockCompleteComputation);
+        System.out.println("all graph nodes: " + graphNodes);
     }
 }

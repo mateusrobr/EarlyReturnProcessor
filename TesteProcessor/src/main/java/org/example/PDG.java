@@ -249,7 +249,7 @@ public class PDG {
                     if(edge.getDst().getBasicBlock() == target.getBasicBlock()){
                         if(initialSizeOutputDependenceList == initialSrc.getOutPutDependence().size()){
                             initialSrc.setOutPutDependence(nodeToBeAddedToDependence);
-                            System.out.println("adicionando "+ nodeToBeAddedToDependence +" como outdep de " + initialSrc);
+                           // System.out.println("adicionando "+ nodeToBeAddedToDependence +" como outdep de " + initialSrc);
                         }
 
                     }

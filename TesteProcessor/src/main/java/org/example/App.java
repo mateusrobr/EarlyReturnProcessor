@@ -43,34 +43,34 @@ public class App {
         String pathHome = "C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src";
         String pathDell = "/home/dev/Área de Trabalho/códigos-teste/untitled";
         String targetClassName = "Main";
-        String targetMethod = "printDocument";
-        Launcher launcher = new Launcher();
-        launcher.addInputResource(pathDell);
-        launcher.buildModel();
-        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
-        //System.out.println(method.prettyprint());
-        PDG pdg = new PDG(method);
+        String targetMethod = "printDocument1";
+//        Launcher launcher = new Launcher();
+//        launcher.addInputResource(pathExample);
+//        launcher.buildModel();
+//        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
+//        //System.out.println(method.prettyprint());
+//        PDG pdg = new PDG(method);
 
 
-        for(GraphNode node : pdg.getCfg().getAllNodes()){
-            System.out.println(node);
-            System.out.println("DataDependence");
-            for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){
-                System.out.println(edge);
-            }
-            System.out.println("---------------------------------");
-            System.out.println("AntiDependence");
-            for(GraphEdgeNode edge : node.getAntiDependence()){
-                System.out.println(edge);
-            }
-            System.out.println("-------------------------------------");
-
-            System.out.println("OutputDependence");
-            for(GraphEdgeNode edge : node.getOutPutDependence()){
-                System.out.println(edge);
-            }
-            System.out.println("---------------------------------------------");
-        }
+//        for(GraphNode node : pdg.getCfg().getAllNodes()){
+//            System.out.println(node);
+//            System.out.println("DataDependence");
+//            for(GraphEdgeNode edge : node.getDataDependenceLocalStatements()){
+//                System.out.println(edge);
+//            }
+//            System.out.println("---------------------------------");
+//            System.out.println("AntiDependence");
+//            for(GraphEdgeNode edge : node.getAntiDependence()){
+//                System.out.println(edge);
+//            }
+//            System.out.println("-------------------------------------");
+//
+//            System.out.println("OutputDependence");
+//            for(GraphEdgeNode edge : node.getOutPutDependence()){
+//                System.out.println(edge);
+//            }
+//            System.out.println("---------------------------------------------");
+//        }
 //        for(BasicBlock block : pdg.getCfg().getBasicBlocks()){
 //            System.out.println(block);
 //            System.out.println(block.getControlDependent());
@@ -80,14 +80,14 @@ public class App {
 
         //String pathHome = args[0];
         //String targetMethod = args[1];
-//        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, targetMethod);
-//        for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
-//            entry.getKey().printSlice();
-//            System.out.println(entry.getValue().prettyprint());
+        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathExample, targetMethod);
+        for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
+            entry.getKey().printSlice();
+            System.out.println(entry.getValue().prettyprint());
 //            System.out.println("If statements that need to continue in the original Method");
 //            System.out.println(moveMethod.getPdg().getRemaingNodes().get(entry.getKey().getLocalVariable()));
-//            //System.out.println(entry.getKey().getMapAux());
-//        }
+            //System.out.println(entry.getKey().getMapAux());
+        }
 
    }
 }
