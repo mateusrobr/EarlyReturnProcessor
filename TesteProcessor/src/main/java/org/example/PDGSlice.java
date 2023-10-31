@@ -20,13 +20,17 @@ public class PDGSlice {
     private Launcher launcher;
     private BasicBlock region;
 
-    public PDGSlice(GraphNode localVariable, List<BasicBlock> completeComputationBasicBlocks,Launcher launcher){
+    private PDG pdg;
+
+    public PDGSlice(GraphNode localVariable, List<BasicBlock> completeComputationBasicBlocks,Launcher launcher, PDG pdg){
         this.localVariable = localVariable;
         this.boundaryBlockCompleteComputation = completeComputationBasicBlocks;
         this.launcher = launcher;
+        this.pdg = pdg;
         mapAux = new LinkedHashMap<>();
         graphNodes = new ArrayList<>();
         selectAllGraphNodes();
+        cleanSlices();
         //this.region = region;
     }
 
@@ -129,7 +133,21 @@ public class PDGSlice {
         return newMethod;
     }
     private void cleanSlices(){
-
+        System.out.println("local vairable: " + localVariable);
+        //System.out.println(pdg.getStatementsLocalVariableIsAssigned().get(localVariable));
+        List<GraphNode> importantGraphNodesForThisSlice = new ArrayList<>();
+        for (GraphNode node : pdg.getLocalVariableAssigmentOcurrences().get(localVariable)){
+            System.out.println(node);
+            getImportantNodesForThisSlice(node, importantGraphNodesForThisSlice);
+            System.out.println(node.getDataDependenceLocalStatements().size());
+            System.out.println("-----------------------------------");
+        }
+        System.out.println(importantGraphNodesForThisSlice);
+    }
+    private void getImportantNodesForThisSlice(GraphNode assignmentNode, List<GraphNode> importantGraphNodes){
+        for(GraphEdgeNode dataDapendencyEdge : assignmentNode.getDataDependenceLocalStatements()){
+            importantGraphNodes.add(dataDapendencyEdge.getDst());
+        }
     }
     private void selectAllGraphNodes(){
         for(BasicBlock block : boundaryBlockCompleteComputation){

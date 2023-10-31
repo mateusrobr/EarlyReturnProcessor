@@ -32,7 +32,7 @@ public class MoveMethodRefefactoring {
         this.pdg = new PDG(method);
         this.pdg.addDependencesToNodes();
         for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
-            candidates.add(new PDGSlice(entry.getKey(),entry.getValue(),launcher));
+            candidates.add(new PDGSlice(entry.getKey(),entry.getValue(),launcher, pdg));
         }
         for(PDGSlice candidate: candidates){
 

@@ -47,7 +47,7 @@ public class App {
 //        Launcher launcher = new Launcher();
 //        launcher.addInputResource(pathExample);
 //        launcher.buildModel();
-//        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument")).get(0);
+//        CtMethod method = (CtMethod) launcher.getModel().getElements(new NamedElementFilter(CtMethod.class, "printDocument1")).get(0);
 //        //System.out.println(method.prettyprint());
 //        PDG pdg = new PDG(method);
 
@@ -76,14 +76,14 @@ public class App {
 //            System.out.println(block.getControlDependent());
 //            System.out.println(block.getOutgoingEdges());
 //            System.out.println("--------------------------------------------------");
-//        }
+ //       }
 
         //String pathHome = args[0];
         //String targetMethod = args[1];
         MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathExample, targetMethod);
         for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
-            entry.getKey().printSlice();
-            System.out.println(entry.getValue().prettyprint());
+            //entry.getKey().printSlice();
+            //System.out.println(entry.getValue().prettyprint());
 //            System.out.println("If statements that need to continue in the original Method");
 //            System.out.println(moveMethod.getPdg().getRemaingNodes().get(entry.getKey().getLocalVariable()));
             //System.out.println(entry.getKey().getMapAux());
