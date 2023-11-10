@@ -30,7 +30,6 @@ public class MoveMethodRefefactoring {
         CtMethod method = (CtMethod) this.model.getElements(new NamedElementFilter(CtMethod.class, targetMethod)).get(0);
 
         this.pdg = new PDG(method);
-        this.pdg.addDependencesToNodes();
         for(Map.Entry<GraphNode, List<BasicBlock>> entry : pdg.getAllBoundaryBlocksForCompleteComputation().entrySet()){
             candidates.add(new PDGSlice(entry.getKey(),entry.getValue(),launcher, pdg));
         }
