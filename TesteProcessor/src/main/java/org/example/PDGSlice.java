@@ -140,15 +140,19 @@ public class PDGSlice {
         for (GraphNode node : pdg.getLocalVariableAssigmentOcurrences().get(localVariable)){
             System.out.println(node);
             getImportantNodesForThisSlice(node, importantGraphNodesForThisSlice);
-            System.out.println(importantGraphNodesForThisSlice);
+            for(GraphNode node1 : importantGraphNodesForThisSlice){
+                System.out.println(node1);
+            }
             System.out.println("-----------------------------------");
         }
         //System.out.println(importantGraphNodesForThisSlice);
     }
     private void getImportantNodesForThisSlice(GraphNode assignmentNode, List<GraphNode> importantGraphNodes){
         for(GraphEdgeNode dataDapendencyEdge : assignmentNode.getDataDependenceLocalStatements()){
-            importantGraphNodes.add(dataDapendencyEdge.getDst());
-            getImportantNodesForThisSlice(dataDapendencyEdge.getDst(), importantGraphNodes);
+            if(!(importantGraphNodes.contains(dataDapendencyEdge.getDst()))){
+                importantGraphNodes.add(dataDapendencyEdge.getDst());
+                getImportantNodesForThisSlice(dataDapendencyEdge.getDst(), importantGraphNodes);
+            }
         }
     }
     private void selectAllGraphNodes(){
