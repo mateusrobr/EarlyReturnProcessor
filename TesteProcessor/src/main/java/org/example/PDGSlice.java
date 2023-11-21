@@ -4,7 +4,6 @@ import spoon.Launcher;
 import spoon.reflect.code.*;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
-import spoon.reflect.visitor.filter.TypeFilter;
 import spoon.support.reflect.code.CtIfImpl;
 
 import java.util.*;
@@ -136,17 +135,12 @@ public class PDGSlice {
         System.out.println("local vairable: " + localVariable);
         //System.out.println(pdg.getStatementsLocalVariableIsAssigned().get(localVariable));
         List<GraphNode> importantGraphNodesForThisSlice = new ArrayList<>();
-        List<GraphNode> alreadyVisitedNodes = new ArrayList<>();
-        for (GraphNode node : pdg.getLocalVariableAssigmentOcurrences().get(localVariable)){
-            System.out.println(node);
-            getImportantNodesForThisSlice(node, importantGraphNodesForThisSlice);
-            for(GraphNode node1 : importantGraphNodesForThisSlice){
-                System.out.println(node1);
-            }
-            System.out.println("-----------------------------------");
-        }
+        //List<GraphNode> alreadyVisitedNodes = new ArrayList<>();
+        selectImportantNodesFromImportantStatements(importantGraphNodesForThisSlice);
+
         //System.out.println(importantGraphNodesForThisSlice);
     }
+
     private void getImportantNodesForThisSlice(GraphNode assignmentNode, List<GraphNode> importantGraphNodes){
         for(GraphEdgeNode dataDapendencyEdge : assignmentNode.getDataDependenceLocalStatements()){
             if(!(importantGraphNodes.contains(dataDapendencyEdge.getDst()))){
@@ -155,12 +149,26 @@ public class PDGSlice {
             }
         }
     }
+    private void selectImportantNodesFromImportantStatements(List<GraphNode> importantGraphNodes){
+        for (GraphNode node : pdg.getLocalVariableAssigmentOcurrences().get(localVariable)){
+            getImportantNodesForThisSlice(node, importantGraphNodes);
+        }
+    }
+
     private void selectAllGraphNodes(){
         for(BasicBlock block : boundaryBlockCompleteComputation){
             graphNodes.addAll(block.getNodes());
         }
     }
-
+    private List<GraphNode> getIfNodesForThisSLice(){
+        List<GraphNode> ifGraphNodes = new ArrayList<>();
+        for(GraphNode node : graphNodes){
+            if(node.getStatement()  instanceof CtIfImpl){
+                ifGraphNodes.add(node);
+            }
+        }
+        return ifGraphNodes;
+    }
     public Map<BasicBlock, List<BasicBlock>> getMapAux(){
         return this.mapAux;
     }

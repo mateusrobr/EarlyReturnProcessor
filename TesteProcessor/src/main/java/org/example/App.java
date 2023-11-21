@@ -43,7 +43,7 @@ public class App {
         String pathHome = "C:\\Users\\Mateus\\Desktop\\metodosteste\\testemetodos\\src";
         String pathDell = "/home/dev/Área de Trabalho/códigos-teste/untitled";
         String targetClassName = "Main";
-        String targetMethod = "printDocument1";
+        String targetMethod = "printDocument";
 //        Launcher launcher = new Launcher();
 //        launcher.addInputResource(pathExample);
 //        launcher.buildModel();
@@ -80,7 +80,7 @@ public class App {
 
         //String pathHome = args[0];
         //String targetMethod = args[1];
-        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathExample, targetMethod);
+        MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, targetMethod);
         for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
             //entry.getKey().printSlice();
             //System.out.println(entry.getValue().prettyprint());
