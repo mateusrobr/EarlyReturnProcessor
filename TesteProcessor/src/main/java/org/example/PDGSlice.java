@@ -61,40 +61,43 @@ public class PDGSlice {
     public CtBlock getCtBlockFromBasicBlock(BasicBlock baseRegion){
         CtBlock newCtBlock = this.launcher.getFactory().createBlock();
         for(GraphNode node : baseRegion.getNodes()) {
-            if (node.getStatement() instanceof CtIfImpl) {
-                CtIf nodeIfStatement = (CtIf) node.getStatement();
-                CtIf ifStatement = this.launcher.getFactory().createIf();
-                ifStatement.setCondition(nodeIfStatement.getCondition());
-                newCtBlock.addStatement(ifStatement);
-                if(mapAux.get(baseRegion).size() > 0){
-                    for(BasicBlock block : mapAux.get(baseRegion)){
-                        if(baseRegion.getOutgoingEdges().get(0).getDst().equals(block)){
-                            ifStatement.setThenStatement(getCtBlockFromBasicBlock(block));
+            if(!(removableNodes.contains(node))){
+                if (node.getStatement() instanceof CtIfImpl) {
+                    CtIf nodeIfStatement = (CtIf) node.getStatement();
+                    CtIf ifStatement = this.launcher.getFactory().createIf();
+                    ifStatement.setCondition(nodeIfStatement.getCondition());
+                    newCtBlock.addStatement(ifStatement);
+                    if(mapAux.get(baseRegion).size() > 0){
+                        for(BasicBlock block : mapAux.get(baseRegion)){
+                            if(baseRegion.getOutgoingEdges().get(0).getDst().equals(block)){
+                                ifStatement.setThenStatement(getCtBlockFromBasicBlock(block));
 
-                        } else if (baseRegion.getOutgoingEdges().get(1).getDst().equals(block) ) {
-                            if(baseRegion.getOutgoingEdges().get(1).getIsControlEdgeCFG()){
-                                ifStatement.setElseStatement(getCtBlockFromBasicBlock(block));
-                            }
-                            else{
+                            } else if (baseRegion.getOutgoingEdges().get(1).getDst().equals(block) ) {
+                                if(baseRegion.getOutgoingEdges().get(1).getIsControlEdgeCFG()){
+                                    ifStatement.setElseStatement(getCtBlockFromBasicBlock(block));
+                                }
+                                else{
+                                    CtStatementList list = getCtBlockFromBasicBlock(block);
+                                    for(CtStatement statement : list){
+                                        newCtBlock.addStatement(statement.clone());
+                                    }
+                                }
+                            }else{
                                 CtStatementList list = getCtBlockFromBasicBlock(block);
                                 for(CtStatement statement : list){
                                     newCtBlock.addStatement(statement.clone());
                                 }
                             }
-                        }else{
-                            CtStatementList list = getCtBlockFromBasicBlock(block);
-                            for(CtStatement statement : list){
-                                newCtBlock.addStatement(statement.clone());
-                            }
                         }
                     }
+
+
+
+                } else {
+                    newCtBlock.addStatement(node.getStatement().clone());
                 }
-
-
-
-            } else {
-                newCtBlock.addStatement(node.getStatement().clone());
             }
+
         }
 
         return newCtBlock;
