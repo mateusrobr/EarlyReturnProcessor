@@ -83,7 +83,8 @@ public class App {
         MoveMethodRefefactoring moveMethod = new MoveMethodRefefactoring(pathHome, targetMethod);
         for(Map.Entry<PDGSlice, CtMethod>entry : moveMethod.getCandidateMap().entrySet()){
             //entry.getKey().printSlice();
-            //System.out.println(entry.getValue().prettyprint());
+            System.out.println(entry.getKey().getLocalVariable());
+            System.out.println(entry.getValue().prettyprint());
 //            System.out.println("If statements that need to continue in the original Method");
 //            System.out.println(moveMethod.getPdg().getRemaingNodes().get(entry.getKey().getLocalVariable()));
             //System.out.println(entry.getKey().getMapAux());

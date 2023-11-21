@@ -16,6 +16,8 @@ public class PDGSlice {
     private  Map<BasicBlock, List<BasicBlock>> mapAux;
 
     private List<GraphNode> graphNodes;
+
+    private List<GraphNode> removableNodes;
     private Launcher launcher;
     private BasicBlock region;
 
@@ -28,8 +30,10 @@ public class PDGSlice {
         this.pdg = pdg;
         mapAux = new LinkedHashMap<>();
         graphNodes = new ArrayList<>();
+        removableNodes = new ArrayList<>();
         selectAllGraphNodes();
         cleanSlices();
+
         //this.region = region;
     }
 
@@ -139,10 +143,11 @@ public class PDGSlice {
         selectImportantNodesFromImportantStatements(importantGraphNodesForThisSlice, getIfNodesForThisSLice());
         importantGraphNodesForThisSlice.addAll(getIfNodesForThisSLice());
         importantGraphNodesForThisSlice.addAll(pdg.getLocalVariableAssigmentOcurrences().get(localVariable));
-        for (GraphNode node : importantGraphNodesForThisSlice){
-            System.out.println(node);
+        for(GraphNode node : graphNodes){
+            if (!(importantGraphNodesForThisSlice.contains(node))){
+                removableNodes.add(node);
+            }
         }
-
     }
 
     private void getImportantNodesForThisSlice(GraphNode assignmentNode, List<GraphNode> importantGraphNodes){
